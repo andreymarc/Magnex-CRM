@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { FiGlobe } from 'react-icons/fi'
+import Logo from './Logo'
+import SwipeableCarousel from './SwipeableCarousel'
 
 const translations = {
   en: {
@@ -382,22 +384,10 @@ export default function LandingPage() {
           }`}>
             <div className="flex justify-between items-center">
               {/* Logo */}
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <div className={`bg-white rounded-lg flex items-center justify-center transition-all duration-300 ${
-                  isScrolled ? 'w-6 h-6' : 'w-8 h-8'
-                }`}>
-                  <svg className={`text-purple-dark transition-all duration-300 ${
-                    isScrolled ? 'w-4 h-4' : 'w-5 h-5'
-                  }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span className={`text-white font-bold transition-all duration-300 ${
-                  isScrolled ? 'text-base' : 'text-xl'
-                }`}>
-                  {language === 'en' ? 'Magnex CRM' : 'מגנקס CRM'}
-                </span>
-              </div>
+              <Logo 
+                size={isScrolled ? 'small' : 'default'}
+                className="transition-all duration-300"
+              />
 
               {/* Navigation Links */}
               <div className="hidden md:flex items-center space-x-6 rtl:space-x-reverse">
@@ -604,9 +594,11 @@ export default function LandingPage() {
               {t.ai.subtitle}
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {t.ai.items.map((item, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105">
+          <SwipeableCarousel
+            items={t.ai.items}
+            itemsPerView={{ mobile: 1, tablet: 2, desktop: 4 }}
+            renderItem={(item, index) => (
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 h-full">
                 <div className="w-12 h-12 bg-gradient-to-br from-gradient-start to-gradient-end rounded-lg flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -619,8 +611,8 @@ export default function LandingPage() {
                   {item.description}
                 </p>
               </div>
-            ))}
-          </div>
+            )}
+          />
         </div>
       </section>
 
@@ -775,8 +767,10 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-800">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="text-2xl font-bold bg-gradient-to-r from-primary-400 to-primary-500 bg-clip-text text-transparent mb-4">
-            {language === 'en' ? 'Magnex CRM' : 'מגנקס CRM'}
+          <div className="flex justify-center mb-4">
+            <div className="opacity-80">
+              <Logo size="default" variant="light" />
+            </div>
           </div>
           <p className="text-sm">
             {language === 'en' 

@@ -1,4 +1,5 @@
 import { FiMenu, FiBell, FiSearch } from 'react-icons/fi'
+import Logo from '../Logo'
 
 export default function TopNav() {
   return (
@@ -8,14 +9,7 @@ export default function TopNav() {
           <button className="text-white/70 hover:text-white transition-colors">
             <FiMenu className="w-5 h-5" />
           </button>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-purple-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-white font-bold text-xl">Magnex CRM</span>
-          </div>
+          <Logo size="default" />
         </div>
         
         <div className="flex items-center space-x-4 rtl:space-x-reverse">
