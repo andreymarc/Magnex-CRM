@@ -111,7 +111,7 @@ export function MonthlyGoalCard({ goal, change }) {
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-xl font-bold text-gray-900">
                 ${(goal / 1000).toFixed(1)}k
               </div>
             </div>
