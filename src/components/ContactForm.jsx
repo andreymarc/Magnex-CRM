@@ -79,13 +79,20 @@ export default function ContactForm({ language = "he" }) {
         ...formData,
       }).toString();
 
+      // Try submitting to the current page
       const response = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formDataEncoded,
       });
 
-      if (response.ok) {
+      // Log response for debugging
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      // Netlify Forms can return 200, 302, or even 404 if form not detected
+      // But if status is 200-299, consider it success
+      if (response.status >= 200 && response.status < 300) {
         setSubmitStatus("success");
         setFormData({
           fullName: "",
@@ -93,9 +100,14 @@ export default function ContactForm({ language = "he" }) {
           phone: "",
           preferredTime: "",
         });
-        // Reset success message after 5 seconds
         setTimeout(() => setSubmitStatus(null), 5000);
       } else {
+        const errorText = await response.text().catch(() => "No error details");
+        console.error("Form submission failed:", {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText,
+        });
         setSubmitStatus("error");
       }
     } catch (error) {
