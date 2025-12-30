@@ -72,6 +72,7 @@ This will install `@supabase/supabase-js` and other dependencies.
 ## Step 7: Test the Connection
 
 1. Start your development server:
+
    ```bash
    npm run dev
    ```
@@ -121,7 +122,7 @@ Once Supabase is set up, you can start implementing features:
 ## Support
 
 If you encounter issues:
+
 1. Check the Supabase documentation: [https://supabase.com/docs](https://supabase.com/docs)
 2. Check the browser console for error messages
 3. Verify your Supabase project is active and running
-

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { FiGlobe } from 'react-icons/fi'
+import { FiGlobe, FiMenu, FiX } from 'react-icons/fi'
 import Logo from './Logo'
 import SwipeableCarousel from './SwipeableCarousel'
 import IntegrationIcon from './IntegrationIcon'
@@ -586,7 +586,7 @@ export default function LandingPage() {
   const [language, setLanguage] = useState('en')
   const [isScrolled, setIsScrolled] = useState(false)
   const [showLanguageMenu, setShowLanguageMenu] = useState(false)
-  const [billingCycle, setBillingCycle] = useState('monthly')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const languageMenuRef = useRef(null)
 
   const t = translations[language]
@@ -650,9 +650,12 @@ export default function LandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <button className="text-white/90 hover:text-white font-medium text-sm transition-colors">
-                  Careers
-                </button>
+                <Link
+                  to="/pricing"
+                  className="text-white/90 hover:text-white font-medium text-sm transition-colors"
+                >
+                  {language === 'en' ? 'Pricing' : 'תמחור'}
+                </Link>
               </div>
 
               {/* Action Buttons */}
@@ -717,14 +720,57 @@ export default function LandingPage() {
                   )}
                 </div>
 
+                {/* Mobile Menu Button */}
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="md:hidden text-white/90 hover:text-white transition-colors p-2"
+                  aria-label="Toggle menu"
+                >
+                  {mobileMenuOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
+                </button>
+
                 {/* Book a Demo Button - Always visible */}
-                <button className={`bg-primary-500 hover:bg-primary-600 text-white rounded-full font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 ${
+                <button className={`bg-primary-500 hover:bg-primary-600 text-white rounded-full font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 hidden sm:block ${
                   isScrolled ? 'px-4 py-1.5 text-xs' : 'px-6 py-2.5 text-sm'
                 }`}>
                   {language === 'en' ? 'Book a Demo' : 'קבעו הדגמה'}
                 </button>
               </div>
             </div>
+
+            {/* Mobile Menu */}
+            {mobileMenuOpen && !isScrolled && (
+              <div className="md:hidden mt-4 pt-4 border-t border-white/20">
+                <div className="flex flex-col space-y-3">
+                  <button className="text-white/90 hover:text-white font-medium text-sm text-left rtl:text-right py-2">
+                    Solutions
+                  </button>
+                  <button className="text-white/90 hover:text-white font-medium text-sm text-left rtl:text-right py-2">
+                    Company
+                  </button>
+                  <button className="text-white/90 hover:text-white font-medium text-sm text-left rtl:text-right py-2">
+                    Resources
+                  </button>
+                  <Link
+                    to="/pricing"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-white/90 hover:text-white font-medium text-sm text-left rtl:text-right py-2"
+                  >
+                    {language === 'en' ? 'Pricing' : 'תמחור'}
+                  </Link>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-white/90 hover:text-white font-medium text-sm text-left rtl:text-right py-2"
+                  >
+                    {language === 'en' ? 'Dashboard' : 'לוח בקרה'}
+                  </Link>
+                  <button className="bg-primary-500 hover:bg-primary-600 text-white rounded-full font-semibold text-sm py-2.5 mt-2">
+                    {language === 'en' ? 'Book a Demo' : 'קבעו הדגמה'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -732,8 +778,8 @@ export default function LandingPage() {
       {/* Free Trial Banner */}
       <section className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-sm sm:text-base font-semibold">
-            🎉 {t.cta.freeTrial} 🎉
+          <p className="text-sm sm:text-base font-semibold glowing-text">
+            {t.cta.freeTrial}
           </p>
         </div>
       </section>
@@ -744,8 +790,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center">
             <div className="inline-block mb-6">
-              <span className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">
-                ✨ {t.cta.freeTrial}
+              <span className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold glowing-text-green">
+                {t.cta.freeTrial}
               </span>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
@@ -1008,166 +1054,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              {t.pricing.title}
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
-              {t.pricing.subtitle}
-            </p>
-            <p className="text-sm text-gray-500">
-              {t.pricing.trial}
-            </p>
-          </div>
-
-          {/* Billing Toggle */}
-          <div className="flex justify-center mb-12">
-            <div className="bg-gray-100 rounded-full p-1 inline-flex">
-              <button
-                onClick={() => setBillingCycle('monthly')}
-                className={`px-6 py-2 rounded-full font-semibold text-sm transition-all duration-200 ${
-                  billingCycle === 'monthly'
-                    ? 'bg-primary-600 text-white shadow-md'
-                    : 'text-gray-700 hover:text-gray-900'
-                }`}
-              >
-                {t.pricing.monthly}
-              </button>
-              <button
-                onClick={() => setBillingCycle('annual')}
-                className={`px-6 py-2 rounded-full font-semibold text-sm transition-all duration-200 relative ${
-                  billingCycle === 'annual'
-                    ? 'bg-primary-600 text-white shadow-md'
-                    : 'text-gray-700 hover:text-gray-900'
-                }`}
-              >
-                {t.pricing.annual}
-                {billingCycle === 'annual' && (
-                  <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
-                    {t.pricing.save}
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-8">
-            {t.pricing.plans.map((plan, index) => {
-              const monthlyPrice = plan.price
-              const annualPrice = Math.round(plan.price * 12 * 0.8)
-              const displayPrice = billingCycle === 'annual' ? annualPrice : monthlyPrice
-              const pricePerMonth = billingCycle === 'annual' ? Math.round(annualPrice / 12) : monthlyPrice
-              const totalFor3Users = pricePerMonth * 3
-
-              return (
-                <div
-                  key={index}
-                  className={`bg-white rounded-2xl border-2 p-8 relative transition-all duration-300 hover:shadow-2xl ${
-                    index === 1
-                      ? 'border-primary-500 shadow-xl scale-105'
-                      : 'border-gray-200 hover:border-primary-300'
-                  }`}
-                >
-                  {index === 1 && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                      {language === 'en' ? 'Most Popular' : 'הפופולרי ביותר'}
-                    </div>
-                  )}
-
-                  {/* Icon */}
-                  <div className="flex justify-center mb-6">
-                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${
-                      index === 0 ? 'bg-blue-100' : index === 1 ? 'bg-primary-100' : 'bg-purple-100'
-                    }`}>
-                      {plan.icon === 'star' && (
-                        <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      )}
-                      {plan.icon === 'diamond' && (
-                        <svg className="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                      )}
-                      {plan.icon === 'crown' && (
-                        <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1s.4-1 1-1h12c.6 0 1 .4 1 1z"/>
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Plan Name */}
-                  <h3 className="text-2xl font-bold text-gray-900 text-center mb-2">
-                    {plan.name}
-                  </h3>
-
-                  {/* Price */}
-                  <div className="text-center mb-4">
-                    <div className="text-4xl font-bold text-gray-900">
-                      ₪{pricePerMonth}
-                    </div>
-                    <div className="text-sm text-gray-600 mt-1">
-                      {language === 'en' ? 'per user per month' : 'למשתמש לחודש'}
-                    </div>
-                    {billingCycle === 'annual' && (
-                      <div className="text-xs text-green-600 font-semibold mt-1">
-                        {t.pricing.save}
-                      </div>
-                    )}
-                    <div className="text-sm text-gray-500 mt-2">
-                      ₪{totalFor3Users}/{language === 'en' ? 'month' : 'חודש'} | {language === 'en' ? '3 users' : '3 משתמשים'}
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-sm text-gray-600 text-center mb-6 min-h-[3rem]">
-                    {plan.description}
-                  </p>
-
-                  {/* CTA Button */}
-                  <button className={`w-full py-3 rounded-lg font-semibold mb-6 transition-all duration-200 ${
-                    index === 1
-                      ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                  }`}>
-                    {language === 'en' ? 'Start Now' : 'התחילו עכשיו'}
-                  </button>
-
-                  {/* Features */}
-                  <div className="space-y-3">
-                    <h4 className="text-sm font-semibold text-gray-900 mb-3">
-                      {language === 'en' ? `${plan.name} License includes:` : `רישיון ${plan.name} כולל:`}
-                    </h4>
-                    <ul className="space-y-2">
-                      {plan.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-start space-x-2 rtl:space-x-reverse">
-                          <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-sm text-gray-700">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-primary-700/20"></div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="mb-6">
-            <span className="inline-block bg-green-500 text-white px-6 py-2 rounded-full text-lg font-bold mb-4 shadow-lg">
-              🎁 {t.cta.freeTrial}
+            <span className="inline-block bg-green-500 text-white px-6 py-2 rounded-full text-lg font-bold mb-4 shadow-lg glowing-text-white">
+              {t.cta.freeTrial}
             </span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold mb-6">
@@ -1198,8 +1091,8 @@ export default function LandingPage() {
           </div>
           <p className="text-sm">
             {language === 'en' 
-              ? '© 2024 Magnex CRM. All rights reserved.'
-              : '© 2024 מגנקס CRM. כל הזכויות שמורות.'}
+              ? '© 2026 Magnex CRM. All rights reserved.'
+              : '© 2026 מגנקס CRM. כל הזכויות שמורות.'}
           </p>
         </div>
       </footer>
