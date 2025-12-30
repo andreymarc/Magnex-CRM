@@ -4,6 +4,7 @@ import { FiGlobe, FiMenu, FiX } from 'react-icons/fi'
 import Logo from './Logo'
 import SwipeableCarousel from './SwipeableCarousel'
 import IntegrationIcon from './IntegrationIcon'
+import ContactForm from './ContactForm'
 
 const translations = {
   en: {
@@ -54,8 +55,26 @@ const translations = {
         { number: "2.5x", label: "Revenue Growth" },
         { number: "60%", label: "Cost Reduction" }
       ],
-      quote: "This CRM has transformed how we manage our business. The payment integration and automated invoicing alone have saved us countless hours every week.",
-      author: "David Levy, Business Owner"
+      testimonials: [
+        {
+          quote: "This CRM has transformed how we manage our business. The payment integration and automated invoicing alone have saved us countless hours every week.",
+          author: "David Levy",
+          role: "Business Owner",
+          company: "Tech Solutions Ltd"
+        },
+        {
+          quote: "The AI-powered features help us prioritize leads and close deals faster. Our sales team productivity increased by 40% in just two months.",
+          author: "Sarah Cohen",
+          role: "Sales Director",
+          company: "Growth Partners"
+        },
+        {
+          quote: "Best investment we've made. The automated workflows and document management save us hours every day. Highly recommend!",
+          author: "Michael Rosen",
+          role: "Operations Manager",
+          company: "Innovate Corp"
+        }
+      ]
     },
     benefits: {
       title: "Why Choose Our Platform",
@@ -341,8 +360,26 @@ const translations = {
         { number: "2.5x", label: "גידול בהכנסות" },
         { number: "60%", label: "הפחתת עלויות" }
       ],
-      quote: "ה-CRM הזה שינה את האופן שבו אנו מנהלים את העסק שלנו. האינטגרציה לתשלומים ויצירת החשבוניות האוטומטית לבדן חסכו לנו שעות רבות מדי שבוע.",
-      author: "דוד לוי, בעל עסק"
+      testimonials: [
+        {
+          quote: "ה-CRM הזה שינה את האופן שבו אנו מנהלים את העסק שלנו. האינטגרציה לתשלומים ויצירת החשבוניות האוטומטית לבדן חסכו לנו שעות רבות מדי שבוע.",
+          author: "דוד לוי",
+          role: "בעל עסק",
+          company: "פתרונות טכנולוגיה בע״מ"
+        },
+        {
+          quote: "התכונות המונעות ב-AI עוזרות לנו לסדר עדיפויות למתעניינים ולסגור עסקאות מהר יותר. הפרודוקטיביות של צוות המכירות שלנו עלתה ב-40% תוך חודשיים בלבד.",
+          author: "שרה כהן",
+          role: "מנהלת מכירות",
+          company: "שותפי צמיחה"
+        },
+        {
+          quote: "ההשקעה הטובה ביותר שעשינו. תהליכי העבודה האוטומטיים וניהול המסמכים חוסכים לנו שעות מדי יום. ממליץ בחום!",
+          author: "מיכאל רוזן",
+          role: "מנהל פעילות",
+          company: "חברת חדשנות"
+        }
+      ]
     },
     benefits: {
       title: "למה לבחור בפלטפורמה שלנו",
@@ -815,24 +852,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats Bar */}
-      <section className="bg-white border-y border-gray-100 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {t.caseStudy.stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-gray-900 mb-1">
-                  {stat.number}
-                </div>
-                <div className="text-sm sm:text-base text-gray-600 font-medium">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Problem Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -980,18 +999,62 @@ export default function LandingPage() {
               {t.caseStudy.subtitle}
             </p>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-10 sm:p-12 mb-12 border border-white/20 shadow-2xl">
-            <div className="flex items-start mb-6">
-              <svg className="w-8 h-8 text-primary-200 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.984zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-              <p className="text-xl sm:text-2xl italic text-white leading-relaxed flex-1">
-                "{t.caseStudy.quote}"
-              </p>
-            </div>
-            <p className="text-primary-100 font-semibold text-lg">
-              — {t.caseStudy.author}
-            </p>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+            {t.caseStudy.stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-4xl sm:text-5xl font-bold mb-2">
+                  {stat.number}
+                </div>
+                <div className="text-primary-200 text-sm sm:text-base">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Testimonials Carousel */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {t.caseStudy.testimonials.map((testimonial, index) => {
+              // Generate avatar URL using UI Avatars (free service)
+              const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.author)}&size=128&background=ffffff&color=6366f1&bold=true&font-size=0.5`
+              
+              return (
+                <div key={index} className="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/20 shadow-xl hover:bg-white/15 transition-all duration-300">
+                  <div className="flex items-start mb-4">
+                    <svg className="w-6 h-6 text-primary-200 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.984zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                    </svg>
+                    <p className="text-base sm:text-lg italic text-white leading-relaxed flex-1 ml-2 rtl:mr-2 rtl:ml-0">
+                      "{testimonial.quote}"
+                    </p>
+                  </div>
+                  <div className="flex items-center mt-6 pt-6 border-t border-white/20">
+                    <img 
+                      src={avatarUrl}
+                      alt={testimonial.author}
+                      className="w-12 h-12 rounded-full border-2 border-white/30 flex-shrink-0"
+                      onError={(e) => {
+                        // Fallback to a placeholder if image fails to load
+                        e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(testimonial.author)}`
+                      }}
+                    />
+                    <div className="ml-4 rtl:mr-4 rtl:ml-0">
+                      <p className="text-white font-semibold text-sm sm:text-base">
+                        {testimonial.author}
+                      </p>
+                      <p className="text-primary-200 text-xs sm:text-sm">
+                        {testimonial.role}
+                      </p>
+                      <p className="text-primary-300 text-xs mt-1">
+                        {testimonial.company}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -1080,6 +1143,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Contact Form Section */}
+      <ContactForm language={language} />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-800">

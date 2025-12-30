@@ -323,13 +323,16 @@ export default function PricingPage() {
                   </p>
 
                   {/* CTA Button */}
-                  <button className={`w-full py-3 rounded-lg font-semibold mb-6 transition-all duration-200 ${
-                    index === 1
-                      ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                  }`}>
+                  <Link
+                    to={`/register?plan_id=${index + 1}&plan=${plan.name.toUpperCase()}`}
+                    className={`w-full py-3 rounded-lg font-semibold mb-6 transition-all duration-200 block text-center ${
+                      index === 1
+                        ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl'
+                        : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                    }`}
+                  >
                     {language === 'en' ? 'Start Now' : 'התחילו עכשיו'}
-                  </button>
+                  </Link>
 
                   {/* Features */}
                   <div className="space-y-3">

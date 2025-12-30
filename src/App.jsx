@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import LandingPage from './components/LandingPage'
 import PricingPage from './components/PricingPage'
+import RegisterPage from './components/RegisterPage'
 import Dashboard from './components/Dashboard/Dashboard'
 import LeadsList from './components/Dashboard/Leads/LeadsList'
 import ContactsList from './components/Dashboard/Contacts/ContactsList'
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/leads" element={<LeadsList />} />
         <Route path="/dashboard/contacts" element={<ContactsList />} />
