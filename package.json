@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
+    "claude-ai": "^1.2.3",
     "clsx": "^2.1.0",
     "date-fns": "^2.30.0",
     "install": "^0.13.0",

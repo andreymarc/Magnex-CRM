@@ -1,4 +1,4 @@
-import { getSupabase, handleSupabaseError } from '../lib/supabase'
+import { supabase, handleSupabaseError } from '../lib/supabase'
 import { mockDeals, filterMockDeals } from '../data/mockDeals'
 
 /**
@@ -9,7 +9,7 @@ import { mockDeals, filterMockDeals } from '../data/mockDeals'
 // Get all deals
 export const getDeals = async (filters = {}) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -56,7 +56,7 @@ export const getDeals = async (filters = {}) => {
 // Get a single deal by ID
 export const getDeal = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -91,7 +91,7 @@ export const getDeal = async (id) => {
 // Create a new deal
 export const createDeal = async (dealData) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -136,7 +136,7 @@ export const createDeal = async (dealData) => {
 // Update a deal
 export const updateDeal = async (id, updates) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -194,7 +194,7 @@ export const updateDeal = async (id, updates) => {
 // Delete a deal
 export const deleteDeal = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -224,7 +224,7 @@ export const deleteDeal = async (id) => {
 // Get deal statistics
 export const getDealStats = async () => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {

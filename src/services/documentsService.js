@@ -1,4 +1,4 @@
-import { getSupabase, handleSupabaseError } from '../lib/supabase'
+import { supabase, handleSupabaseError } from '../lib/supabase'
 import { mockDocuments, filterMockDocuments, formatFileSize } from '../data/mockDocuments'
 
 /**
@@ -9,7 +9,7 @@ import { mockDocuments, filterMockDocuments, formatFileSize } from '../data/mock
 // Get all documents
 export const getDocuments = async (filters = {}) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -56,7 +56,7 @@ export const getDocuments = async (filters = {}) => {
 // Get a single document by ID
 export const getDocument = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -91,7 +91,7 @@ export const getDocument = async (id) => {
 // Upload a document (for mock, we'll simulate it)
 export const uploadDocument = async (file, documentData) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -165,7 +165,7 @@ export const uploadDocument = async (file, documentData) => {
 // Update a document
 export const updateDocument = async (id, updates) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -207,7 +207,7 @@ export const updateDocument = async (id, updates) => {
 // Delete a document
 export const deleteDocument = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -260,7 +260,7 @@ export const deleteDocument = async (id) => {
 // Get document download URL
 export const getDocumentUrl = async (document) => {
   try {
-    const supabase = getSupabase()
+    
     
     if (!supabase) {
       // For mock data, return a placeholder
@@ -284,7 +284,7 @@ export const getDocumentUrl = async (document) => {
 // Get document statistics
 export const getDocumentStats = async () => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { FiArrowLeft, FiGlobe, FiMail, FiPhone, FiUser, FiBriefcase, FiHome } from 'react-icons/fi'
+import { FiArrowLeft, FiGlobe, FiMail, FiPhone, FiUser, FiBriefcase, FiHome, FiLock } from 'react-icons/fi'
 import Logo from './Logo'
+import { useAuth } from '../context/AuthContext'
 
 const translations = {
   en: {
@@ -17,6 +18,8 @@ const translations = {
       firstName: "First Name",
       lastName: "Last Name",
       email: "Email",
+      password: "Password",
+      confirmPassword: "Confirm Password",
       mobile: "Mobile",
       companyName: "Company Name",
       companyPhone: "Company Phone",
@@ -29,7 +32,12 @@ const translations = {
       loginLink: "Click here to log in",
       freeTrial: "First Month Free - No Credit Card Required",
       planSelected: "Plan Selected",
-      terms: "By continuing, you agree to our Terms of Service and Privacy Policy"
+      terms: "By continuing, you agree to our Terms of Service and Privacy Policy",
+      passwordMinLength: "Password must be at least 6 characters",
+      passwordsNotMatch: "Passwords do not match",
+      emailExists: "This email is already registered",
+      registrationFailed: "Registration failed. Please try again.",
+      checkEmail: "Please check your email to verify your account"
     }
   },
   he: {
@@ -45,6 +53,8 @@ const translations = {
       firstName: "שם פרטי",
       lastName: "שם משפחה",
       email: "אימייל",
+      password: "סיסמה",
+      confirmPassword: "אימות סיסמה",
       mobile: "נייד",
       companyName: "שם החברה",
       companyPhone: "טלפון בחברה",
@@ -57,7 +67,12 @@ const translations = {
       loginLink: "לחץ כאן להתחברות",
       freeTrial: "חודש ראשון חינם - ללא צורך בכרטיס אשראי",
       planSelected: "תוכנית נבחרה",
-      terms: "בהמשך, אתה מסכים לתנאי השירות ומדיניות הפרטיות שלנו"
+      terms: "בהמשך, אתה מסכים לתנאי השירות ומדיניות הפרטיות שלנו",
+      passwordMinLength: "הסיסמה חייבת להכיל לפחות 6 תווים",
+      passwordsNotMatch: "הסיסמאות אינן תואמות",
+      emailExists: "אימייל זה כבר רשום במערכת",
+      registrationFailed: "ההרשמה נכשלה. אנא נסה שוב.",
+      checkEmail: "אנא בדוק את האימייל שלך לאימות החשבון"
     }
   }
 }
@@ -66,23 +81,27 @@ export default function RegisterPage() {
   const [language, setLanguage] = useState('he') // Default to Hebrew
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  
+  const { signUp } = useAuth()
+
   const planId = searchParams.get('plan_id')
   const planName = searchParams.get('plan') || 'BASIC'
-  
+
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
+    password: '',
+    confirmPassword: '',
     mobile: '',
     companyName: '',
     companyPhone: '',
     companySubdomain: ''
   })
-  
+
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [registrationSuccess, setRegistrationSuccess] = useState(false)
 
   const t = translations[language]
   const isRTL = language === 'he'
@@ -104,27 +123,39 @@ export default function RegisterPage() {
 
   const validateStep1 = () => {
     const newErrors = {}
-    
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = language === 'en' ? 'First name is required' : 'שם פרטי נדרש'
     }
-    
+
     if (!formData.lastName.trim()) {
       newErrors.lastName = language === 'en' ? 'Last name is required' : 'שם משפחה נדרש'
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = language === 'en' ? 'Email is required' : 'אימייל נדרש'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = language === 'en' ? 'Invalid email format' : 'פורמט אימייל לא תקין'
     }
-    
+
+    if (!formData.password.trim()) {
+      newErrors.password = language === 'en' ? 'Password is required' : 'סיסמה נדרשת'
+    } else if (formData.password.length < 6) {
+      newErrors.password = t.register.passwordMinLength
+    }
+
+    if (!formData.confirmPassword.trim()) {
+      newErrors.confirmPassword = language === 'en' ? 'Please confirm password' : 'אנא אמת את הסיסמה'
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = t.register.passwordsNotMatch
+    }
+
     if (!formData.mobile.trim()) {
       newErrors.mobile = language === 'en' ? 'Mobile number is required' : 'מספר נייד נדרש'
     } else if (!/^[0-9+\-\s()]+$/.test(formData.mobile)) {
       newErrors.mobile = language === 'en' ? 'Invalid mobile number' : 'מספר נייד לא תקין'
     }
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -175,44 +206,45 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (currentStep === 1) {
       handleNext()
       return
     }
-    
+
     // Step 2 - Final submission
     if (!validateStep2()) {
       return
     }
-    
+
     setIsSubmitting(true)
-    
+
     try {
-      // Here you would integrate with Supabase Auth
-      // For now, we'll simulate the registration
-      console.log('Registering user:', formData)
-      console.log('Plan:', planName, 'Plan ID:', planId)
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      // Store registration data (in real app, this would be handled by Supabase)
-      localStorage.setItem('registration_data', JSON.stringify({
-        ...formData,
-        plan: planName,
-        planId: planId,
-        freeTrial: true,
-        trialEndDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days from now
-      }))
-      
-      // Redirect to dashboard or next step
-      navigate('/dashboard')
+      // Register with Supabase Auth
+      await signUp({
+        email: formData.email,
+        password: formData.password,
+        fullName: `${formData.firstName} ${formData.lastName}`,
+        companyName: formData.companyName,
+        phone: formData.mobile
+      })
+
+      // Show success message
+      setRegistrationSuccess(true)
+
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 2000)
     } catch (error) {
       console.error('Registration error:', error)
-      alert(language === 'en' 
-        ? 'Registration failed. Please try again.' 
-        : 'ההרשמה נכשלה. אנא נסה שוב.')
+
+      // Handle specific errors
+      if (error.message.includes('already registered') || error.message.includes('already exists')) {
+        setErrors({ email: t.register.emailExists })
+      } else {
+        alert(t.register.registrationFailed)
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -278,6 +310,24 @@ export default function RegisterPage() {
 
           {/* Registration Card - less padding on mobile */}
           <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl p-5 sm:p-8 lg:p-10 border border-gray-100">
+            {/* Success Message */}
+            {registrationSuccess ? (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  {language === 'en' ? 'Registration Successful!' : 'ההרשמה הצליחה!'}
+                </h2>
+                <p className="text-gray-600 mb-4">{t.register.checkEmail}</p>
+                <p className="text-sm text-gray-500">
+                  {language === 'en' ? 'Redirecting to dashboard...' : 'מעביר לדשבורד...'}
+                </p>
+              </div>
+            ) : (
+              <>
             {/* Plan Info - compact on mobile */}
             {planName && (
               <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-primary-50 rounded-lg sm:rounded-xl border border-primary-200">
@@ -381,6 +431,56 @@ export default function RegisterPage() {
                 )}
               </div>
 
+              {/* Password */}
+              <div>
+                <label htmlFor="password" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+                  {t.register.password}
+                </label>
+                <div className="relative">
+                  <FiLock className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className={`w-full pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                      errors.password ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder="••••••••"
+                    dir="ltr"
+                  />
+                </div>
+                {errors.password && (
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.password}</p>
+                )}
+              </div>
+
+              {/* Confirm Password */}
+              <div>
+                <label htmlFor="confirmPassword" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+                  {t.register.confirmPassword}
+                </label>
+                <div className="relative">
+                  <FiLock className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    className={`w-full pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                      errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder="••••••••"
+                    dir="ltr"
+                  />
+                </div>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.confirmPassword}</p>
+                )}
+              </div>
+
               {/* Mobile */}
               <div>
                 <label htmlFor="mobile" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
@@ -477,7 +577,7 @@ export default function RegisterPage() {
                         onChange={(e) => {
                           // Only allow English letters, numbers, and hyphens, convert to lowercase
                           const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
-                          handleInputChange({ ...e, target: { ...e.target, value } })
+                          handleInputChange({ target: { name: 'companySubdomain', value } })
                         }}
                         className={`w-full pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
                           errors.companySubdomain ? 'border-red-300' : 'border-gray-300'
@@ -552,6 +652,8 @@ export default function RegisterPage() {
                 </Link>
               </p>
             </div>
+              </>
+            )}
           </div>
         </div>
       </div>

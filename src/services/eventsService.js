@@ -1,4 +1,4 @@
-import { getSupabase, handleSupabaseError } from '../lib/supabase'
+import { supabase, handleSupabaseError } from '../lib/supabase'
 import { mockEvents, filterMockEvents, getEventsForDate, getUpcomingEvents } from '../data/mockEvents'
 
 /**
@@ -9,7 +9,7 @@ import { mockEvents, filterMockEvents, getEventsForDate, getUpcomingEvents } fro
 // Get all events
 export const getEvents = async (filters = {}) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -62,7 +62,7 @@ export const getEvents = async (filters = {}) => {
 // Get events for a specific date
 export const getEventsByDate = async (date) => {
   try {
-    const supabase = getSupabase()
+    
     
     if (!supabase) {
       const events = getEventsForDate(mockEvents, date)
@@ -95,7 +95,7 @@ export const getEventsByDate = async (date) => {
 // Get upcoming events
 export const getUpcoming = async (days = 7) => {
   try {
-    const supabase = getSupabase()
+    
     
     if (!supabase) {
       const events = getUpcomingEvents(mockEvents, days)
@@ -128,7 +128,7 @@ export const getUpcoming = async (days = 7) => {
 // Get a single event by ID
 export const getEvent = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -163,7 +163,7 @@ export const getEvent = async (id) => {
 // Create a new event
 export const createEvent = async (eventData) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -206,7 +206,7 @@ export const createEvent = async (eventData) => {
 // Update an event
 export const updateEvent = async (id, updates) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -248,7 +248,7 @@ export const updateEvent = async (id, updates) => {
 // Delete an event
 export const deleteEvent = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {

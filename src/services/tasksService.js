@@ -1,4 +1,4 @@
-import { getSupabase, handleSupabaseError } from '../lib/supabase'
+import { supabase, handleSupabaseError } from '../lib/supabase'
 import { mockTasks, filterMockTasks, getOverdueTasks, getTasksDueToday } from '../data/mockTasks'
 
 /**
@@ -9,7 +9,7 @@ import { mockTasks, filterMockTasks, getOverdueTasks, getTasksDueToday } from '.
 // Get all tasks
 export const getTasks = async (filters = {}) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -60,7 +60,7 @@ export const getTasks = async (filters = {}) => {
 // Get a single task by ID
 export const getTask = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -95,7 +95,7 @@ export const getTask = async (id) => {
 // Create a new task
 export const createTask = async (taskData) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -138,7 +138,7 @@ export const createTask = async (taskData) => {
 // Update a task
 export const updateTask = async (id, updates) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -198,7 +198,7 @@ export const updateTask = async (id, updates) => {
 // Delete a task
 export const deleteTask = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -228,7 +228,7 @@ export const deleteTask = async (id) => {
 // Get task statistics
 export const getTaskStats = async () => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {

@@ -1,4 +1,4 @@
-import { getSupabase, handleSupabaseError } from '../lib/supabase'
+import { supabase, handleSupabaseError } from '../lib/supabase'
 import { mockLeads, filterMockLeads } from '../data/mockLeads'
 
 /**
@@ -9,8 +9,7 @@ import { mockLeads, filterMockLeads } from '../data/mockLeads'
 // Get all leads
 export const getLeads = async (filters = {}) => {
   try {
-    const supabase = getSupabase()
-    
+        
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const filtered = filterMockLeads(mockLeads, filters)
@@ -52,8 +51,7 @@ export const getLeads = async (filters = {}) => {
 // Get a single lead by ID
 export const getLead = async (id) => {
   try {
-    const supabase = getSupabase()
-    
+        
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const lead = mockLeads.find(l => l.id === id)
@@ -87,8 +85,7 @@ export const getLead = async (id) => {
 // Create a new lead
 export const createLead = async (leadData) => {
   try {
-    const supabase = getSupabase()
-    
+        
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const newLead = {
@@ -129,8 +126,7 @@ export const createLead = async (leadData) => {
 // Update a lead
 export const updateLead = async (id, updates) => {
   try {
-    const supabase = getSupabase()
-    
+        
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const index = mockLeads.findIndex(l => l.id === id)
@@ -170,8 +166,7 @@ export const updateLead = async (id, updates) => {
 // Delete a lead
 export const deleteLead = async (id) => {
   try {
-    const supabase = getSupabase()
-    
+        
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const index = mockLeads.findIndex(l => l.id === id)
@@ -209,8 +204,7 @@ export const convertLeadToContact = async (leadId) => {
     const lead = leadResult.data
 
     // Create contact from lead
-    const supabase = getSupabase()
-    
+        
     // Use mock data if Supabase is not configured
     if (!supabase) {
       // For mock data, we just update the lead status
@@ -264,8 +258,7 @@ export const convertLeadToContact = async (leadId) => {
 // Get lead statistics
 export const getLeadStats = async () => {
   try {
-    const supabase = getSupabase()
-    
+        
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const stats = {

@@ -1,4 +1,4 @@
-import { getSupabase, handleSupabaseError } from '../lib/supabase'
+import { supabase, handleSupabaseError } from '../lib/supabase'
 import { mockInvoices, filterMockInvoices, getInvoiceStats } from '../data/mockInvoices'
 
 /**
@@ -9,7 +9,7 @@ import { mockInvoices, filterMockInvoices, getInvoiceStats } from '../data/mockI
 // Get all invoices
 export const getInvoices = async (filters = {}) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -52,7 +52,7 @@ export const getInvoices = async (filters = {}) => {
 // Get a single invoice by ID
 export const getInvoice = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -87,7 +87,7 @@ export const getInvoice = async (id) => {
 // Create a new invoice
 export const createInvoice = async (invoiceData) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -132,7 +132,7 @@ export const createInvoice = async (invoiceData) => {
 // Update an invoice
 export const updateInvoice = async (id, updates) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -186,7 +186,7 @@ export const updateInvoice = async (id, updates) => {
 // Delete an invoice
 export const deleteInvoice = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -216,7 +216,7 @@ export const deleteInvoice = async (id) => {
 // Mark invoice as paid
 export const markInvoiceAsPaid = async (id, paymentMethod) => {
   try {
-    const supabase = getSupabase()
+    
     
     if (!supabase) {
       return await updateInvoice(id, {
@@ -239,7 +239,7 @@ export const markInvoiceAsPaid = async (id, paymentMethod) => {
 // Get invoice statistics
 export const getInvoiceStatistics = async () => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {

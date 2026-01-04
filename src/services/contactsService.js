@@ -1,4 +1,4 @@
-import { getSupabase, handleSupabaseError } from '../lib/supabase'
+import { supabase, handleSupabaseError } from '../lib/supabase'
 import { mockContacts, filterMockContacts } from '../data/mockContacts'
 
 /**
@@ -9,7 +9,7 @@ import { mockContacts, filterMockContacts } from '../data/mockContacts'
 // Get all contacts
 export const getContacts = async (filters = {}) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -52,7 +52,7 @@ export const getContacts = async (filters = {}) => {
 // Get a single contact by ID
 export const getContact = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -87,7 +87,7 @@ export const getContact = async (id) => {
 // Create a new contact
 export const createContact = async (contactData) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -129,7 +129,7 @@ export const createContact = async (contactData) => {
 // Update a contact
 export const updateContact = async (id, updates) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -170,7 +170,7 @@ export const updateContact = async (id, updates) => {
 // Delete a contact
 export const deleteContact = async (id) => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
@@ -200,7 +200,7 @@ export const deleteContact = async (id) => {
 // Get contact statistics
 export const getContactStats = async () => {
   try {
-    const supabase = getSupabase()
+    
     
     // Use mock data if Supabase is not configured
     if (!supabase) {
