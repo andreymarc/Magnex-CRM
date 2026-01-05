@@ -97,18 +97,10 @@ export default function LeadsList() {
     return colors[status] || 'bg-gray-100 text-gray-800'
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div dir="rtl" className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 flex flex-col lg:ml-0">
+      <div className="flex-1 flex flex-col pr-16 lg:pr-16">
         <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
         {/* Free Trial Banner */}
         <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 sm:px-6 text-center text-xs sm:text-sm font-semibold">
@@ -181,7 +173,11 @@ export default function LeadsList() {
 
       {/* Leads List - Desktop Table / Mobile Cards */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        {leads.length === 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+          </div>
+        ) : leads.length === 0 ? (
           <div className="text-center py-12 px-4">
             <FiUser className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-gray-500 text-lg">No leads found</p>

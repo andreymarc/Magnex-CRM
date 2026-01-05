@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { initializeUserData, markDataInitialized } from '../services/dataInitService'
 
 const AuthContext = createContext({})
 
@@ -45,6 +46,16 @@ export function AuthProvider({ children }) {
 
       if (data) {
         setProfile(data)
+        // Initialize user data on first login
+        if (!data.data_initialized) {
+          console.log('First login detected, initializing user data...')
+          const initSuccess = await initializeUserData(userId)
+          if (initSuccess) {
+            await markDataInitialized(userId)
+            // Update local profile state
+            setProfile(prev => ({ ...prev, data_initialized: true }))
+          }
+        }
         return data
       } else {
         console.log('No profile found, using default')
@@ -156,6 +167,31 @@ export function AuthProvider({ children }) {
     return data
   }
 
+  // Upload profile photo to Supabase Storage
+  const uploadProfilePhoto = async (file) => {
+    if (!user) throw new Error('No user logged in')
+
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${user.id}/avatar.${fileExt}`
+
+    // Upload to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, file, { upsert: true })
+
+    if (uploadError) throw uploadError
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(fileName)
+
+    // Update profile with avatar URL
+    await updateProfile({ avatar_url: publicUrl })
+
+    return publicUrl
+  }
+
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -204,6 +240,7 @@ export function AuthProvider({ children }) {
     signInWithMagicLink,
     signOut,
     updateProfile,
+    uploadProfilePhoto,
     isTrialActive,
     isPro,
     getTrialDaysRemaining

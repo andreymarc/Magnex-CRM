@@ -137,9 +137,9 @@ export default function PaymentsList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex">
+      <div dir="rtl" className="min-h-screen bg-gray-50">
         <Sidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col pr-16 lg:pr-16">
           <TopNav />
           <div className="flex-1 flex items-center justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -150,9 +150,9 @@ export default function PaymentsList() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div dir="rtl" className="min-h-screen bg-gray-50">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col pr-16 lg:pr-16">
         <TopNav />
         {/* Free Trial Banner */}
         <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-6 text-center text-sm font-semibold">

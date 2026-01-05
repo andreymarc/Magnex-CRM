@@ -1,24 +1,46 @@
-import { useState } from 'react'
-import { FiUser, FiBell, FiShield, FiLink, FiGlobe, FiSave, FiZap, FiMail, FiKey, FiDatabase, FiCreditCard } from 'react-icons/fi'
+import { useState, useEffect } from 'react'
+import { FiUser, FiBell, FiShield, FiLink, FiSave, FiZap, FiMail, FiKey, FiDatabase, FiCreditCard, FiCamera, FiCalendar } from 'react-icons/fi'
+import { useAuth } from '../../../context/AuthContext'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
 import AIAssistant from '../AIAssistant'
 
 export default function SettingsPage() {
+  const { user, profile: authProfile, updateProfile, uploadProfilePhoto } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
   const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
-  
-  // Profile settings
-  const [profile, setProfile] = useState({
-    firstName: 'David',
-    lastName: 'Cohen',
-    email: 'david.cohen@magnex.com',
-    phone: '+972-50-123-4567',
-    company: 'Magnex CRM',
-    jobTitle: 'CEO',
-    language: 'en',
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+
+  // Profile settings form
+  const [profileForm, setProfileForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    company: '',
+    jobTitle: '',
+    language: 'he',
     timezone: 'Asia/Jerusalem'
   })
+
+  // Load profile data from auth context
+  useEffect(() => {
+    if (authProfile && user) {
+      const nameParts = (authProfile.full_name || '').split(' ')
+      setProfileForm({
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        email: user.email || '',
+        phone: authProfile.phone || '',
+        company: authProfile.company_name || '',
+        jobTitle: authProfile.job_title || '',
+        language: authProfile.language || 'he',
+        timezone: authProfile.timezone || 'Asia/Jerusalem'
+      })
+    }
+  }, [authProfile, user])
 
   // Notification settings
   const [notifications, setNotifications] = useState({
@@ -46,7 +68,7 @@ export default function SettingsPage() {
   })
 
   const handleProfileChange = (field, value) => {
-    setProfile(prev => ({ ...prev, [field]: value }))
+    setProfileForm(prev => ({ ...prev, [field]: value }))
   }
 
   const handleNotificationChange = (field, value) => {
@@ -64,34 +86,63 @@ export default function SettingsPage() {
     }))
   }
 
-  const handleSave = () => {
-    // In a real app, this would save to the backend
-    alert('Settings saved successfully!')
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    try {
+      setUploading(true)
+      await uploadProfilePhoto(file)
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert('העלאת התמונה נכשלה')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleSave = async () => {
+    try {
+      setSaving(true)
+      await updateProfile({
+        full_name: `${profileForm.firstName} ${profileForm.lastName}`.trim(),
+        phone: profileForm.phone,
+        company_name: profileForm.company,
+        job_title: profileForm.jobTitle,
+        language: profileForm.language,
+        timezone: profileForm.timezone
+      })
+      alert('ההגדרות נשמרו בהצלחה!')
+    } catch (error) {
+      console.error('Save error:', error)
+      alert('שמירת ההגדרות נכשלה')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const tabs = [
-    { id: 'profile', label: 'Profile', icon: FiUser },
-    { id: 'notifications', label: 'Notifications', icon: FiBell },
-    { id: 'security', label: 'Security', icon: FiShield },
-    { id: 'integrations', label: 'Integrations', icon: FiLink },
-    { id: 'billing', label: 'Billing', icon: FiCreditCard }
+    { id: 'profile', label: 'פרופיל', icon: FiUser },
+    { id: 'notifications', label: 'התראות', icon: FiBell },
+    { id: 'security', label: 'אבטחה', icon: FiShield },
+    { id: 'integrations', label: 'אינטגרציות', icon: FiLink },
+    { id: 'billing', label: 'חיובים', icon: FiCreditCard }
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <TopNav />
+    <div dir="rtl" className="min-h-screen bg-gray-50">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 flex flex-col pr-16 lg:pr-16">
+        <TopNav onMenuClick={() => setSidebarOpen(true)} />
         {/* Free Trial Banner */}
         <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-6 text-center text-sm font-semibold">
-          🎉 First Month Free - No Credit Card Required • Start Your Free Trial Today! 🎉
+          🎉 חודש ראשון חינם - ללא צורך בכרטיס אשראי • התחל את הניסיון החינמי שלך היום! 🎉
         </div>
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Header */}
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-              <p className="text-gray-600 mt-1">הגדרות</p>
+              <h1 className="text-3xl font-bold text-gray-900">הגדרות</h1>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -104,13 +155,13 @@ export default function SettingsPage() {
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                           activeTab === tab.id
                             ? 'bg-primary-100 text-primary-700 font-semibold'
                             : 'text-gray-700 hover:bg-gray-100'
                         }`}
                       >
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-5 h-5 flex-shrink-0" />
                         <span>{tab.label}</span>
                       </button>
                     )
@@ -125,30 +176,57 @@ export default function SettingsPage() {
                   {activeTab === 'profile' && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Profile Settings</h2>
-                        <p className="text-gray-600">Manage your personal information and preferences</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">הגדרות פרופיל</h2>
+                        <p className="text-gray-600">נהל את המידע האישי שלך וההעדפות</p>
+                      </div>
+
+                      {/* Profile Photo Section */}
+                      <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                        <div className="relative">
+                          <img
+                            src={authProfile?.avatar_url || `https://ui-avatars.com/api/?name=${profileForm.firstName}+${profileForm.lastName}&background=6366f1&color=fff&size=80`}
+                            alt="Profile"
+                            className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                          />
+                          <label className={`absolute bottom-0 right-0 bg-primary-600 text-white p-1.5 rounded-full cursor-pointer hover:bg-primary-700 transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handlePhotoUpload}
+                              disabled={uploading}
+                            />
+                            <FiCamera className="w-4 h-4" />
+                          </label>
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900">תמונת פרופיל</h3>
+                          <p className="text-sm text-gray-500">
+                            {uploading ? 'מעלה...' : 'לחץ על סמל המצלמה כדי להעלות תמונה חדשה'}
+                          </p>
+                        </div>
                       </div>
 
                       <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                              First Name *
+                              שם פרטי *
                             </label>
                             <input
                               type="text"
-                              value={profile.firstName}
+                              value={profileForm.firstName}
                               onChange={(e) => handleProfileChange('firstName', e.target.value)}
                               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Last Name *
+                              שם משפחה *
                             </label>
                             <input
                               type="text"
-                              value={profile.lastName}
+                              value={profileForm.lastName}
                               onChange={(e) => handleProfileChange('lastName', e.target.value)}
                               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
@@ -157,23 +235,24 @@ export default function SettingsPage() {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Email *
+                            אימייל *
                           </label>
                           <input
                             type="email"
-                            value={profile.email}
-                            onChange={(e) => handleProfileChange('email', e.target.value)}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            value={profileForm.email}
+                            disabled
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
                           />
+                          <p className="text-xs text-gray-500 mt-1">לא ניתן לשנות את האימייל</p>
                         </div>
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Phone
+                            טלפון
                           </label>
                           <input
                             type="tel"
-                            value={profile.phone}
+                            value={profileForm.phone}
                             onChange={(e) => handleProfileChange('phone', e.target.value)}
                             className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           />
@@ -182,22 +261,22 @@ export default function SettingsPage() {
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Company
+                              חברה
                             </label>
                             <input
                               type="text"
-                              value={profile.company}
+                              value={profileForm.company}
                               onChange={(e) => handleProfileChange('company', e.target.value)}
                               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Job Title
+                              תפקיד
                             </label>
                             <input
                               type="text"
-                              value={profile.jobTitle}
+                              value={profileForm.jobTitle}
                               onChange={(e) => handleProfileChange('jobTitle', e.target.value)}
                               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
@@ -207,10 +286,10 @@ export default function SettingsPage() {
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Language
+                              שפה
                             </label>
                             <select
-                              value={profile.language}
+                              value={profileForm.language}
                               onChange={(e) => handleProfileChange('language', e.target.value)}
                               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             >
@@ -220,10 +299,10 @@ export default function SettingsPage() {
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Timezone
+                              אזור זמן
                             </label>
                             <select
-                              value={profile.timezone}
+                              value={profileForm.timezone}
                               onChange={(e) => handleProfileChange('timezone', e.target.value)}
                               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             >
@@ -242,8 +321,8 @@ export default function SettingsPage() {
                   {activeTab === 'notifications' && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Notification Settings</h2>
-                        <p className="text-gray-600">Configure how and when you receive notifications</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">הגדרות התראות</h2>
+                        <p className="text-gray-600">הגדר איך ומתי תקבל התראות</p>
                       </div>
 
                       <div className="space-y-4">
@@ -254,12 +333,12 @@ export default function SettingsPage() {
                                 {key.replace(/([A-Z])/g, ' $1').trim()}
                               </h3>
                               <p className="text-sm text-gray-500">
-                                {key === 'emailNotifications' && 'Receive email notifications for important updates'}
-                                {key === 'taskReminders' && 'Get reminders for upcoming tasks'}
-                                {key === 'dealUpdates' && 'Notifications when deals change status'}
-                                {key === 'paymentReminders' && 'Reminders for upcoming invoice due dates'}
-                                {key === 'weeklyReports' && 'Weekly summary reports via email'}
-                                {key === 'marketingEmails' && 'Product updates and marketing communications'}
+                                {key === 'emailNotifications' && 'קבל התראות אימייל לעדכונים חשובים'}
+                                {key === 'taskReminders' && 'קבל תזכורות למשימות קרובות'}
+                                {key === 'dealUpdates' && 'התראות כאשר עסקאות משנות סטטוס'}
+                                {key === 'paymentReminders' && 'תזכורות לתאריכי תשלום קרובים'}
+                                {key === 'weeklyReports' && 'דוחות סיכום שבועיים בדוא"ל'}
+                                {key === 'marketingEmails' && 'עדכוני מוצר ותקשורת שיווקית'}
                               </p>
                             </div>
                             <label className="relative inline-flex items-center cursor-pointer">
@@ -281,16 +360,16 @@ export default function SettingsPage() {
                   {activeTab === 'security' && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Security Settings</h2>
-                        <p className="text-gray-600">Manage your account security and privacy</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">הגדרות אבטחה</h2>
+                        <p className="text-gray-600">נהל את אבטחת החשבון והפרטיות שלך</p>
                       </div>
 
                       <div className="space-y-4">
                         <div className="p-4 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-2">
                             <div>
-                              <h3 className="font-medium text-gray-900">Two-Factor Authentication</h3>
-                              <p className="text-sm text-gray-500">Add an extra layer of security to your account</p>
+                              <h3 className="font-medium text-gray-900">אימות דו-שלבי</h3>
+                              <p className="text-sm text-gray-500">הוסף שכבת אבטחה נוספת לחשבון שלך</p>
                             </div>
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input
@@ -306,7 +385,7 @@ export default function SettingsPage() {
 
                         <div className="p-4 border border-gray-200 rounded-lg">
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Session Timeout (minutes)
+                            זמן פגימת הפעלה (דקות)
                           </label>
                           <input
                             type="number"
@@ -316,27 +395,27 @@ export default function SettingsPage() {
                             max="120"
                             className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           />
-                          <p className="text-xs text-gray-500 mt-1">Automatically log out after inactivity</p>
+                          <p className="text-xs text-gray-500 mt-1">התנתק אוטומטית לאחר חוסר פעילות</p>
                         </div>
 
                         <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-2">Password</h3>
+                          <h3 className="font-medium text-gray-900 mb-2">סיסמה</h3>
                           <p className="text-sm text-gray-500 mb-3">
-                            Last changed: {new Date(security.passwordLastChanged).toLocaleDateString()}
+                            שונה לאחרונה: {new Date(security.passwordLastChanged).toLocaleDateString('he-IL')}
                           </p>
                           <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                            Change Password
+                            שנה סיסמה
                           </button>
                         </div>
 
                         <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-2">API Keys</h3>
+                          <h3 className="font-medium text-gray-900 mb-2">מפתחות API</h3>
                           <p className="text-sm text-gray-500 mb-3">
-                            Manage your API keys for integrations
+                            נהל את מפתחות ה-API שלך לאינטגרציות
                           </p>
                           <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                            <FiKey className="w-4 h-4 inline mr-2" />
-                            Manage API Keys
+                            <FiKey className="w-4 h-4 inline ml-2" />
+                            נהל מפתחות API
                           </button>
                         </div>
                       </div>
@@ -347,8 +426,8 @@ export default function SettingsPage() {
                   {activeTab === 'integrations' && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Integrations</h2>
-                        <p className="text-gray-600">Connect your favorite tools and services</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">אינטגרציות</h2>
+                        <p className="text-gray-600">חבר את הכלים והשירותים המועדפים עליך</p>
                       </div>
 
                       <div className="space-y-4">
@@ -357,8 +436,8 @@ export default function SettingsPage() {
                             <div className="flex items-center space-x-3">
                               <FiMail className="w-8 h-8 text-blue-600" />
                               <div>
-                                <h3 className="font-medium text-gray-900">Email Integration</h3>
-                                <p className="text-sm text-gray-500">Connect Gmail, Outlook, or IMAP</p>
+                                <h3 className="font-medium text-gray-900">אינטגרציית אימייל</h3>
+                                <p className="text-sm text-gray-500">חבר Gmail, Outlook או IMAP</p>
                               </div>
                             </div>
                             <div className="flex items-center space-x-3">
@@ -392,8 +471,8 @@ export default function SettingsPage() {
                             <div className="flex items-center space-x-3">
                               <FiCalendar className="w-8 h-8 text-green-600" />
                               <div>
-                                <h3 className="font-medium text-gray-900">Calendar Sync</h3>
-                                <p className="text-sm text-gray-500">Sync with Google Calendar or Outlook</p>
+                                <h3 className="font-medium text-gray-900">סנכרון יומן</h3>
+                                <p className="text-sm text-gray-500">סנכרן עם Google Calendar או Outlook</p>
                               </div>
                             </div>
                             <div className="flex items-center space-x-3">
@@ -426,8 +505,8 @@ export default function SettingsPage() {
                             <div className="flex items-center space-x-3">
                               <FiCreditCard className="w-8 h-8 text-purple-600" />
                               <div>
-                                <h3 className="font-medium text-gray-900">Payment Gateway</h3>
-                                <p className="text-sm text-gray-500">Connect Stripe, PayPal, or other payment processors</p>
+                                <h3 className="font-medium text-gray-900">שער תשלום</h3>
+                                <p className="text-sm text-gray-500">חבר Stripe, PayPal או מעבדי תשלום אחרים</p>
                               </div>
                             </div>
                             <div className="flex items-center space-x-3">
@@ -461,8 +540,8 @@ export default function SettingsPage() {
                             <div className="flex items-center space-x-3">
                               <FiDatabase className="w-8 h-8 text-orange-600" />
                               <div>
-                                <h3 className="font-medium text-gray-900">Cloud Storage</h3>
-                                <p className="text-sm text-gray-500">Connect OneDrive, Google Drive, or Dropbox</p>
+                                <h3 className="font-medium text-gray-900">אחסון ענן</h3>
+                                <p className="text-sm text-gray-500">חבר OneDrive, Google Drive או Dropbox</p>
                               </div>
                             </div>
                             <div className="flex items-center space-x-3">
@@ -498,63 +577,63 @@ export default function SettingsPage() {
                   {activeTab === 'billing' && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Billing & Subscription</h2>
-                        <p className="text-gray-600">Manage your subscription and payment methods</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">חיובים ומנוי</h2>
+                        <p className="text-gray-600">נהל את המנוי ואמצעי התשלום שלך</p>
                       </div>
 
                       <div className="space-y-4">
                         <div className="p-6 border-2 border-primary-200 rounded-lg bg-primary-50">
                           <div className="flex items-center justify-between">
                             <div>
-                              <h3 className="text-xl font-bold text-gray-900">Premium Plan</h3>
-                              <p className="text-gray-600 mt-1">₪289 per user per month</p>
-                              <p className="text-sm text-gray-500 mt-2">Next billing date: {new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                              <h3 className="text-xl font-bold text-gray-900">תוכנית פרימיום</h3>
+                              <p className="text-gray-600 mt-1">₪289 למשתמש לחודש</p>
+                              <p className="text-sm text-gray-500 mt-2">תאריך חיוב הבא: {new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('he-IL')}</p>
                             </div>
                             <div className="text-right">
                               <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
-                                Active
+                                פעיל
                               </span>
                             </div>
                           </div>
                         </div>
 
                         <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-3">Payment Method</h3>
+                          <h3 className="font-medium text-gray-900 mb-3">אמצעי תשלום</h3>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
                               <FiCreditCard className="w-6 h-6 text-gray-400" />
                               <div>
                                 <p className="font-medium text-gray-900">•••• •••• •••• 4242</p>
-                                <p className="text-sm text-gray-500">Expires 12/25</p>
+                                <p className="text-sm text-gray-500">פג תוקף 12/25</p>
                               </div>
                             </div>
                             <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                              Update
+                              עדכן
                             </button>
                           </div>
                         </div>
 
                         <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-3">Billing History</h3>
+                          <h3 className="font-medium text-gray-900 mb-3">היסטוריית חיובים</h3>
                           <div className="space-y-2">
                             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                               <div>
-                                <p className="font-medium text-gray-900">Premium Plan - January 2024</p>
-                                <p className="text-sm text-gray-500">{new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                                <p className="font-medium text-gray-900">תוכנית פרימיום - ינואר 2024</p>
+                                <p className="text-sm text-gray-500">{new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toLocaleDateString('he-IL')}</p>
                               </div>
                               <div className="text-right">
                                 <p className="font-semibold text-gray-900">₪867</p>
-                                <button className="text-sm text-primary-600 hover:text-primary-700">Download</button>
+                                <button className="text-sm text-primary-600 hover:text-primary-700">הורד</button>
                               </div>
                             </div>
                           </div>
                         </div>
 
                         <div className="p-4 border border-red-200 rounded-lg bg-red-50">
-                          <h3 className="font-medium text-red-900 mb-2">Danger Zone</h3>
-                          <p className="text-sm text-red-700 mb-3">Once you cancel your subscription, you'll lose access to all premium features.</p>
+                          <h3 className="font-medium text-red-900 mb-2">אזור מסוכן</h3>
+                          <p className="text-sm text-red-700 mb-3">ביטול המנוי יגרום לאובדן גישה לכל התכונות הפרימיום.</p>
                           <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                            Cancel Subscription
+                            בטל מנוי
                           </button>
                         </div>
                       </div>
@@ -565,10 +644,11 @@ export default function SettingsPage() {
                   <div className="flex justify-end pt-6 border-t mt-6">
                     <button
                       onClick={handleSave}
-                      className="flex items-center space-x-2 bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+                      disabled={saving}
+                      className={`flex items-center gap-2 bg-primary-600 text-white px-6 py-2 rounded-lg transition-colors ${saving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-700'}`}
                     >
                       <FiSave className="w-5 h-5" />
-                      <span>Save Changes</span>
+                      <span>{saving ? 'שומר...' : 'שמור שינויים'}</span>
                     </button>
                   </div>
                 </div>
@@ -582,7 +662,7 @@ export default function SettingsPage() {
       <button
         onClick={() => setAIAssistantOpen(true)}
         className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-200 z-40"
-        title="Open AI Assistant"
+        title="פתח עוזר AI"
       >
         <FiZap className="w-6 h-6" />
       </button>

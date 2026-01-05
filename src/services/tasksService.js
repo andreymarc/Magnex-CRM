@@ -9,18 +9,25 @@ import { mockTasks, filterMockTasks, getOverdueTasks, getTasksDueToday } from '.
 // Get all tasks
 export const getTasks = async (filters = {}) => {
   try {
-    
-    
+
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const filtered = filterMockTasks(mockTasks, filters)
       return { data: filtered, error: false, usingMockData: true }
     }
-    
+
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
     let query = supabase
       .from('tasks')
       .select('*')
       .order('due_date', { ascending: true, nullsFirst: false })
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
 
     // Apply filters
     if (filters.status) {

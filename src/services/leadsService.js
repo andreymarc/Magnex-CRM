@@ -9,17 +9,25 @@ import { mockLeads, filterMockLeads } from '../data/mockLeads'
 // Get all leads
 export const getLeads = async (filters = {}) => {
   try {
-        
+
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const filtered = filterMockLeads(mockLeads, filters)
       return { data: filtered, error: false, usingMockData: true }
     }
-    
+
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
     let query = supabase
       .from('leads')
       .select('*')
       .order('created_at', { ascending: false })
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
 
     // Apply filters
     if (filters.status) {
@@ -85,7 +93,7 @@ export const getLead = async (id) => {
 // Create a new lead
 export const createLead = async (leadData) => {
   try {
-        
+
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const newLead = {
@@ -97,12 +105,14 @@ export const createLead = async (leadData) => {
       mockLeads.unshift(newLead) // Add to beginning of array
       return { data: newLead, error: false, usingMockData: true }
     }
-    
+
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     const lead = {
       ...leadData,
+      user_id: user?.id, // Multi-tenant: assign to current user
       created_by: user?.id,
+      assigned_to: user?.id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }
