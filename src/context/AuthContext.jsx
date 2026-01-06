@@ -22,6 +22,13 @@ export function AuthProvider({ children }) {
       trial_ends_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     }
 
+    // Check if supabase is available
+    if (!supabase) {
+      console.warn('Supabase not configured, using default profile')
+      setProfile(defaultProfile)
+      return null
+    }
+
     try {
       // Add timeout to prevent hanging
       const timeoutPromise = new Promise((_, reject) =>
@@ -93,6 +100,9 @@ export function AuthProvider({ children }) {
 
   // Sign up with email and password
   const signUp = async ({ email, password, fullName, companyName, phone }) => {
+    if (!supabase) {
+      throw new Error('Supabase is not configured. Please set up your environment variables.')
+    }
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -108,7 +118,7 @@ export function AuthProvider({ children }) {
     if (error) throw error
 
     // Update profile with additional info
-    if (data.user) {
+    if (data.user && supabase) {
       await supabase
         .from('profiles')
         .update({
@@ -123,6 +133,9 @@ export function AuthProvider({ children }) {
 
   // Sign in with email and password
   const signIn = async ({ email, password }) => {
+    if (!supabase) {
+      throw new Error('Supabase is not configured. Please set up your environment variables.')
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
@@ -133,6 +146,9 @@ export function AuthProvider({ children }) {
 
   // Sign in with magic link
   const signInWithMagicLink = async (email) => {
+    if (!supabase) {
+      throw new Error('Supabase is not configured. Please set up your environment variables.')
+    }
     const { data, error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -145,6 +161,11 @@ export function AuthProvider({ children }) {
 
   // Sign out
   const signOut = async () => {
+    if (!supabase) {
+      setUser(null)
+      setProfile(null)
+      return
+    }
     const { error } = await supabase.auth.signOut()
     if (error) throw error
     setUser(null)
@@ -154,6 +175,7 @@ export function AuthProvider({ children }) {
   // Update profile
   const updateProfile = async (updates) => {
     if (!user) throw new Error('No user logged in')
+    if (!supabase) throw new Error('Supabase is not configured. Please set up your environment variables.')
 
     const { data, error } = await supabase
       .from('profiles')
@@ -170,6 +192,7 @@ export function AuthProvider({ children }) {
   // Upload profile photo to Supabase Storage
   const uploadProfilePhoto = async (file) => {
     if (!user) throw new Error('No user logged in')
+    if (!supabase) throw new Error('Supabase is not configured. Please set up your environment variables.')
 
     const fileExt = file.name.split('.').pop()
     const fileName = `${user.id}/avatar.${fileExt}`
@@ -193,6 +216,13 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    // Check if supabase is available first
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping auth initialization')
+      setLoading(false)
+      return
+    }
+
     // Get initial session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       console.log('Initial session:', session?.user?.email)
@@ -228,7 +258,11 @@ export function AuthProvider({ children }) {
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe()
+      }
+    }
   }, [])
 
   const value = {
