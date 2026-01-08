@@ -115,9 +115,10 @@ export const createDeal = async (dealData) => {
     }
     
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     const deal = {
       ...dealData,
+      user_id: user?.id, // Multi-tenant: assign to current user
       owner_id: dealData.owner_id || user?.id,
       created_by: user?.id,
       created_at: new Date().toISOString(),
@@ -258,9 +259,19 @@ export const getDealStats = async () => {
       return { data: stats, error: false, usingMockData: true }
     }
     
-    const { data, error } = await supabase
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
+    let query = supabase
       .from('deals')
       .select('amount, stage')
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       return handleSupabaseError(error)

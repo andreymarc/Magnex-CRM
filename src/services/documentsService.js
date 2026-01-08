@@ -148,6 +148,7 @@ export const uploadDocument = async (file, documentData) => {
       tags: documentData.tags || [],
       related_to_type: documentData.related_to_type || null,
       related_to_id: documentData.related_to_id || null,
+      user_id: user?.id, // Multi-tenant: assign to current user
       uploaded_by: user?.id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -314,9 +315,19 @@ export const getDocumentStats = async () => {
       return { data: stats, error: false, usingMockData: true }
     }
     
-    const { data, error } = await supabase
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
+    let query = supabase
       .from('documents')
       .select('file_size, category')
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       return handleSupabaseError(error)

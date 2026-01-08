@@ -102,11 +102,6 @@ export default function LeadsList() {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col pr-16 lg:pr-16">
         <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-        {/* Free Trial Banner */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 sm:px-6 text-center text-xs sm:text-sm font-semibold">
-          <span className="hidden sm:inline">🎉 First Month Free - No Credit Card Required • Start Your Free Trial Today! 🎉</span>
-          <span className="sm:hidden">🎉 First Month Free - No Credit Card Required 🎉</span>
-        </div>
         <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
           <div className="space-y-4 sm:space-y-6">
             {/* Header */}

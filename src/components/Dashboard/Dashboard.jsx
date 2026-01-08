@@ -7,6 +7,7 @@ import DealsTable from './QuotesTable'
 import FiltersPanel from './FiltersPanel'
 import AIAssistant from './AIAssistant'
 import { useAuth } from '../../context/AuthContext'
+import { useLanguage } from '../../context/LanguageContext'
 import { mockDeals, businessStats, profitData, statusCounts, tagCounts } from '../../data/mockData'
 
 export default function Dashboard() {
@@ -14,6 +15,7 @@ export default function Dashboard() {
   const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { profile } = useAuth()
+  const { isRTL, language } = useLanguage()
 
   const handleFilterChange = (type, value) => {
     // Filter logic would go here
@@ -31,21 +33,18 @@ export default function Dashboard() {
   }
 
   // Get user's first name from profile
-  const userName = profile?.full_name?.split(' ')[0] || 'משתמש'
+  const userName = profile?.full_name?.split(' ')[0] || (language === 'he' ? 'משתמש' : 'User')
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-50">
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col pr-16 lg:pr-16">
         <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-        {/* Free Trial Banner */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 sm:px-6 text-center text-xs sm:text-sm font-semibold">
-          <span className="hidden sm:inline">🎉 חודש ראשון חינם - ללא צורך בכרטיס אשראי 🎉</span>
-          <span className="sm:hidden">🎉 חודש ראשון חינם 🎉</span>
-        </div>
         <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
           <div className="mb-4 sm:mb-6">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">שלום {userName}!</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              {language === 'he' ? `שלום ${userName}!` : `Hello ${userName}!`}
+            </h1>
           </div>
 
           {/* KPI Cards */}
@@ -75,7 +74,7 @@ export default function Dashboard() {
       <button
         onClick={() => setAIAssistantOpen(true)}
         className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform duration-200 z-40"
-        title="פתח עוזר AI"
+        title={language === 'he' ? 'פתח עוזר AI' : 'Open AI Assistant'}
       >
         <FiZap className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>

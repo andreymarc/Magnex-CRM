@@ -19,7 +19,9 @@ CREATE TABLE IF NOT EXISTS leads (
   status VARCHAR(50) DEFAULT 'new', -- new, contacted, qualified, converted, lost
   score INTEGER DEFAULT 0, -- Lead scoring
   notes TEXT,
-  assigned_to UUID REFERENCES auth.users(id),
+  user_id UUID REFERENCES auth.users(id), -- Multi-tenant: owner of the lead
+  created_by UUID REFERENCES auth.users(id), -- User who created the lead
+  assigned_to UUID REFERENCES auth.users(id), -- User assigned to work on the lead
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -45,6 +47,7 @@ CREATE TABLE IF NOT EXISTS contacts (
   status VARCHAR(50) DEFAULT 'active', -- active, inactive, archived
   tags TEXT[], -- Array of tags
   notes TEXT,
+  user_id UUID REFERENCES auth.users(id), -- Multi-tenant: owner of the contact
   created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -65,6 +68,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   assigned_to UUID REFERENCES auth.users(id),
   related_to_type VARCHAR(50), -- lead, contact, deal, project, etc.
   related_to_id UUID,
+  user_id UUID REFERENCES auth.users(id), -- Multi-tenant: owner of the task
   created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -86,6 +90,7 @@ CREATE TABLE IF NOT EXISTS events (
   attendees UUID[], -- Array of user IDs
   related_to_type VARCHAR(50), -- lead, contact, deal, etc.
   related_to_id UUID,
+  user_id UUID REFERENCES auth.users(id), -- Multi-tenant: owner of the event
   created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -105,6 +110,7 @@ CREATE TABLE IF NOT EXISTS documents (
   tags TEXT[],
   related_to_type VARCHAR(50), -- lead, contact, deal, project, etc.
   related_to_id UUID,
+  user_id UUID REFERENCES auth.users(id), -- Multi-tenant: owner of the document
   uploaded_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -218,8 +224,31 @@ CREATE TABLE IF NOT EXISTS deals (
   customer_id UUID REFERENCES contacts(id),
   lead_id UUID REFERENCES leads(id),
   owner_id UUID REFERENCES auth.users(id),
+  user_id UUID REFERENCES auth.users(id), -- Multi-tenant: owner of the deal
   tags TEXT[],
   notes TEXT,
+  created_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ============================================
+-- INVOICES (ניהול חשבוניות ותשלומים)
+-- ============================================
+CREATE TABLE IF NOT EXISTS invoices (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  invoice_number VARCHAR(50) UNIQUE NOT NULL,
+  customer_id UUID REFERENCES contacts(id),
+  customer_name VARCHAR(255),
+  description TEXT,
+  amount DECIMAL(12, 2) NOT NULL,
+  currency VARCHAR(10) DEFAULT 'USD',
+  status VARCHAR(50) DEFAULT 'pending', -- pending, paid, overdue, cancelled
+  due_date DATE,
+  paid_date DATE,
+  payment_method VARCHAR(50), -- credit_card, bank_transfer, cash, check
+  notes TEXT,
+  user_id UUID REFERENCES auth.users(id), -- Multi-tenant: owner of the invoice
   created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -299,6 +328,18 @@ CREATE INDEX IF NOT EXISTS idx_emails_account ON emails(account_id);
 CREATE INDEX IF NOT EXISTS idx_emails_received_at ON emails(received_at);
 CREATE INDEX IF NOT EXISTS idx_emails_related ON emails(related_to_type, related_to_id);
 
+CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
+CREATE INDEX IF NOT EXISTS idx_invoices_customer ON invoices(customer_id);
+CREATE INDEX IF NOT EXISTS idx_invoices_user_id ON invoices(user_id);
+
+-- Multi-tenant indexes for user_id
+CREATE INDEX IF NOT EXISTS idx_leads_user_id ON leads(user_id);
+CREATE INDEX IF NOT EXISTS idx_contacts_user_id ON contacts(user_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_user_id ON tasks(user_id);
+CREATE INDEX IF NOT EXISTS idx_events_user_id ON events(user_id);
+CREATE INDEX IF NOT EXISTS idx_documents_user_id ON documents(user_id);
+CREATE INDEX IF NOT EXISTS idx_deals_user_id ON deals(user_id);
+
 -- ============================================
 -- ROW LEVEL SECURITY (RLS) Policies
 -- ============================================
@@ -316,31 +357,130 @@ ALTER TABLE form_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE deals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE email_accounts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE emails ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
 
--- Basic policy: Users can only see their own data or data assigned to them
--- You can customize these policies based on your needs
+-- ============================================
+-- Multi-tenant RLS Policies (user_id based)
+-- All tables use user_id for data isolation
+-- ============================================
 
 -- Leads policies
-CREATE POLICY "Users can view their own leads" ON leads
-  FOR SELECT USING (auth.uid() = assigned_to OR auth.uid() = created_by);
+CREATE POLICY "Users can view own leads" ON leads
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own leads" ON leads
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own leads" ON leads
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own leads" ON leads
+  FOR DELETE USING (auth.uid() = user_id);
 
-CREATE POLICY "Users can insert their own leads" ON leads
+-- Contacts policies
+CREATE POLICY "Users can view own contacts" ON contacts
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own contacts" ON contacts
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own contacts" ON contacts
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own contacts" ON contacts
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Tasks policies
+CREATE POLICY "Users can view own tasks" ON tasks
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own tasks" ON tasks
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own tasks" ON tasks
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own tasks" ON tasks
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Events policies
+CREATE POLICY "Users can view own events" ON events
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own events" ON events
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own events" ON events
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own events" ON events
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Documents policies
+CREATE POLICY "Users can view own documents" ON documents
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own documents" ON documents
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own documents" ON documents
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own documents" ON documents
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Deals policies
+CREATE POLICY "Users can view own deals" ON deals
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own deals" ON deals
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own deals" ON deals
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own deals" ON deals
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Invoices policies
+CREATE POLICY "Users can view own invoices" ON invoices
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own invoices" ON invoices
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own invoices" ON invoices
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own invoices" ON invoices
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Email accounts policies (already has user_id)
+CREATE POLICY "Users can view own email accounts" ON email_accounts
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own email accounts" ON email_accounts
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own email accounts" ON email_accounts
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own email accounts" ON email_accounts
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Projects policies (uses manager_id for ownership)
+CREATE POLICY "Users can view own projects" ON projects
+  FOR SELECT USING (auth.uid() = manager_id OR auth.uid() = created_by);
+CREATE POLICY "Users can insert own projects" ON projects
   FOR INSERT WITH CHECK (auth.uid() = created_by);
+CREATE POLICY "Users can update own projects" ON projects
+  FOR UPDATE USING (auth.uid() = manager_id OR auth.uid() = created_by);
+CREATE POLICY "Users can delete own projects" ON projects
+  FOR DELETE USING (auth.uid() = created_by);
 
-CREATE POLICY "Users can update their own leads" ON leads
-  FOR UPDATE USING (auth.uid() = assigned_to OR auth.uid() = created_by);
-
--- Contacts policies (similar pattern for other tables)
-CREATE POLICY "Users can view all contacts" ON contacts
-  FOR SELECT USING (true);
-
-CREATE POLICY "Users can insert contacts" ON contacts
+-- Forms policies
+CREATE POLICY "Users can view own forms" ON forms
+  FOR SELECT USING (auth.uid() = created_by);
+CREATE POLICY "Users can insert own forms" ON forms
   FOR INSERT WITH CHECK (auth.uid() = created_by);
+CREATE POLICY "Users can update own forms" ON forms
+  FOR UPDATE USING (auth.uid() = created_by);
+CREATE POLICY "Users can delete own forms" ON forms
+  FOR DELETE USING (auth.uid() = created_by);
 
-CREATE POLICY "Users can update contacts" ON contacts
-  FOR UPDATE USING (true);
+-- Campaigns policies
+CREATE POLICY "Users can view own campaigns" ON campaigns
+  FOR SELECT USING (auth.uid() = created_by);
+CREATE POLICY "Users can insert own campaigns" ON campaigns
+  FOR INSERT WITH CHECK (auth.uid() = created_by);
+CREATE POLICY "Users can update own campaigns" ON campaigns
+  FOR UPDATE USING (auth.uid() = created_by);
+CREATE POLICY "Users can delete own campaigns" ON campaigns
+  FOR DELETE USING (auth.uid() = created_by);
 
--- Add similar policies for other tables as needed
--- For now, we'll use a more permissive policy for development
--- You should tighten these in production
+-- Service calls policies
+CREATE POLICY "Users can view own service calls" ON service_calls
+  FOR SELECT USING (auth.uid() = created_by OR auth.uid() = assigned_to);
+CREATE POLICY "Users can insert own service calls" ON service_calls
+  FOR INSERT WITH CHECK (auth.uid() = created_by);
+CREATE POLICY "Users can update own service calls" ON service_calls
+  FOR UPDATE USING (auth.uid() = created_by OR auth.uid() = assigned_to);
+CREATE POLICY "Users can delete own service calls" ON service_calls
+  FOR DELETE USING (auth.uid() = created_by);
 

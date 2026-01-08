@@ -2,6 +2,50 @@ import { useState, useEffect } from 'react'
 import { FiX } from 'react-icons/fi'
 import { createLead, updateLead } from '../../../services/leadsService'
 
+const translations = {
+  title: {
+    add: 'הוסף מתעניין חדש',
+    edit: 'ערוך מתעניין'
+  },
+  fields: {
+    firstName: 'שם פרטי',
+    lastName: 'שם משפחה',
+    email: 'אימייל',
+    phone: 'טלפון',
+    company: 'חברה',
+    jobTitle: 'תפקיד',
+    source: 'מקור',
+    status: 'סטטוס',
+    leadScore: 'ציון מתעניין',
+    notes: 'הערות'
+  },
+  source: {
+    select: 'בחר מקור',
+    website: 'אתר',
+    referral: 'המלצה',
+    campaign: 'קמפיין',
+    social: 'רשתות חברתיות',
+    other: 'אחר'
+  },
+  status: {
+    new: 'חדש',
+    contacted: 'נוצר קשר',
+    qualified: 'מוכשר',
+    converted: 'הומר',
+    lost: 'אבד'
+  },
+  buttons: {
+    cancel: 'ביטול',
+    create: 'צור',
+    update: 'עדכן',
+    saving: 'שומר...'
+  },
+  errors: {
+    saveFailed: 'שמירת המתעניין נכשלה',
+    unexpected: 'אירעה שגיאה בלתי צפויה'
+  }
+}
+
 export default function LeadModal({ isOpen, onClose, lead }) {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -71,12 +115,12 @@ export default function LeadModal({ isOpen, onClose, lead }) {
       }
 
       if (result.error) {
-        setError(result.message || 'Failed to save lead')
+        setError(result.message || translations.errors.saveFailed)
       } else {
         onClose()
       }
     } catch (err) {
-      setError('An unexpected error occurred')
+      setError(translations.errors.unexpected)
     } finally {
       setLoading(false)
     }
@@ -88,8 +132,8 @@ export default function LeadModal({ isOpen, onClose, lead }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {lead ? 'Edit Lead' : 'Add New Lead'}
+          <h2 className="text-2xl font-bold text-gray-900" dir="rtl">
+            {lead ? translations.title.edit : translations.title.add}
           </h2>
           <button
             onClick={onClose}
@@ -108,8 +152,8 @@ export default function LeadModal({ isOpen, onClose, lead }) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                First Name *
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.firstName} *
               </label>
               <input
                 type="text"
@@ -117,12 +161,12 @@ export default function LeadModal({ isOpen, onClose, lead }) {
                 value={formData.first_name}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name *
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.lastName} *
               </label>
               <input
                 type="text"
@@ -130,106 +174,108 @@ export default function LeadModal({ isOpen, onClose, lead }) {
                 value={formData.last_name}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.email}
               </label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.phone}
               </label>
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.company}
               </label>
               <input
                 type="text"
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Job Title
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.jobTitle}
               </label>
               <input
                 type="text"
                 name="job_title"
                 value={formData.job_title}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Source
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.source}
               </label>
               <select
                 name="source"
                 value={formData.source}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                dir="rtl"
               >
-                <option value="">Select source</option>
-                <option value="website">Website</option>
-                <option value="referral">Referral</option>
-                <option value="campaign">Campaign</option>
-                <option value="social">Social Media</option>
-                <option value="other">Other</option>
+                <option value="">{translations.source.select}</option>
+                <option value="website">{translations.source.website}</option>
+                <option value="referral">{translations.source.referral}</option>
+                <option value="campaign">{translations.source.campaign}</option>
+                <option value="social">{translations.source.social}</option>
+                <option value="other">{translations.source.other}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.status}
               </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                dir="rtl"
               >
-                <option value="new">New</option>
-                <option value="contacted">Contacted</option>
-                <option value="qualified">Qualified</option>
-                <option value="converted">Converted</option>
-                <option value="lost">Lost</option>
+                <option value="new">{translations.status.new}</option>
+                <option value="contacted">{translations.status.contacted}</option>
+                <option value="qualified">{translations.status.qualified}</option>
+                <option value="converted">{translations.status.converted}</option>
+                <option value="lost">{translations.status.lost}</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Lead Score
+            <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+              {translations.fields.leadScore}
             </label>
             <input
               type="number"
@@ -238,20 +284,20 @@ export default function LeadModal({ isOpen, onClose, lead }) {
               onChange={handleChange}
               min="0"
               max="100"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Notes
+            <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+              {translations.fields.notes}
             </label>
             <textarea
               name="notes"
               value={formData.notes}
               onChange={handleChange}
               rows="4"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
 
@@ -260,15 +306,17 @@ export default function LeadModal({ isOpen, onClose, lead }) {
               type="button"
               onClick={onClose}
               className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              dir="rtl"
             >
-              Cancel
+              {translations.buttons.cancel}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+              dir="rtl"
             >
-              {loading ? 'Saving...' : (lead ? 'Update' : 'Create')}
+              {loading ? translations.buttons.saving : (lead ? translations.buttons.update : translations.buttons.create)}
             </button>
           </div>
         </form>

@@ -117,15 +117,25 @@ export function AuthProvider({ children }) {
 
     if (error) throw error
 
-    // Update profile with additional info
+    // Upsert profile with trial info (backup if trigger didn't fire)
     if (data.user && supabase) {
+      const trialEndsAt = new Date()
+      trialEndsAt.setDate(trialEndsAt.getDate() + 30)
+
       await supabase
         .from('profiles')
-        .update({
+        .upsert({
+          id: data.user.id,
+          full_name: fullName,
           company_name: companyName,
-          phone: phone
+          phone: phone,
+          plan: 'trial',
+          trial_ends_at: trialEndsAt.toISOString(),
+          data_initialized: false,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'id'
         })
-        .eq('id', data.user.id)
     }
 
     return data

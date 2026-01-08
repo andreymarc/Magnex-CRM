@@ -117,7 +117,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter task title"
             />
           </div>
@@ -131,7 +131,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
               value={formData.description}
               onChange={handleChange}
               rows="4"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter task description"
             />
           </div>
@@ -145,7 +145,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="task">Task</option>
                 <option value="reminder">Reminder</option>
@@ -160,7 +160,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
                 name="priority"
                 value={formData.priority}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -179,7 +179,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="pending">Pending</option>
                 <option value="in_progress">In Progress</option>
@@ -196,7 +196,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
                 name="due_date"
                 value={formData.due_date}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
                 name="related_to_type"
                 value={formData.related_to_type}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">None</option>
                 <option value="lead">Lead</option>
@@ -229,7 +229,7 @@ export default function TaskModal({ isOpen, onClose, task }) {
                 name="related_to_id"
                 value={formData.related_to_id}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Enter related record ID"
               />
             </div>

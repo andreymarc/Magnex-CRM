@@ -76,17 +76,27 @@ export const getEventsByDate = async (date) => {
       return { data: events, error: false, usingMockData: true }
     }
     
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
     const startOfDay = new Date(date)
     startOfDay.setHours(0, 0, 0, 0)
     const endOfDay = new Date(startOfDay)
     endOfDay.setDate(endOfDay.getDate() + 1)
-    
-    const { data, error } = await supabase
+
+    let query = supabase
       .from('events')
       .select('*')
       .gte('start_time', startOfDay.toISOString())
       .lt('start_time', endOfDay.toISOString())
       .order('start_time', { ascending: true })
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       return handleSupabaseError(error)
@@ -109,17 +119,27 @@ export const getUpcoming = async (days = 7) => {
       return { data: events, error: false, usingMockData: true }
     }
     
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
     const now = new Date()
     const futureDate = new Date(now)
     futureDate.setDate(futureDate.getDate() + days)
-    
-    const { data, error } = await supabase
+
+    let query = supabase
       .from('events')
       .select('*')
       .gte('start_time', now.toISOString())
       .lte('start_time', futureDate.toISOString())
       .eq('status', 'scheduled')
       .order('start_time', { ascending: true })
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       return handleSupabaseError(error)
@@ -186,9 +206,10 @@ export const createEvent = async (eventData) => {
     }
     
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     const event = {
       ...eventData,
+      user_id: user?.id, // Multi-tenant: assign to current user
       created_by: user?.id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()

@@ -1,31 +1,61 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import Logo from './Logo'
 import { FiMail, FiLock, FiArrowLeft, FiCheck } from 'react-icons/fi'
 
 const translations = {
-  title: 'התחברות',
-  subtitle: 'ברוכים הבאים בחזרה',
-  email: 'אימייל',
-  password: 'סיסמה',
-  loginButton: 'התחבר',
-  magicLinkButton: 'התחברות עם קישור קסם',
-  magicLinkSent: 'קישור התחברות נשלח לאימייל שלך',
-  noAccount: 'אין לך חשבון?',
-  register: 'הרשמה',
-  backToHome: 'חזרה לדף הבית',
-  forgotPassword: 'שכחת סיסמה?',
-  or: 'או',
-  errors: {
-    invalidCredentials: 'אימייל או סיסמה שגויים',
-    emailRequired: 'נא להזין אימייל',
-    passwordRequired: 'נא להזין סיסמה',
-    generic: 'אירעה שגיאה, נסה שוב'
+  en: {
+    title: 'Login',
+    subtitle: 'Welcome back',
+    email: 'Email',
+    password: 'Password',
+    loginButton: 'Login',
+    magicLinkButton: 'Login with Magic Link',
+    magicLinkSent: 'Login link sent to your email',
+    noAccount: "Don't have an account?",
+    register: 'Sign up',
+    backToHome: 'Back to home',
+    forgotPassword: 'Forgot password?',
+    or: 'or',
+    loading: 'Loading...',
+    passwordMode: 'Password',
+    magicMode: 'Magic Link',
+    errors: {
+      invalidCredentials: 'Invalid email or password',
+      emailRequired: 'Please enter email',
+      passwordRequired: 'Please enter password',
+      generic: 'An error occurred, please try again'
+    }
+  },
+  he: {
+    title: 'התחברות',
+    subtitle: 'ברוכים הבאים בחזרה',
+    email: 'אימייל',
+    password: 'סיסמה',
+    loginButton: 'התחבר',
+    magicLinkButton: 'התחברות עם קישור קסם',
+    magicLinkSent: 'קישור התחברות נשלח לאימייל שלך',
+    noAccount: 'אין לך חשבון?',
+    register: 'הרשמה',
+    backToHome: 'חזרה לדף הבית',
+    forgotPassword: 'שכחת סיסמה?',
+    or: 'או',
+    loading: 'טוען...',
+    passwordMode: 'סיסמה',
+    magicMode: 'קישור קסם',
+    errors: {
+      invalidCredentials: 'אימייל או סיסמה שגויים',
+      emailRequired: 'נא להזין אימייל',
+      passwordRequired: 'נא להזין סיסמה',
+      generic: 'אירעה שגיאה, נסה שוב'
+    }
   }
 }
 
 export default function LoginPage() {
+  const { language, isRTL } = useLanguage()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -36,16 +66,18 @@ export default function LoginPage() {
   const { signIn, signInWithMagicLink } = useAuth()
   const navigate = useNavigate()
 
+  const t = translations[language]
+
   const handlePasswordLogin = async (e) => {
     e.preventDefault()
     setError('')
 
     if (!email) {
-      setError(translations.errors.emailRequired)
+      setError(t.errors.emailRequired)
       return
     }
     if (!password) {
-      setError(translations.errors.passwordRequired)
+      setError(t.errors.passwordRequired)
       return
     }
 
@@ -56,9 +88,9 @@ export default function LoginPage() {
     } catch (err) {
       console.error('Login error:', err)
       if (err.message.includes('Invalid login credentials')) {
-        setError(translations.errors.invalidCredentials)
+        setError(t.errors.invalidCredentials)
       } else {
-        setError(translations.errors.generic)
+        setError(t.errors.generic)
       }
     } finally {
       setLoading(false)
@@ -70,7 +102,7 @@ export default function LoginPage() {
     setError('')
 
     if (!email) {
-      setError(translations.errors.emailRequired)
+      setError(t.errors.emailRequired)
       return
     }
 
@@ -80,14 +112,14 @@ export default function LoginPage() {
       setMagicLinkSent(true)
     } catch (err) {
       console.error('Magic link error:', err)
-      setError(translations.errors.generic)
+      setError(t.errors.generic)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center p-4">
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center p-4">
       {/* Background effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
@@ -100,8 +132,8 @@ export default function LoginPage() {
           to="/"
           className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
         >
-          <FiArrowLeft className="rotate-180" />
-          <span>{translations.backToHome}</span>
+          <FiArrowLeft className={isRTL ? "rotate-180" : ""} />
+          <span>{t.backToHome}</span>
         </Link>
 
         {/* Login card */}
@@ -113,17 +145,17 @@ export default function LoginPage() {
 
           {/* Title */}
           <h1 className="text-2xl font-bold text-white text-center mb-2">
-            {translations.title}
+            {t.title}
           </h1>
           <p className="text-gray-400 text-center mb-8">
-            {translations.subtitle}
+            {t.subtitle}
           </p>
 
           {/* Magic link success message */}
           {magicLinkSent ? (
             <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-4 text-center">
               <FiCheck className="w-12 h-12 text-green-400 mx-auto mb-3" />
-              <p className="text-green-300">{translations.magicLinkSent}</p>
+              <p className="text-green-300">{t.magicLinkSent}</p>
             </div>
           ) : (
             <>
@@ -143,9 +175,9 @@ export default function LoginPage() {
                     mode === 'password'
                       ? 'bg-purple-600 text-white'
                       : 'bg-gray-700/50 text-gray-400 hover:text-white'
-                  }`}
+                  }`                  }
                 >
-                  סיסמה
+                  {t.passwordMode}
                 </button>
                 <button
                   type="button"
@@ -156,7 +188,7 @@ export default function LoginPage() {
                       : 'bg-gray-700/50 text-gray-400 hover:text-white'
                   }`}
                 >
-                  קישור קסם
+                  {t.magicMode}
                 </button>
               </div>
 
@@ -164,18 +196,18 @@ export default function LoginPage() {
                 {/* Email field */}
                 <div className="mb-4">
                   <label className="block text-gray-300 text-sm mb-2">
-                    {translations.email}
+                    {t.email}
                   </label>
                   <div className="relative">
+                    <FiMail className={`absolute ${isRTL ? 'right' : 'left'}-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-10`} />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg py-3 px-4 pr-10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+                      className={`w-full bg-white border border-gray-300 rounded-lg py-3 ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} text-gray-900 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors`}
                       placeholder="email@example.com"
                       dir="ltr"
                     />
-                    <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                   </div>
                 </div>
 
@@ -183,18 +215,18 @@ export default function LoginPage() {
                 {mode === 'password' && (
                   <div className="mb-6">
                     <label className="block text-gray-300 text-sm mb-2">
-                      {translations.password}
+                      {t.password}
                     </label>
                     <div className="relative">
+                      <FiLock className={`absolute ${isRTL ? 'right' : 'left'}-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-10`} />
                       <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg py-3 px-4 pr-10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+                        className={`w-full bg-white border border-gray-300 rounded-lg py-3 ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} text-gray-900 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors`}
                         placeholder="••••••••"
                         dir="ltr"
                       />
-                      <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                     </div>
                   </div>
                 )}
@@ -211,12 +243,12 @@ export default function LoginPage() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
-                      <span>טוען...</span>
+                      <span>{t.loading}</span>
                     </span>
                   ) : mode === 'password' ? (
-                    translations.loginButton
+                    t.loginButton
                   ) : (
-                    translations.magicLinkButton
+                    t.magicLinkButton
                   )}
                 </button>
               </form>
@@ -225,9 +257,9 @@ export default function LoginPage() {
 
           {/* Register link */}
           <p className="mt-6 text-center text-gray-400">
-            {translations.noAccount}{' '}
+            {t.noAccount}{' '}
             <Link to="/register" className="text-purple-400 hover:text-purple-300 transition-colors">
-              {translations.register}
+              {t.register}
             </Link>
           </p>
         </div>

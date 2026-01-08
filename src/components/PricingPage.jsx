@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiArrowLeft, FiGlobe } from 'react-icons/fi'
 import Logo from './Logo'
+import { useLanguage } from '../context/LanguageContext'
 
 const translations = {
   en: {
@@ -165,15 +166,14 @@ const translations = {
 }
 
 export default function PricingPage() {
-  const [language, setLanguage] = useState('en')
+  const { language, changeLanguage, isRTL } = useLanguage()
   const [billingCycle, setBillingCycle] = useState('monthly')
   const navigate = useNavigate()
 
   const t = translations[language]
-  const isRTL = language === 'he'
 
   return (
-    <div className={`min-h-screen bg-white antialiased ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-white antialiased">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 py-4 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -191,7 +191,7 @@ export default function PricingPage() {
             </button>
             
             <button
-              onClick={() => setLanguage(language === 'en' ? 'he' : 'en')}
+              onClick={() => changeLanguage(language === 'en' ? 'he' : 'en')}
               className="flex items-center space-x-2 rtl:space-x-reverse text-gray-700 hover:text-primary-600 font-medium text-sm transition-colors"
             >
               <FiGlobe className="w-4 h-4" />

@@ -9,18 +9,26 @@ import { mockInvoices, filterMockInvoices, getInvoiceStats } from '../data/mockI
 // Get all invoices
 export const getInvoices = async (filters = {}) => {
   try {
-    
-    
+
+
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const filtered = filterMockInvoices(mockInvoices, filters)
       return { data: filtered, error: false, usingMockData: true }
     }
-    
+
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
     let query = supabase
       .from('invoices')
       .select('*')
       .order('created_at', { ascending: false })
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
 
     // Apply filters
     if (filters.status) {
@@ -105,9 +113,10 @@ export const createInvoice = async (invoiceData) => {
     }
     
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     const invoice = {
       ...invoiceData,
+      user_id: user?.id, // Multi-tenant: assign to current user
       created_by: user?.id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -239,17 +248,27 @@ export const markInvoiceAsPaid = async (id, paymentMethod) => {
 // Get invoice statistics
 export const getInvoiceStatistics = async () => {
   try {
-    
-    
+
+
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const stats = getInvoiceStats(mockInvoices)
       return { data: stats, error: false, usingMockData: true }
     }
-    
-    const { data, error } = await supabase
+
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
+    let query = supabase
       .from('invoices')
       .select('status, amount')
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       return handleSupabaseError(error)

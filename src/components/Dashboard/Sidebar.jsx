@@ -11,75 +11,83 @@ import {
   FiUserPlus,
   FiCheckSquare,
   FiX,
+  FiLogOut,
 } from "react-icons/fi";
+import { useAuth } from "../../context/AuthContext";
 
 const menuItems = [
   {
     icon: FiHome,
-    label: "Home",
+    label: "דף הבית",
     path: "/dashboard",
     active: true,
-    description: "Dashboard overview and quick access to key metrics",
+    description: "סקירה כללית וגישה מהירה למדדים חשובים",
   },
   {
     icon: FiUserPlus,
-    label: "Leads",
+    label: "לידים",
     path: "/dashboard/leads",
-    description: "Manage potential customers and lead generation",
+    description: "ניהול לקוחות פוטנציאליים והפקת לידים",
   },
   {
     icon: FiUsers,
-    label: "Contacts",
+    label: "אנשי קשר",
     path: "/dashboard/contacts",
-    description: "View and manage all your customer contacts",
+    description: "צפייה וניהול כל אנשי הקשר שלך",
   },
   {
     icon: FiCheckSquare,
-    label: "Tasks",
+    label: "משימות",
     path: "/dashboard/tasks",
-    description: "Track tasks, to-dos, and follow-up activities",
+    description: "מעקב אחר משימות ופעילויות המשך",
   },
   {
     icon: FiList,
-    label: "Deals",
+    label: "עסקאות",
     path: "/dashboard/deals",
-    description: "Manage sales pipeline and deal stages",
+    description: "ניהול צינור מכירות ושלבי עסקה",
   },
   {
     icon: FiClock,
-    label: "Schedule",
+    label: "יומן",
     path: "/dashboard/schedule",
-    description: "Calendar view and event scheduling",
+    description: "תצוגת לוח שנה ותזמון אירועים",
   },
   {
     icon: FiFileText,
-    label: "Documents",
+    label: "מסמכים",
     path: "/dashboard/documents",
-    description: "Store and manage business documents",
+    description: "אחסון וניהול מסמכים עסקיים",
   },
   {
     icon: FiBarChart2,
-    label: "Analytics",
+    label: "אנליטיקס",
     path: "/dashboard/analytics",
-    description: "View reports, charts, and business insights",
+    description: "צפייה בדוחות, גרפים ותובנות עסקיות",
   },
   {
     icon: FiDollarSign,
-    label: "Payments",
+    label: "תשלומים",
     path: "/dashboard/payments",
-    description: "Manage invoices and payment tracking",
+    description: "ניהול חשבוניות ומעקב תשלומים",
   },
   {
     icon: FiSettings,
-    label: "Settings",
+    label: "הגדרות",
     path: "/dashboard/settings",
-    description: "Configure your account and preferences",
+    description: "הגדרת החשבון וההעדפות שלך",
   },
 ];
 
 export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
   const isActive = (path) => {
     if (path === "/dashboard") {
@@ -120,7 +128,7 @@ export default function Sidebar({ isOpen, onClose }) {
       >
         {/* Mobile Header */}
         <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-800">
-          <h2 className="text-white font-semibold text-lg">Menu</h2>
+          <h2 className="text-white font-semibold text-lg">תפריט</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors"
@@ -130,7 +138,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
 
         {/* Menu Items */}
-        <div className="flex-1 overflow-y-auto py-4 lg:py-6">
+        <div className="flex-1 overflow-y-auto py-4 lg:py-6 min-h-0">
           <div className="flex flex-col lg:items-center space-y-2 lg:space-y-6 px-2 lg:px-0">
             {menuItems.map((item, index) => {
               const Icon = item.icon;
@@ -195,6 +203,64 @@ export default function Sidebar({ isOpen, onClose }) {
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* Logout Button */}
+        <div className="flex-shrink-0 border-t border-gray-800 p-4 lg:py-4 lg:px-2">
+          <div className="relative group flex lg:justify-center">
+            <button
+              onClick={handleLogout}
+              className="
+                w-full lg:w-12 h-12
+                rounded-lg
+                flex items-center
+                lg:justify-center
+                px-4 lg:px-0
+                transition-all duration-200
+                text-gray-400 hover:text-red-400 hover:bg-red-500/10
+                bg-gray-800/50
+              "
+              title="התנתק"
+            >
+              <FiLogOut className="w-5 h-5 flex-shrink-0" />
+              <span className="mr-3 lg:hidden text-sm font-medium">
+                התנתק
+              </span>
+            </button>
+
+            {/* Tooltip - Only show on desktop when sidebar is collapsed */}
+            <div
+              className="
+              absolute right-full mr-2 top-1/2 -translate-y-1/2
+              hidden lg:group-hover:block
+              z-50
+              pointer-events-none
+            "
+            >
+              <div
+                className="
+                bg-gray-800 text-white text-sm
+                px-3 py-2 rounded-lg
+                whitespace-nowrap
+                shadow-xl
+                border border-gray-700
+              "
+              >
+                <div className="font-semibold mb-1">התנתק</div>
+                <div className="text-gray-300 text-xs max-w-xs">
+                  יציאה מהחשבון שלך
+                </div>
+                {/* Tooltip arrow */}
+                <div
+                  className="
+                  absolute left-full top-1/2 -translate-y-1/2
+                  border-4 border-transparent
+                  border-l-gray-800
+                "
+                ></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

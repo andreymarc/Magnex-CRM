@@ -118,9 +118,10 @@ export const createTask = async (taskData) => {
     }
     
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     const task = {
       ...taskData,
+      user_id: user?.id, // Multi-tenant: assign to current user
       created_by: user?.id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -235,8 +236,7 @@ export const deleteTask = async (id) => {
 // Get task statistics
 export const getTaskStats = async () => {
   try {
-    
-    
+
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const stats = {
@@ -251,10 +251,20 @@ export const getTaskStats = async () => {
       }
       return { data: stats, error: false, usingMockData: true }
     }
-    
-    const { data, error } = await supabase
+
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
+    let query = supabase
       .from('tasks')
       .select('status, priority, due_date')
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       return handleSupabaseError(error)

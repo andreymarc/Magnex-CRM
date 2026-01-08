@@ -8,6 +8,7 @@ import { mockTasks } from '../data/mockTasks'
 import { mockDeals } from '../data/mockDeals'
 import { mockEvents } from '../data/mockEvents'
 import { mockDocuments } from '../data/mockDocuments'
+import { mockInvoices } from '../data/mockInvoices'
 
 // Initialize user data with mock data
 export const initializeUserData = async (userId) => {
@@ -36,12 +37,21 @@ export const initializeUserData = async (userId) => {
 
     console.log('Initializing mock data for user:', userId)
 
-    // Insert leads
-    const leadsToInsert = mockLeads.slice(0, 5).map(lead => ({
-      ...lead,
-      id: undefined, // Let Supabase generate new IDs
+    // Insert leads (8 records) - only include valid DB columns
+    const leadsToInsert = mockLeads.slice(0, 8).map(lead => ({
+      first_name: lead.first_name,
+      last_name: lead.last_name,
+      email: lead.email,
+      phone: lead.phone,
+      company: lead.company,
+      job_title: lead.job_title,
+      source: lead.source,
+      status: lead.status,
+      score: lead.score,
+      notes: lead.notes,
       user_id: userId,
       assigned_to: userId,
+      created_by: userId,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }))
@@ -54,10 +64,24 @@ export const initializeUserData = async (userId) => {
       console.error('Error inserting leads:', leadsError)
     }
 
-    // Insert contacts
-    const contactsToInsert = mockContacts.slice(0, 5).map(contact => ({
-      ...contact,
-      id: undefined,
+    // Insert contacts (8 records) - only include valid DB columns
+    const contactsToInsert = mockContacts.slice(0, 8).map(contact => ({
+      first_name: contact.first_name,
+      last_name: contact.last_name,
+      email: contact.email,
+      phone: contact.phone,
+      mobile: contact.mobile,
+      company: contact.company,
+      job_title: contact.job_title,
+      address: contact.address,
+      city: contact.city,
+      country: contact.country,
+      postal_code: contact.postal_code,
+      website: contact.website,
+      type: contact.type,
+      status: contact.status,
+      tags: contact.tags,
+      notes: contact.notes,
       user_id: userId,
       created_by: userId,
       created_at: new Date().toISOString(),
@@ -72,10 +96,18 @@ export const initializeUserData = async (userId) => {
       console.error('Error inserting contacts:', contactsError)
     }
 
-    // Insert tasks
-    const tasksToInsert = mockTasks.slice(0, 5).map(task => ({
-      ...task,
-      id: undefined,
+    // Insert tasks (8 records) - only include valid DB columns
+    // Note: related_to_id set to null because mock data uses string IDs, not UUIDs
+    const tasksToInsert = mockTasks.slice(0, 8).map(task => ({
+      title: task.title,
+      description: task.description,
+      type: task.type,
+      priority: task.priority,
+      status: task.status,
+      due_date: task.due_date,
+      completed_at: task.completed_at,
+      related_to_type: null, // Can't reference entities without valid UUIDs
+      related_to_id: null,
       user_id: userId,
       assigned_to: userId,
       created_by: userId,
@@ -91,12 +123,20 @@ export const initializeUserData = async (userId) => {
       console.error('Error inserting tasks:', tasksError)
     }
 
-    // Insert deals
-    const dealsToInsert = mockDeals.slice(0, 5).map(deal => ({
-      ...deal,
-      id: undefined,
+    // Insert deals (8 records) - only include valid DB columns
+    const dealsToInsert = mockDeals.slice(0, 8).map(deal => ({
+      title: deal.title,
+      description: deal.description,
+      amount: deal.amount,
+      currency: deal.currency,
+      stage: deal.stage,
+      probability: deal.probability,
+      expected_close_date: deal.expected_close_date,
+      actual_close_date: deal.actual_close_date,
+      tags: deal.tags,
+      notes: deal.notes,
       user_id: userId,
-      assigned_to: userId,
+      owner_id: userId,
       created_by: userId,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -110,10 +150,20 @@ export const initializeUserData = async (userId) => {
       console.error('Error inserting deals:', dealsError)
     }
 
-    // Insert events
-    const eventsToInsert = mockEvents.slice(0, 5).map(event => ({
-      ...event,
-      id: undefined,
+    // Insert events (8 records) - only include valid DB columns
+    // Note: related_to_id set to null because mock data uses string IDs, not UUIDs
+    const eventsToInsert = mockEvents.slice(0, 8).map(event => ({
+      title: event.title,
+      description: event.description,
+      type: event.type,
+      start_time: event.start_time,
+      end_time: event.end_time,
+      location: event.location,
+      is_all_day: event.is_all_day,
+      status: event.status,
+      attendees: event.attendees,
+      related_to_type: null, // Can't reference entities without valid UUIDs
+      related_to_id: null,
       user_id: userId,
       created_by: userId,
       created_at: new Date().toISOString(),
@@ -128,10 +178,18 @@ export const initializeUserData = async (userId) => {
       console.error('Error inserting events:', eventsError)
     }
 
-    // Insert documents (metadata only, no actual files)
-    const documentsToInsert = mockDocuments.slice(0, 5).map(doc => ({
-      ...doc,
-      id: undefined,
+    // Insert documents (8 records, metadata only, no actual files) - only include valid DB columns
+    // Note: related_to_id set to null because mock data uses string IDs, not UUIDs
+    const documentsToInsert = mockDocuments.slice(0, 8).map(doc => ({
+      name: doc.name,
+      file_name: doc.file_name,
+      file_path: doc.file_path,
+      file_type: doc.file_type,
+      file_size: doc.file_size,
+      category: doc.category,
+      tags: doc.tags,
+      related_to_type: null, // Can't reference entities without valid UUIDs
+      related_to_id: null,
       user_id: userId,
       uploaded_by: userId,
       created_at: new Date().toISOString(),
@@ -144,6 +202,31 @@ export const initializeUserData = async (userId) => {
 
     if (documentsError) {
       console.error('Error inserting documents:', documentsError)
+    }
+
+    // Insert invoices (8 records) - only include valid DB columns
+    const invoicesToInsert = mockInvoices.slice(0, 8).map(invoice => ({
+      invoice_number: invoice.invoice_number,
+      customer_name: invoice.customer_name,
+      description: invoice.description,
+      amount: invoice.amount,
+      currency: invoice.currency,
+      status: invoice.status,
+      due_date: invoice.due_date,
+      paid_date: invoice.paid_date,
+      payment_method: invoice.payment_method,
+      user_id: userId,
+      created_by: userId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }))
+
+    const { error: invoicesError } = await supabase
+      .from('invoices')
+      .insert(invoicesToInsert)
+
+    if (invoicesError) {
+      console.error('Error inserting invoices:', invoicesError)
     }
 
     console.log('Mock data initialization completed for user:', userId)

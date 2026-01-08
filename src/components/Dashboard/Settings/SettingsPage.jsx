@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { FiUser, FiBell, FiShield, FiLink, FiSave, FiZap, FiMail, FiKey, FiDatabase, FiCreditCard, FiCamera, FiCalendar } from 'react-icons/fi'
 import { useAuth } from '../../../context/AuthContext'
+import { useLanguage } from '../../../context/LanguageContext'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
 import AIAssistant from '../AIAssistant'
 
 export default function SettingsPage() {
   const { user, profile: authProfile, updateProfile, uploadProfilePhoto } = useAuth()
+  const { language, changeLanguage, isRTL } = useLanguage()
   const [activeTab, setActiveTab] = useState('profile')
   const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -36,11 +38,11 @@ export default function SettingsPage() {
         phone: authProfile.phone || '',
         company: authProfile.company_name || '',
         jobTitle: authProfile.job_title || '',
-        language: authProfile.language || 'he',
+        language: authProfile.language || language || 'he',
         timezone: authProfile.timezone || 'Asia/Jerusalem'
       })
     }
-  }, [authProfile, user])
+  }, [authProfile, user, language])
 
   // Notification settings
   const [notifications, setNotifications] = useState({
@@ -112,6 +114,10 @@ export default function SettingsPage() {
         language: profileForm.language,
         timezone: profileForm.timezone
       })
+      // Update language context when language is changed
+      if (profileForm.language !== language) {
+        changeLanguage(profileForm.language)
+      }
       alert('ההגדרות נשמרו בהצלחה!')
     } catch (error) {
       console.error('Save error:', error)
@@ -130,14 +136,10 @@ export default function SettingsPage() {
   ]
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-50">
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col pr-16 lg:pr-16">
         <TopNav onMenuClick={() => setSidebarOpen(true)} />
-        {/* Free Trial Banner */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-6 text-center text-sm font-semibold">
-          🎉 חודש ראשון חינם - ללא צורך בכרטיס אשראי • התחל את הניסיון החינמי שלך היום! 🎉
-        </div>
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Header */}
@@ -217,7 +219,7 @@ export default function SettingsPage() {
                               type="text"
                               value={profileForm.firstName}
                               onChange={(e) => handleProfileChange('firstName', e.target.value)}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
                           <div>
@@ -228,7 +230,7 @@ export default function SettingsPage() {
                               type="text"
                               value={profileForm.lastName}
                               onChange={(e) => handleProfileChange('lastName', e.target.value)}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
                         </div>
@@ -254,7 +256,7 @@ export default function SettingsPage() {
                             type="tel"
                             value={profileForm.phone}
                             onChange={(e) => handleProfileChange('phone', e.target.value)}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           />
                         </div>
 
@@ -267,7 +269,7 @@ export default function SettingsPage() {
                               type="text"
                               value={profileForm.company}
                               onChange={(e) => handleProfileChange('company', e.target.value)}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
                           <div>
@@ -278,7 +280,7 @@ export default function SettingsPage() {
                               type="text"
                               value={profileForm.jobTitle}
                               onChange={(e) => handleProfileChange('jobTitle', e.target.value)}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
                         </div>
@@ -291,7 +293,7 @@ export default function SettingsPage() {
                             <select
                               value={profileForm.language}
                               onChange={(e) => handleProfileChange('language', e.target.value)}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             >
                               <option value="en">English</option>
                               <option value="he">עברית</option>
@@ -304,7 +306,7 @@ export default function SettingsPage() {
                             <select
                               value={profileForm.timezone}
                               onChange={(e) => handleProfileChange('timezone', e.target.value)}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             >
                               <option value="Asia/Jerusalem">Asia/Jerusalem (GMT+2)</option>
                               <option value="America/New_York">America/New_York (GMT-5)</option>
@@ -393,7 +395,7 @@ export default function SettingsPage() {
                             onChange={(e) => handleSecurityChange('sessionTimeout', parseInt(e.target.value))}
                             min="5"
                             max="120"
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           />
                           <p className="text-xs text-gray-500 mt-1">התנתק אוטומטית לאחר חוסר פעילות</p>
                         </div>
@@ -433,21 +435,21 @@ export default function SettingsPage() {
                       <div className="space-y-4">
                         <div className="p-4 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <FiMail className="w-8 h-8 text-blue-600" />
+                            <div className="flex items-center gap-3">
+                              <FiMail className="w-8 h-8 text-blue-600 flex-shrink-0" />
                               <div>
                                 <h3 className="font-medium text-gray-900">אינטגרציית אימייל</h3>
                                 <p className="text-sm text-gray-500">חבר Gmail, Outlook או IMAP</p>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center gap-3">
                               <select
                                 value={integrations.email.provider}
                                 onChange={(e) => setIntegrations(prev => ({
                                   ...prev,
                                   email: { ...prev.email, provider: e.target.value }
                                 }))}
-                                className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="gmail">Gmail</option>
                                 <option value="outlook">Outlook</option>
@@ -468,21 +470,21 @@ export default function SettingsPage() {
 
                         <div className="p-4 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <FiCalendar className="w-8 h-8 text-green-600" />
+                            <div className="flex items-center gap-3">
+                              <FiCalendar className="w-8 h-8 text-green-600 flex-shrink-0" />
                               <div>
                                 <h3 className="font-medium text-gray-900">סנכרון יומן</h3>
                                 <p className="text-sm text-gray-500">סנכרן עם Google Calendar או Outlook</p>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center gap-3">
                               <select
                                 value={integrations.calendar.provider}
                                 onChange={(e) => setIntegrations(prev => ({
                                   ...prev,
                                   calendar: { ...prev.calendar, provider: e.target.value }
                                 }))}
-                                className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="google">Google Calendar</option>
                                 <option value="outlook">Outlook Calendar</option>
@@ -502,21 +504,21 @@ export default function SettingsPage() {
 
                         <div className="p-4 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <FiCreditCard className="w-8 h-8 text-purple-600" />
+                            <div className="flex items-center gap-3">
+                              <FiCreditCard className="w-8 h-8 text-purple-600 flex-shrink-0" />
                               <div>
                                 <h3 className="font-medium text-gray-900">שער תשלום</h3>
                                 <p className="text-sm text-gray-500">חבר Stripe, PayPal או מעבדי תשלום אחרים</p>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center gap-3">
                               <select
                                 value={integrations.payment.provider}
                                 onChange={(e) => setIntegrations(prev => ({
                                   ...prev,
                                   payment: { ...prev.payment, provider: e.target.value }
                                 }))}
-                                className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="stripe">Stripe</option>
                                 <option value="paypal">PayPal</option>
@@ -537,21 +539,21 @@ export default function SettingsPage() {
 
                         <div className="p-4 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <FiDatabase className="w-8 h-8 text-orange-600" />
+                            <div className="flex items-center gap-3">
+                              <FiDatabase className="w-8 h-8 text-orange-600 flex-shrink-0" />
                               <div>
                                 <h3 className="font-medium text-gray-900">אחסון ענן</h3>
                                 <p className="text-sm text-gray-500">חבר OneDrive, Google Drive או Dropbox</p>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center gap-3">
                               <select
                                 value={integrations.storage.provider}
                                 onChange={(e) => setIntegrations(prev => ({
                                   ...prev,
                                   storage: { ...prev.storage, provider: e.target.value }
                                 }))}
-                                className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="onedrive">OneDrive</option>
                                 <option value="googledrive">Google Drive</option>

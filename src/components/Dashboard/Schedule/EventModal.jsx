@@ -3,6 +3,60 @@ import { FiX } from 'react-icons/fi'
 import { createEvent, updateEvent } from '../../../services/eventsService'
 import { format } from 'date-fns'
 
+const translations = {
+  title: {
+    add: 'הוסף אירוע חדש',
+    edit: 'ערוך אירוע'
+  },
+  fields: {
+    eventTitle: 'כותרת אירוע',
+    description: 'תיאור',
+    type: 'סוג',
+    status: 'סטטוס',
+    allDayEvent: 'אירוע לכל היום',
+    startTime: 'שעת התחלה',
+    endTime: 'שעת סיום',
+    date: 'תאריך',
+    location: 'מיקום',
+    relatedToType: 'קשור לסוג',
+    relatedToId: 'קשור למזהה'
+  },
+  type: {
+    meeting: 'פגישה',
+    call: 'שיחה',
+    appointment: 'תור',
+    reminder: 'תזכורת'
+  },
+  status: {
+    scheduled: 'מתוזמן',
+    completed: 'הושלם',
+    cancelled: 'בוטל'
+  },
+  relatedTo: {
+    none: 'ללא',
+    lead: 'מתעניין',
+    contact: 'איש קשר',
+    deal: 'עסקה',
+    project: 'פרויקט'
+  },
+  placeholders: {
+    eventTitle: 'הזן כותרת אירוע',
+    description: 'הזן תיאור אירוע',
+    location: 'הזן מיקום או קישור לפגישה',
+    relatedId: 'הזן מזהה רשומה קשורה'
+  },
+  buttons: {
+    cancel: 'ביטול',
+    create: 'צור',
+    update: 'עדכן',
+    saving: 'שומר...'
+  },
+  errors: {
+    saveFailed: 'שמירת האירוע נכשלה',
+    unexpected: 'אירעה שגיאה בלתי צפויה'
+  }
+}
+
 export default function EventModal({ isOpen, onClose, event, defaultDate }) {
   const [formData, setFormData] = useState({
     title: '',
@@ -110,12 +164,12 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
       }
 
       if (result.error) {
-        setError(result.message || 'Failed to save event')
+        setError(result.message || translations.errors.saveFailed)
       } else {
         onClose()
       }
     } catch (err) {
-      setError('An unexpected error occurred')
+      setError(translations.errors.unexpected)
     } finally {
       setLoading(false)
     }
@@ -127,8 +181,8 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {event ? 'Edit Event' : 'Add New Event'}
+          <h2 className="text-2xl font-bold text-gray-900" dir="rtl">
+            {event ? translations.title.edit : translations.title.add}
           </h2>
           <button
             onClick={onClose}
@@ -146,8 +200,8 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Event Title *
+            <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+              {translations.fields.eventTitle} *
             </label>
             <input
               type="text"
@@ -155,55 +209,59 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Enter event title"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder={translations.placeholders.eventTitle}
+              dir="rtl"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
+            <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+              {translations.fields.description}
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               rows="3"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Enter event description"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder={translations.placeholders.description}
+              dir="rtl"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Type
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.type}
               </label>
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                dir="rtl"
               >
-                <option value="meeting">Meeting</option>
-                <option value="call">Call</option>
-                <option value="appointment">Appointment</option>
-                <option value="reminder">Reminder</option>
+                <option value="meeting">{translations.type.meeting}</option>
+                <option value="call">{translations.type.call}</option>
+                <option value="appointment">{translations.type.appointment}</option>
+                <option value="reminder">{translations.type.reminder}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.status}
               </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                dir="rtl"
               >
-                <option value="scheduled">Scheduled</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="scheduled">{translations.status.scheduled}</option>
+                <option value="completed">{translations.status.completed}</option>
+                <option value="cancelled">{translations.status.cancelled}</option>
               </select>
             </div>
           </div>
@@ -216,16 +274,16 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
               onChange={handleChange}
               className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
             />
-            <label className="text-sm font-medium text-gray-700">
-              All Day Event
+            <label className="text-sm font-medium text-gray-700" dir="rtl">
+              {translations.fields.allDayEvent}
             </label>
           </div>
 
           {!formData.is_all_day ? (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Start Time *
+                <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                  {translations.fields.startTime} *
                 </label>
                 <input
                   type="datetime-local"
@@ -233,12 +291,12 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
                   value={formData.start_time}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  End Time *
+                <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                  {translations.fields.endTime} *
                 </label>
                 <input
                   type="datetime-local"
@@ -246,14 +304,14 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
                   value={formData.end_time}
                   onChange={handleChange}
                   required
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
             </div>
           ) : (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Date *
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.date} *
               </label>
               <input
                 type="date"
@@ -268,54 +326,57 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
                   }))
                 }}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Location
+            <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+              {translations.fields.location}
             </label>
             <input
               type="text"
               name="location"
               value={formData.location}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Enter location or meeting link"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder={translations.placeholders.location}
+              dir="rtl"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Related To Type
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.relatedToType}
               </label>
               <select
                 name="related_to_type"
                 value={formData.related_to_type}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                dir="rtl"
               >
-                <option value="">None</option>
-                <option value="lead">Lead</option>
-                <option value="contact">Contact</option>
-                <option value="deal">Deal</option>
-                <option value="project">Project</option>
+                <option value="">{translations.relatedTo.none}</option>
+                <option value="lead">{translations.relatedTo.lead}</option>
+                <option value="contact">{translations.relatedTo.contact}</option>
+                <option value="deal">{translations.relatedTo.deal}</option>
+                <option value="project">{translations.relatedTo.project}</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Related To ID
+              <label className="block text-sm font-medium text-gray-700 mb-1" dir="rtl">
+                {translations.fields.relatedToId}
               </label>
               <input
                 type="text"
                 name="related_to_id"
                 value={formData.related_to_id}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                placeholder="Enter related record ID"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder={translations.placeholders.relatedId}
+                dir="rtl"
               />
             </div>
           </div>
@@ -325,15 +386,17 @@ export default function EventModal({ isOpen, onClose, event, defaultDate }) {
               type="button"
               onClick={onClose}
               className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              dir="rtl"
             >
-              Cancel
+              {translations.buttons.cancel}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+              dir="rtl"
             >
-              {loading ? 'Saving...' : (event ? 'Update' : 'Create')}
+              {loading ? translations.buttons.saving : (event ? translations.buttons.update : translations.buttons.create)}
             </button>
           </div>
         </form>

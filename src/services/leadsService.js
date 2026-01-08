@@ -268,7 +268,7 @@ export const convertLeadToContact = async (leadId) => {
 // Get lead statistics
 export const getLeadStats = async () => {
   try {
-        
+
     // Use mock data if Supabase is not configured
     if (!supabase) {
       const stats = {
@@ -281,10 +281,20 @@ export const getLeadStats = async () => {
       }
       return { data: stats, error: false, usingMockData: true }
     }
-    
-    const { data, error } = await supabase
+
+    // Get current user for multi-tenant filtering
+    const { data: { user } } = await supabase.auth.getUser()
+
+    let query = supabase
       .from('leads')
       .select('status')
+
+    // Filter by user_id for multi-tenant isolation
+    if (user?.id) {
+      query = query.eq('user_id', user.id)
+    }
+
+    const { data, error } = await query
 
     if (error) {
       return handleSupabaseError(error)

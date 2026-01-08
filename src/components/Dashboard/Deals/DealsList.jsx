@@ -122,10 +122,6 @@ export default function DealsList() {
       <Sidebar />
       <div className="flex-1 flex flex-col pr-16 lg:pr-16">
         <TopNav />
-        {/* Free Trial Banner */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-6 text-center text-sm font-semibold">
-          🎉 First Month Free - No Credit Card Required • Start Your Free Trial Today! 🎉
-        </div>
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="space-y-6">
             {/* Header */}

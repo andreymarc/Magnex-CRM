@@ -177,7 +177,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                 value={formData.customer_name}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Enter customer name"
               />
             </div>
@@ -190,7 +190,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                 name="customer_id"
                 value={formData.customer_id}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Contact ID (optional)"
               />
             </div>
@@ -244,7 +244,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                           type="text"
                           value={item.description}
                           onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                          className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-full bg-white border border-gray-300 rounded px-2 py-1 text-sm text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           placeholder="Item description"
                         />
                       </td>
@@ -254,7 +254,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                           value={item.quantity}
                           onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
                           min="1"
-                          className="w-20 border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-20 bg-white border border-gray-300 rounded px-2 py-1 text-sm text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         />
                       </td>
                       <td className="px-4 py-2">
@@ -264,7 +264,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                           onChange={(e) => handleItemChange(index, 'unit_price', e.target.value)}
                           min="0"
                           step="0.01"
-                          className="w-24 border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-24 bg-white border border-gray-300 rounded px-2 py-1 text-sm text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         />
                       </td>
                       <td className="px-4 py-2">
@@ -316,7 +316,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                 required
                 min="0"
                 step="0.01"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <div>
@@ -327,7 +327,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                 name="currency"
                 value={formData.currency}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
@@ -343,7 +343,7 @@ export default function InvoiceModal({ isOpen, onClose, invoice }) {
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="pending">Pending</option>
                 <option value="paid">Paid</option>

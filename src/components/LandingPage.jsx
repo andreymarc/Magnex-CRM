@@ -5,6 +5,7 @@ import Logo from './Logo'
 import SwipeableCarousel from './SwipeableCarousel'
 import IntegrationIcon from './IntegrationIcon'
 import ContactForm from './ContactForm'
+import { useLanguage } from '../context/LanguageContext'
 
 const translations = {
   en: {
@@ -93,7 +94,7 @@ const translations = {
       title: "Ready to Transform Your Business Operations?",
       subtitle: "Join hundreds of businesses already using our tailor-made CRM solution",
       button: "Get Started Today",
-      secondaryButton: "Schedule a Demo",
+      secondaryButton: "Start Today",
       freeTrial: "First Month Free - No Credit Card Required"
     },
     ai: {
@@ -398,7 +399,7 @@ const translations = {
       title: "מוכנים לשנות את הפעילות העסקית שלכם?",
       subtitle: "הצטרפו למאות עסקים שכבר משתמשים בפתרון ה-CRM המותאם שלנו",
       button: "התחילו עוד היום",
-      secondaryButton: "קבעו הדגמה",
+      secondaryButton: "התחילו עוד היום",
       freeTrial: "חודש ראשון חינם - ללא צורך בכרטיס אשראי"
     },
     pricing: {
@@ -620,14 +621,13 @@ const translations = {
 }
 
 export default function LandingPage() {
-  const [language, setLanguage] = useState('en')
+  const { language, changeLanguage, isRTL } = useLanguage()
   const [isScrolled, setIsScrolled] = useState(false)
   const [showLanguageMenu, setShowLanguageMenu] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const languageMenuRef = useRef(null)
 
   const t = translations[language]
-  const isRTL = language === 'he'
 
   // Close language menu when clicking outside
   useEffect(() => {
@@ -704,7 +704,7 @@ export default function LandingPage() {
                     isScrolled ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
                   }`}
                 >
-                  {language === 'en' ? 'Dashboard' : 'לוח בקרה'}
+                  {language === 'en' ? 'Login' : 'כניסה למערכת'}
                 </Link>
                 
                 {/* Language Selector - Hidden when scrolled */}
@@ -723,7 +723,7 @@ export default function LandingPage() {
                     <div className="absolute right-0 rtl:left-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
                       <button
                         onClick={() => {
-                          setLanguage('en')
+                          changeLanguage('en')
                           setShowLanguageMenu(false)
                         }}
                         className={`w-full text-left rtl:text-right px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between ${
@@ -739,7 +739,7 @@ export default function LandingPage() {
                       </button>
                       <button
                         onClick={() => {
-                          setLanguage('he')
+                          changeLanguage('he')
                           setShowLanguageMenu(false)
                         }}
                         className={`w-full text-left rtl:text-right px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between ${
@@ -767,11 +767,14 @@ export default function LandingPage() {
                 </button>
 
                 {/* Book a Demo Button - Always visible */}
-                <button className={`bg-primary-500 hover:bg-primary-600 text-white rounded-full font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 hidden sm:block ${
-                  isScrolled ? 'px-4 py-1.5 text-xs' : 'px-6 py-2.5 text-sm'
-                }`}>
-                  {language === 'en' ? 'Book a Demo' : 'קבעו הדגמה'}
-                </button>
+                <Link
+                  to="/register"
+                  className={`bg-primary-500 hover:bg-primary-600 text-white rounded-full font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 hidden sm:block ${
+                    isScrolled ? 'px-4 py-1.5 text-xs' : 'px-6 py-2.5 text-sm'
+                  }`}
+                >
+                  {language === 'en' ? 'Book a Demo' : 'התחילו עוד היום'}
+                </Link>
               </div>
             </div>
 
@@ -800,11 +803,15 @@ export default function LandingPage() {
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-white/90 hover:text-white font-medium text-sm text-left rtl:text-right py-2"
                   >
-                    {language === 'en' ? 'Dashboard' : 'לוח בקרה'}
+                    {language === 'en' ? 'Login' : 'כניסה למערכת'}
                   </Link>
-                  <button className="bg-primary-500 hover:bg-primary-600 text-white rounded-full font-semibold text-sm py-2.5 mt-2">
-                    {language === 'en' ? 'Book a Demo' : 'קבעו הדגמה'}
-                  </button>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="bg-primary-500 hover:bg-primary-600 text-white rounded-full font-semibold text-sm py-2.5 mt-2 inline-block text-center"
+                  >
+                    {language === 'en' ? 'Book a Demo' : 'התחילו עוד היום'}
+                  </Link>
                 </div>
               </div>
             )}
@@ -840,13 +847,13 @@ export default function LandingPage() {
               {t.hero.subheadline}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="group relative bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-300 shadow-xl shadow-primary-500/30 hover:shadow-2xl hover:shadow-primary-500/40 hover:-translate-y-0.5">
+              <Link
+                to="/register"
+                className="group relative bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-300 shadow-xl shadow-primary-500/30 hover:shadow-2xl hover:shadow-primary-500/40 hover:-translate-y-0.5 inline-block"
+              >
                 {t.cta.button}
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/0 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-              </button>
-              <button className="bg-white text-gray-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-50 transition-all duration-300 border-2 border-gray-200 hover:border-gray-300 shadow-lg hover:shadow-xl">
-                {t.cta.secondaryButton}
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -1133,13 +1140,13 @@ export default function LandingPage() {
             {t.cta.subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="group relative bg-white text-gray-900 px-10 py-5 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:-translate-y-1">
+            <Link
+              to="/register"
+              className="group relative bg-white text-gray-900 px-10 py-5 rounded-xl text-lg font-bold hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:-translate-y-1 inline-block"
+            >
               {t.cta.button}
               <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/0 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-            </button>
-            <button className="bg-transparent text-white px-10 py-5 rounded-xl text-lg font-semibold hover:bg-white/10 transition-all duration-300 border-2 border-white/30 hover:border-white/50 backdrop-blur-sm">
-              {t.cta.secondaryButton}
-            </button>
+            </Link>
           </div>
         </div>
       </section>

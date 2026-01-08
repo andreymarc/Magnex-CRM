@@ -195,7 +195,7 @@ export default function DocumentModal({ isOpen, onClose, document }) {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter document name"
             />
           </div>
@@ -209,7 +209,7 @@ export default function DocumentModal({ isOpen, onClose, document }) {
               value={formData.category}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               {documentCategories.map(cat => (
                 <option key={cat.id} value={cat.id}>{cat.label}</option>
@@ -232,7 +232,7 @@ export default function DocumentModal({ isOpen, onClose, document }) {
                     handleAddTag()
                   }
                 }}
-                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Add tag and press Enter"
               />
               <button
@@ -273,7 +273,7 @@ export default function DocumentModal({ isOpen, onClose, document }) {
                 name="related_to_type"
                 value={formData.related_to_type}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">None</option>
                 <option value="lead">Lead</option>
@@ -292,7 +292,7 @@ export default function DocumentModal({ isOpen, onClose, document }) {
                 name="related_to_id"
                 value={formData.related_to_id}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Enter related record ID"
               />
             </div>

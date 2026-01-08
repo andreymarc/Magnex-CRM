@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(git push:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

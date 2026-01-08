@@ -152,7 +152,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter deal title"
             />
           </div>
@@ -166,7 +166,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
               value={formData.description}
               onChange={handleChange}
               rows="3"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter deal description"
             />
           </div>
@@ -184,7 +184,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                 required
                 min="0"
                 step="0.01"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="0.00"
               />
             </div>
@@ -196,7 +196,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                 name="currency"
                 value={formData.currency}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
@@ -215,7 +215,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                 onChange={handleChange}
                 min="0"
                 max="100"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="0"
               />
             </div>
@@ -231,7 +231,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                 value={formData.stage}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 {dealStages.map(stage => (
                   <option key={stage.id} value={stage.id}>{stage.label}</option>
@@ -247,7 +247,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                 name="expected_close_date"
                 value={formData.expected_close_date}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -262,7 +262,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                 name="customer_id"
                 value={formData.customer_id}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Contact ID (optional)"
               />
             </div>
@@ -275,7 +275,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                 name="lead_id"
                 value={formData.lead_id}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Lead ID (optional)"
               />
             </div>
@@ -296,7 +296,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
                     handleAddTag()
                   }
                 }}
-                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Add tag and press Enter"
               />
               <button
@@ -337,7 +337,7 @@ export default function DealModal({ isOpen, onClose, deal }) {
               value={formData.notes}
               onChange={handleChange}
               rows="4"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Add notes about this deal"
             />
           </div>
