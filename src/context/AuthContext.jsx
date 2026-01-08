@@ -84,9 +84,39 @@ export function AuthProvider({ children }) {
     return new Date() < trialEnd
   }
 
-  // Check if user has pro plan
+  // Check if user has pro plan (with active subscription)
   const isPro = () => {
-    return profile?.plan === 'pro'
+    if (!profile) return false
+    // User is pro if plan is 'pro' AND subscription is active
+    if (profile.plan === 'pro') {
+      // If they have a subscription, check status
+      if (profile.subscription_status) {
+        return ['active', 'trialing'].includes(profile.subscription_status)
+      }
+      // Legacy pro users without subscription status
+      return true
+    }
+    return false
+  }
+
+  // Check if subscription is active
+  const isSubscriptionActive = () => {
+    if (!profile) return false
+    return ['active', 'trialing'].includes(profile.subscription_status)
+  }
+
+  // Get subscription information
+  const getSubscriptionInfo = () => {
+    if (!profile) return null
+    return {
+      status: profile.subscription_status || 'none',
+      currentPeriodEnd: profile.subscription_current_period_end,
+      cancelAtPeriodEnd: profile.subscription_cancel_at_period_end,
+      billingCycle: profile.billing_cycle,
+      customerId: profile.stripe_customer_id,
+      subscriptionId: profile.stripe_subscription_id,
+      priceId: profile.subscription_price_id
+    }
   }
 
   // Get days remaining in trial
@@ -118,27 +148,9 @@ export function AuthProvider({ children }) {
 
     if (error) throw error
 
-    // Upsert profile with trial info (backup if trigger didn't fire)
-    if (data.user && supabase) {
-      const trialEndsAt = new Date()
-      trialEndsAt.setDate(trialEndsAt.getDate() + 30)
-
-      await supabase
-        .from('profiles')
-        .upsert({
-          id: data.user.id,
-          full_name: fullName,
-          company_name: companyName,
-          phone: phone,
-          subdomain: subdomain?.toLowerCase() || null,
-          plan: 'trial',
-          trial_ends_at: trialEndsAt.toISOString(),
-          data_initialized: false,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'id'
-        })
-    }
+    // Profile will be created automatically by the database trigger
+    // The trigger uses the metadata from signUp options.data
+    // No need to manually upsert here
 
     return data
   }
@@ -289,7 +301,9 @@ export function AuthProvider({ children }) {
     uploadProfilePhoto,
     isTrialActive,
     isPro,
-    getTrialDaysRemaining
+    getTrialDaysRemaining,
+    isSubscriptionActive,
+    getSubscriptionInfo
   }
 
   return (

@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react'
-import { FiUser, FiBell, FiShield, FiLink, FiSave, FiZap, FiMail, FiKey, FiDatabase, FiCreditCard, FiCamera, FiCalendar } from 'react-icons/fi'
+import { FiUser, FiBell, FiShield, FiLink, FiSave, FiZap, FiMail, FiKey, FiDatabase, FiCreditCard, FiCamera, FiCalendar, FiCheck } from 'react-icons/fi'
 import { useAuth } from '../../../context/AuthContext'
 import { useLanguage } from '../../../context/LanguageContext'
+import { openCustomerPortal, PRICING, formatPrice, getSubscriptionStatusText, getBillingCycleText } from '../../../services/stripeService'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
 import AIAssistant from '../AIAssistant'
+import UpgradeModal from '../UpgradeModal'
 
 export default function SettingsPage() {
-  const { user, profile: authProfile, updateProfile, uploadProfilePhoto } = useAuth()
+  const { user, profile: authProfile, updateProfile, uploadProfilePhoto, isPro, isTrialActive, getTrialDaysRemaining, getSubscriptionInfo } = useAuth()
   const { language, changeLanguage, isRTL } = useLanguage()
   const [activeTab, setActiveTab] = useState('profile')
   const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false)
+  const [portalLoading, setPortalLoading] = useState(false)
 
   // Profile settings form
   const [profileForm, setProfileForm] = useState({
@@ -577,69 +581,16 @@ export default function SettingsPage() {
 
                   {/* Billing Tab */}
                   {activeTab === 'billing' && (
-                    <div className="space-y-6">
-                      <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">חיובים ומנוי</h2>
-                        <p className="text-gray-600">נהל את המנוי ואמצעי התשלום שלך</p>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div className="p-6 border-2 border-primary-200 rounded-lg bg-primary-50">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="text-xl font-bold text-gray-900">תוכנית פרימיום</h3>
-                              <p className="text-gray-600 mt-1">₪289 למשתמש לחודש</p>
-                              <p className="text-sm text-gray-500 mt-2">תאריך חיוב הבא: {new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('he-IL')}</p>
-                            </div>
-                            <div className="text-right">
-                              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
-                                פעיל
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-3">אמצעי תשלום</h3>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <FiCreditCard className="w-6 h-6 text-gray-400" />
-                              <div>
-                                <p className="font-medium text-gray-900">•••• •••• •••• 4242</p>
-                                <p className="text-sm text-gray-500">פג תוקף 12/25</p>
-                              </div>
-                            </div>
-                            <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                              עדכן
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-3">היסטוריית חיובים</h3>
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <div>
-                                <p className="font-medium text-gray-900">תוכנית פרימיום - ינואר 2024</p>
-                                <p className="text-sm text-gray-500">{new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toLocaleDateString('he-IL')}</p>
-                              </div>
-                              <div className="text-right">
-                                <p className="font-semibold text-gray-900">₪867</p>
-                                <button className="text-sm text-primary-600 hover:text-primary-700">הורד</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-4 border border-red-200 rounded-lg bg-red-50">
-                          <h3 className="font-medium text-red-900 mb-2">אזור מסוכן</h3>
-                          <p className="text-sm text-red-700 mb-3">ביטול המנוי יגרום לאובדן גישה לכל התכונות הפרימיום.</p>
-                          <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                            בטל מנוי
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <BillingTab
+                      isPro={isPro}
+                      isTrialActive={isTrialActive}
+                      getTrialDaysRemaining={getTrialDaysRemaining}
+                      getSubscriptionInfo={getSubscriptionInfo}
+                      onUpgrade={() => setUpgradeModalOpen(true)}
+                      portalLoading={portalLoading}
+                      setPortalLoading={setPortalLoading}
+                      language={language}
+                    />
                   )}
 
                   {/* Save Button */}
@@ -671,6 +622,230 @@ export default function SettingsPage() {
 
       {/* AI Assistant */}
       <AIAssistant isOpen={aiAssistantOpen} onClose={() => setAIAssistantOpen(false)} />
+
+      {/* Upgrade Modal */}
+      <UpgradeModal isOpen={upgradeModalOpen} onClose={() => setUpgradeModalOpen(false)} />
+    </div>
+  )
+}
+
+// Billing Tab Component
+function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscriptionInfo, onUpgrade, portalLoading, setPortalLoading, language }) {
+  const subscriptionInfo = getSubscriptionInfo()
+  const isHebrew = language === 'he'
+  const hasActiveSubscription = isPro() && subscriptionInfo?.status === 'active'
+  const trialActive = isTrialActive()
+  const daysRemaining = getTrialDaysRemaining()
+
+  const handleManageBilling = async () => {
+    if (!subscriptionInfo?.customerId) return
+
+    try {
+      setPortalLoading(true)
+      await openCustomerPortal(subscriptionInfo.customerId)
+    } catch (error) {
+      console.error('Portal error:', error)
+      alert(isHebrew ? 'שגיאה בפתיחת פורטל החיובים' : 'Error opening billing portal')
+    } finally {
+      setPortalLoading(false)
+    }
+  }
+
+  const texts = {
+    he: {
+      title: 'חיובים ומנוי',
+      subtitle: 'נהל את המנוי ואמצעי התשלום שלך',
+      currentPlan: 'התוכנית הנוכחית',
+      pro: 'Pro',
+      trial: 'תקופת ניסיון',
+      free: 'חינם (מוגבל)',
+      perMonth: 'לחודש',
+      perYear: 'לשנה',
+      nextBilling: 'תאריך חיוב הבא',
+      billingCycle: 'מחזור חיוב',
+      upgrade: 'שדרג עכשיו',
+      manageBilling: 'נהל חיובים',
+      trialEnds: 'תקופת הניסיון מסתיימת בעוד',
+      days: 'ימים',
+      trialExpired: 'תקופת הניסיון הסתיימה',
+      upgradeToAccess: 'שדרג כדי לקבל גישה לכל התכונות',
+      features: 'תכונות כלולות',
+      featuresList: [
+        'ניהול לידים ללא הגבלה',
+        'ניהול עסקאות',
+        'לוח שנה ותזכורות',
+        'ניהול מסמכים',
+        'דוחות ואנליטיקס',
+        'ניהול חשבוניות'
+      ],
+      cancelInfo: 'ביטול המנוי יגרום לאובדן גישה לתכונות הפרימיום בסיום תקופת החיוב.',
+      processing: 'מעבד...'
+    },
+    en: {
+      title: 'Billing & Subscription',
+      subtitle: 'Manage your subscription and payment methods',
+      currentPlan: 'Current Plan',
+      pro: 'Pro',
+      trial: 'Trial Period',
+      free: 'Free (Limited)',
+      perMonth: '/month',
+      perYear: '/year',
+      nextBilling: 'Next billing date',
+      billingCycle: 'Billing cycle',
+      upgrade: 'Upgrade Now',
+      manageBilling: 'Manage Billing',
+      trialEnds: 'Trial ends in',
+      days: 'days',
+      trialExpired: 'Trial period has ended',
+      upgradeToAccess: 'Upgrade to access all features',
+      features: 'Included Features',
+      featuresList: [
+        'Unlimited lead management',
+        'Deal management',
+        'Calendar & reminders',
+        'Document management',
+        'Reports & analytics',
+        'Invoice management'
+      ],
+      cancelInfo: 'Canceling your subscription will result in loss of premium features at the end of the billing period.',
+      processing: 'Processing...'
+    }
+  }
+
+  const t = texts[isHebrew ? 'he' : 'en']
+
+  // Get status badge color and text
+  const getStatusBadge = () => {
+    if (hasActiveSubscription) {
+      return { color: 'bg-green-100 text-green-800', text: getSubscriptionStatusText('active', language) }
+    }
+    if (trialActive) {
+      return { color: 'bg-blue-100 text-blue-800', text: t.trial }
+    }
+    return { color: 'bg-gray-100 text-gray-800', text: t.free }
+  }
+
+  const statusBadge = getStatusBadge()
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.title}</h2>
+        <p className="text-gray-600">{t.subtitle}</p>
+      </div>
+
+      <div className="space-y-4">
+        {/* Current Plan Card */}
+        <div className={`p-6 border-2 rounded-lg ${hasActiveSubscription ? 'border-green-200 bg-green-50' : trialActive ? 'border-blue-200 bg-blue-50' : 'border-yellow-200 bg-yellow-50'}`}>
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-sm text-gray-600 mb-1">{t.currentPlan}</div>
+              <h3 className="text-xl font-bold text-gray-900">
+                {hasActiveSubscription ? t.pro : trialActive ? t.trial : t.free}
+              </h3>
+
+              {hasActiveSubscription && subscriptionInfo?.billingCycle && (
+                <p className="text-gray-600 mt-1">
+                  {subscriptionInfo.billingCycle === 'annual'
+                    ? `${formatPrice(PRICING.annual.price)} ${t.perYear}`
+                    : `${formatPrice(PRICING.monthly.price)} ${t.perMonth}`
+                  }
+                </p>
+              )}
+
+              {hasActiveSubscription && subscriptionInfo?.currentPeriodEnd && (
+                <p className="text-sm text-gray-500 mt-2">
+                  {t.nextBilling}: {new Date(subscriptionInfo.currentPeriodEnd).toLocaleDateString(isHebrew ? 'he-IL' : 'en-US')}
+                </p>
+              )}
+
+              {trialActive && !hasActiveSubscription && (
+                <p className="text-sm text-blue-600 mt-2">
+                  {t.trialEnds} {daysRemaining} {t.days}
+                </p>
+              )}
+
+              {!trialActive && !hasActiveSubscription && (
+                <p className="text-sm text-yellow-700 mt-2">
+                  {t.trialExpired}. {t.upgradeToAccess}
+                </p>
+              )}
+            </div>
+            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${statusBadge.color}`}>
+              {statusBadge.text}
+            </span>
+          </div>
+
+          {/* Action buttons */}
+          <div className="mt-4 flex gap-3">
+            {hasActiveSubscription ? (
+              <button
+                onClick={handleManageBilling}
+                disabled={portalLoading}
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                {portalLoading ? t.processing : t.manageBilling}
+              </button>
+            ) : (
+              <button
+                onClick={onUpgrade}
+                className="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg hover:from-primary-600 hover:to-primary-700 transition-colors flex items-center gap-2"
+              >
+                <FiZap className="w-4 h-4" />
+                {t.upgrade}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Pricing Cards for non-subscribers */}
+        {!hasActiveSubscription && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Monthly */}
+            <div className="p-4 border border-gray-200 rounded-lg">
+              <h4 className="font-semibold text-gray-900">{isHebrew ? 'חודשי' : 'Monthly'}</h4>
+              <div className="text-2xl font-bold text-gray-900 mt-2">
+                {formatPrice(PRICING.monthly.price)}
+                <span className="text-sm font-normal text-gray-500">{t.perMonth}</span>
+              </div>
+            </div>
+
+            {/* Annual */}
+            <div className="p-4 border-2 border-primary-200 rounded-lg bg-primary-50 relative">
+              <div className="absolute -top-3 right-4 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                {isHebrew ? 'חסוך 15%' : 'Save 15%'}
+              </div>
+              <h4 className="font-semibold text-gray-900">{isHebrew ? 'שנתי' : 'Annual'}</h4>
+              <div className="text-2xl font-bold text-gray-900 mt-2">
+                {formatPrice(PRICING.annual.price)}
+                <span className="text-sm font-normal text-gray-500">{t.perYear}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Features included */}
+        <div className="p-4 border border-gray-200 rounded-lg">
+          <h3 className="font-medium text-gray-900 mb-3">{t.features}</h3>
+          <ul className="space-y-2">
+            {t.featuresList.map((feature, index) => (
+              <li key={index} className="flex items-center gap-2 text-sm text-gray-700">
+                <FiCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Cancel info for subscribers */}
+        {hasActiveSubscription && (
+          <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+            <p className="text-sm text-gray-600">
+              {t.cancelInfo}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

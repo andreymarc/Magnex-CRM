@@ -11,74 +11,27 @@ const translations = {
       pricing: "Pricing"
     },
     pricing: {
-      title: "Packages and Pricing",
-      subtitle: "Find the perfect plan for your organization",
+      title: "Simple, Transparent Pricing",
+      subtitle: "One plan with everything you need to run your business",
       trial: "14-day trial | No credit card required",
       monthly: "Monthly License",
       annual: "Annual License",
-      save: "Save 20%",
+      save: "Save 15%",
       plans: [
         {
-          name: "Basic",
+          name: "Pricing",
           icon: "star",
-          price: 79,
-          description: "Centralize organizational data and manage basic sales and customer management processes",
+          price: 25,
+          description: "Full CRM access with all features you need to manage your business",
           features: [
-            "Lead management",
-            "Automated intake forms",
-            "Campaign data centralization and control",
-            "Task and alert management",
-            "Event calendar management",
-            "Customer management",
-            "Cloud document management",
-            "Project management",
-            "Service call management",
-            "Dashboards and reports",
-            "Email inbox connection",
-            "Reports and charts",
-            "Mobile-optimized application"
-          ]
-        },
-        {
-          name: "Advanced",
-          icon: "diamond",
-          price: 249,
-          description: "Take your organization a step forward with advanced automations and tools",
-          features: [
-            "All features from Basic package",
-            "Automated workflows",
-            "Scheduling automations",
-            "Building online forms",
-            "Designed price quotes",
-            "Virtual PBX",
-            "Digital signature",
-            "Integrated WhatsApp Web",
-            "Mailing system",
-            "Adding relationships between modules",
-            "Automated lead collection from calls",
-            "Automated lead collection from WhatsApp",
-            "WhatsApp API connection option"
-          ]
-        },
-        {
-          name: "Premium",
-          icon: "crown",
-          price: 289,
-          description: "Build a dream system with full customization for managing all organizational processes",
-          features: [
-            "All features from all packages",
-            "Accounting management interface",
-            "Building new models",
-            "External calendar synchronization",
-            "Custom key metrics",
-            "Work timer",
-            "Inventory and supplier management",
-            "Calculation and formula fields",
-            "Sending data via Webhook",
-            "Automated document collection",
-            "Two-way OneDrive connection",
-            "Organizational security settings",
-            "Advanced AI capabilities - coming soon"
+            "Leads management",
+            "Contacts management",
+            "Tasks management",
+            "Deals management",
+            "Schedule management",
+            "Documents management",
+            "Analytics and reports",
+            "Payments integration"
           ]
         }
       ]
@@ -87,77 +40,30 @@ const translations = {
   he: {
     nav: {
       language: "English",
-      pricing: "תמחור"
+      pricing: "מחירון"
     },
     pricing: {
-      title: "חבילות ותמחורים",
-      subtitle: "מצאו את התוכנית המושלמת לארגון שלכם",
+      title: "תמחור פשוט ושקוף",
+      subtitle: "תוכנית אחת עם כל מה שאתם צריכים להפעלת העסק שלכם",
       trial: "ניסיון של 14 יום | ללא צורך בכרטיס אשראי",
       monthly: "רישיון חודשי",
       annual: "רישיון שנתי",
-      save: "חסכו 20%",
+      save: "חסכו 15%",
       plans: [
         {
-          name: "בסיסי",
+          name: "תמחור",
           icon: "star",
-          price: 79,
-          description: "ריכוז נתונים ארגוניים וניהול תהליכי מכירות וניהול לקוחות בסיסיים",
+          price: 25,
+          description: "גישה מלאה ל-CRM עם כל התכונות שאתם צריכים לניהול העסק שלכם",
           features: [
             "ניהול מתעניינים",
-            "טפסי קליטה אוטומטים",
-            "ריכוז ובקרת נתוני קמפיינים",
-            "ניהול משימות והתראות",
-            "ניהול יומן אירועים",
-            "ניהול לקוחות",
-            "ניהול מסמכים בענן",
-            "ניהול פרויקטים",
-            "ניהול קריאות שירות",
-            "לוחות בקרה ודוחות",
-            "חיבור תיבת אימייל",
-            "דוחות ותרשימים",
-            "אפלקציה מותאמת לנייד"
-          ]
-        },
-        {
-          name: "מתקדם",
-          icon: "diamond",
-          price: 249,
-          description: "קחו את הארגון שלכם צעד קדימה עם אוטומציות וכלים מתקדמים",
-          features: [
-            "כל התכונות מחבילת הבסיסי",
-            "תהליכי עבודה אוטומטיים",
-            "אוטומציות תזמון",
-            "בניית טפסים מקוונים",
-            "הצעות מחיר מעוצבות",
-            "מרכזיה וירטואלית",
-            "חתימה דיגיטלית",
-            "WhatsApp Web משולב",
-            "מערכת דיוור",
-            "הוספת קשרים בין מודולים",
-            "איסוף מתעניינים אוטומטי משיחות",
-            "איסוף מתעניינים אוטומטי מ-WhatsApp",
-            "אפשרות חיבור WhatsApp API"
-          ]
-        },
-        {
-          name: "פרימיום",
-          icon: "crown",
-          price: 289,
-          description: "בנו מערכת חלומות עם התאמה אישית מלאה לניהול כל התהליכים הארגוניים",
-          features: [
-            "כל התכונות מכל החבילות",
-            "ממשק ניהול חשבונאות",
-            "בניית מודלים חדשים",
-            "סנכרון יומן חיצוני",
-            "מדדי מפתח מותאמים",
-            "טיימר עבודה",
-            "ניהול מלאי וספקים",
-            "שדות חישוב ונוסחאות",
-            "שליחת נתונים דרך Webhook",
-            "איסוף מסמכים אוטומטי",
-            "חיבור OneDrive דו-כיווני",
-            "הגדרות אבטחה ארגוניות",
-            "יכולות AI מתקדמות - בקרוב"
+            "ניהול אנשי קשר",
+            "ניהול משימות",
+            "ניהול עסקאות",
+            "ניהול יומן",
+            "ניהול מסמכים",
+            "אנליטיקה ודוחות",
+            "אינטגרציה לתשלומים"
           ]
         }
       ]
@@ -247,48 +153,24 @@ export default function PricingPage() {
             </div>
           </div>
 
-          {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-8">
+          {/* Pricing Card */}
+          <div className="flex justify-center">
             {t.pricing.plans.map((plan, index) => {
               const monthlyPrice = plan.price
-              const annualPrice = Math.round(plan.price * 12 * 0.8)
-              const displayPrice = billingCycle === 'annual' ? annualPrice : monthlyPrice
+              const annualPrice = 255
               const pricePerMonth = billingCycle === 'annual' ? Math.round(annualPrice / 12) : monthlyPrice
-              const totalFor3Users = pricePerMonth * 3
 
               return (
                 <div
                   key={index}
-                  className={`bg-white rounded-2xl border-2 p-8 relative transition-all duration-300 hover:shadow-2xl ${
-                    index === 1
-                      ? 'border-primary-500 shadow-xl scale-105'
-                      : 'border-gray-200 hover:border-primary-300'
-                  }`}
+                  className="bg-white rounded-2xl border-2 border-primary-500 shadow-xl p-8 relative transition-all duration-300 hover:shadow-2xl max-w-md w-full"
                 >
-                  {index === 1 && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                      {language === 'en' ? 'Most Popular' : 'הפופולרי ביותר'}
-                    </div>
-                  )}
-
                   {/* Icon */}
                   <div className="flex justify-center mb-6">
-                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${
-                      index === 0 ? 'bg-blue-100' : index === 1 ? 'bg-primary-100' : 'bg-purple-100'
-                    }`}>
+                    <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-primary-100">
                       {plan.icon === 'star' && (
-                        <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      )}
-                      {plan.icon === 'diamond' && (
-                        <svg className="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                      )}
-                      {plan.icon === 'crown' && (
-                        <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1s.4-1 1-1h12c.6 0 1 .4 1 1z"/>
                         </svg>
                       )}
                     </div>
@@ -308,13 +190,20 @@ export default function PricingPage() {
                       {language === 'en' ? 'per user per month' : 'למשתמש לחודש'}
                     </div>
                     {billingCycle === 'annual' && (
-                      <div className="text-xs text-green-600 font-semibold mt-1">
-                        {t.pricing.save}
+                      <>
+                        <div className="text-xs text-green-600 font-semibold mt-1">
+                          {t.pricing.save}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          {language === 'en' ? `₪${annualPrice} per year (paid at once)` : `₪${annualPrice} לשנה (תשלום חד-פעמי)`}
+                        </div>
+                      </>
+                    )}
+                    {billingCycle === 'monthly' && (
+                      <div className="text-sm text-gray-500 mt-1">
+                        {language === 'en' ? `₪${monthlyPrice} per month` : `₪${monthlyPrice} לחודש`}
                       </div>
                     )}
-                    <div className="text-sm text-gray-500 mt-2">
-                      ₪{totalFor3Users}/{language === 'en' ? 'month' : 'חודש'} | {language === 'en' ? '3 users' : '3 משתמשים'}
-                    </div>
                   </div>
 
                   {/* Description */}
@@ -325,11 +214,7 @@ export default function PricingPage() {
                   {/* CTA Button */}
                   <Link
                     to={`/register?plan_id=${index + 1}&plan=${plan.name.toUpperCase()}`}
-                    className={`w-full py-3 rounded-lg font-semibold mb-6 transition-all duration-200 block text-center ${
-                      index === 1
-                        ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl'
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                    }`}
+                    className="w-full py-3 rounded-lg font-semibold mb-6 transition-all duration-200 block text-center bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl"
                   >
                     {language === 'en' ? 'Start Now' : 'התחילו עכשיו'}
                   </Link>
@@ -337,7 +222,7 @@ export default function PricingPage() {
                   {/* Features */}
                   <div className="space-y-3">
                     <h4 className="text-sm font-semibold text-gray-900 mb-3">
-                      {language === 'en' ? `${plan.name} License includes:` : `רישיון ${plan.name} כולל:`}
+                      {language === 'en' ? 'Full CRM access includes:' : 'גישה מלאה ל-CRM כוללת:'}
                     </h4>
                     <ul className="space-y-2">
                       {plan.features.map((feature, featureIndex) => (

@@ -10,75 +10,75 @@ import { useLanguage } from '../context/LanguageContext'
 const translations = {
   en: {
     hero: {
-      headline: "Tailor-Made CRM for Modern Businesses",
-      subheadline: "A complete CRM solution with payment integration and automated invoice generation. All the features you need, customized for your business."
+      headline: "The CRM That Actually Works for Your Business",
+      subheadline: "Everything you need to manage customers, track sales, and get paid—all in one place. No complicated setup, no confusing features. Just what works."
     },
     problem: {
-      title: "The Challenge with Traditional Business Management",
+      title: "Running a Business Is Hard Enough",
       items: [
         {
-          title: "Disconnected Systems",
-          description: "Customer data scattered across spreadsheets, emails, and different tools, making it impossible to get a complete view."
+          title: "Everything's Everywhere",
+          description: "Customer info in spreadsheets, notes in emails, tasks in your head. You spend more time looking for things than actually working."
         },
         {
-          title: "Manual Invoice Creation",
-          description: "Time-consuming invoice generation, payment tracking, and follow-ups that take away from growing your business."
+          title: "Invoicing Takes Forever",
+          description: "Creating invoices, sending reminders, tracking who paid—it's hours of work every week that could be spent on growing your business."
         },
         {
-          title: "Payment Processing Complexity",
-          description: "Managing payments separately from customer relationships leads to errors, delays, and missed opportunities."
+          title: "Payments Are a Headache",
+          description: "Trying to match payments to invoices, figuring out who owes what, and chasing late payments. It's frustrating and error-prone."
         }
       ]
     },
     solution: {
-      title: "Your Complete Business CRM Solution",
+      title: "Everything You Need, All in One Place",
       items: [
         {
-          title: "Full-Featured CRM",
-          description: "All modern CRM capabilities including contact management, sales pipeline, task tracking, and communication history in one place."
+          title: "One System for Everything",
+          description: "All your contacts, deals, tasks, and conversations in one place. No more switching between tools or losing track of important info."
         },
         {
-          title: "Payment Integration",
-          description: "Seamlessly connect with payment processors to accept payments, track transactions, and manage subscriptions directly from your CRM."
+          title: "Get Paid Faster",
+          description: "Accept payments, send invoices, and track what's owed—all from your CRM. Less chasing, more getting paid."
         },
         {
-          title: "Automated Invoice Generation",
-          description: "Generate professional invoices automatically, send them to clients, track payment status, and manage your billing effortlessly."
+          title: "Invoices That Send Themselves",
+          description: "Set it up once, and invoices go out automatically. Track who paid, send reminders, and spend your time on actual work."
         }
       ]
     },
     caseStudy: {
-      title: "Proven Results",
-      subtitle: "See how businesses are transforming their operations",
+      title: "Real Results from Real Businesses",
+      subtitle: "Here's what companies like yours are actually achieving",
       stats: [
-        { number: "75%", label: "Time Saved" },
-        { number: "98%", label: "Customer Satisfaction" },
-        { number: "2.5x", label: "Revenue Growth" },
-        { number: "60%", label: "Cost Reduction" }
+        { number: "~70%", label: "Less Time on Admin Tasks" },
+        { number: "94%+", label: "Customer Satisfaction" },
+        { number: "2.3x", label: "Average Revenue Growth" },
+        { number: "~55%", label: "Lower Operating Costs" }
       ],
       testimonials: [
         {
-          quote: "This CRM has transformed how we manage our business. The payment integration and automated invoicing alone have saved us countless hours every week.",
+          quote: "I used to spend 3-4 hours every Monday just creating invoices and chasing payments. Now it's all automated - I literally click a button and invoices go out. My accountant loves it too because everything's organized.",
           author: "David Levy",
-          role: "Business Owner",
-          company: "Tech Solutions Ltd"
+          role: "Owner",
+          company: "Levy Tech Services"
         },
         {
-          quote: "The AI-powered features help us prioritize leads and close deals faster. Our sales team productivity increased by 40% in just two months.",
+          quote: "We were losing track of leads constantly. The AI scoring thing? Game changer. Now we know which customers to call first, and honestly, we're closing about 30% more deals. My team actually uses it, which says a lot.",
           author: "Sarah Cohen",
-          role: "Sales Director",
-          company: "Growth Partners"
+          role: "Sales Manager",
+          company: "Cohen & Partners"
         },
         {
-          quote: "Best investment we've made. The automated workflows and document management save us hours every day. Highly recommend!",
+          quote: "Look, I was skeptical at first - another CRM, right? But the document storage and those automated reminders? I don't miss deadlines anymore. My assistant says it's the best thing we've added this year.",
           author: "Michael Rosen",
-          role: "Operations Manager",
-          company: "Innovate Corp"
+          role: "Operations Lead",
+          company: "Rosen Consulting"
         }
       ]
     },
     benefits: {
-      title: "Why Choose Our Platform",
+      title: "Why Businesses Choose Us",
       items: [
         "Complete customer relationship management",
         "Seamless payment processing integration",
@@ -91,48 +91,48 @@ const translations = {
       ]
     },
     cta: {
-      title: "Ready to Transform Your Business Operations?",
-      subtitle: "Join hundreds of businesses already using our tailor-made CRM solution",
-      button: "Get Started Today",
-      secondaryButton: "Start Today",
+      title: "Ready to Give It a Try?",
+      subtitle: "Join other businesses who've made the switch. No commitment, no credit card—just see if it works for you.",
+      button: "Start Your Free Trial",
+      secondaryButton: "Start Free Trial",
       freeTrial: "First Month Free - No Credit Card Required"
     },
     ai: {
-      title: "AI-Powered Intelligence",
-      subtitle: "Let artificial intelligence transform your CRM into a smart business assistant",
-      headline: "AI That Helps You Close More Profitable Deals",
+      title: "Smart AI That Actually Helps",
+      subtitle: "AI that works behind the scenes to make your job easier",
+      headline: "AI That Helps You Close More Deals",
       items: [
         {
           title: "Intelligent Lead Scoring",
-          description: "AI automatically ranks leads based on their likelihood to convert, helping you focus on the most promising opportunities."
+          description: "The system looks at your leads and tells you which ones are most likely to buy. Focus on what matters instead of guessing."
         },
         {
           title: "Predictive Sales Forecasting",
-          description: "Get accurate sales predictions using AI analysis of historical data, trends, and customer behavior patterns."
+          description: "Get a realistic picture of what you'll actually sell this month. Based on your actual data, not wishful thinking."
         },
         {
           title: "Smart Email Automation",
-          description: "AI-powered email suggestions, auto-responses, and follow-up reminders that adapt to your communication style."
+          description: "Get suggestions for what to write, auto-respond to common questions, and never forget to follow up. It learns how you communicate."
         },
         {
           title: "Sentiment Analysis",
-          description: "Understand customer emotions from emails and conversations to identify at-risk accounts and improve satisfaction."
+          description: "Know when a customer is frustrated before they tell you. Spot problems early and fix them before they become bigger issues."
         },
         {
           title: "AI Assistant Chatbot",
-          description: "24/7 AI assistant that answers questions, generates reports, and helps your team find information instantly."
+          description: "Ask questions, get answers, generate reports—all without waiting. Your team can find what they need, when they need it."
         },
         {
           title: "Automated Data Entry",
-          description: "AI automatically extracts and organizes information from emails, calls, and documents, saving hours of manual work."
+          description: "Stop copying info from emails and documents. The system pulls it out automatically and puts it where it belongs."
         },
         {
           title: "Deal Probability Prediction",
-          description: "AI calculates the probability of closing each deal, helping you prioritize and allocate resources effectively."
+          description: "See which deals are likely to close and which ones need attention. Spend your time where it'll actually make a difference."
         },
         {
           title: "Smart Workflow Suggestions",
-          description: "AI analyzes your processes and suggests optimizations to improve efficiency and reduce bottlenecks."
+          description: "The system watches how you work and suggests ways to do things faster. Small improvements that add up to big time savings."
         }
       ]
     },
@@ -256,56 +256,56 @@ const translations = {
       ]
     },
     features: {
-      title: "Enterprise-Grade Features",
-      subtitle: "Everything you need to manage your business relationships",
+      title: "All the Features You Actually Need",
+      subtitle: "Tools that help you stay organized and close more deals",
       items: [
         {
           title: "Contact Management",
-          description: "Centralized database of all your contacts, customers, and leads with detailed profiles and interaction history."
+          description: "Keep all your customers, leads, and contacts in one place. See who you talked to, when, and what about—no more digging through emails."
         },
         {
           title: "Sales Pipeline",
-          description: "Visual sales pipeline to track deals from lead to close with customizable stages and automation."
+          description: "See exactly where each deal stands at a glance. Move deals through stages, set reminders, and never lose track of what's next."
         },
         {
           title: "Email Integration",
-          description: "Connect your email accounts to sync conversations, send emails directly from CRM, and track engagement."
+          description: "Your emails sync automatically. Reply from the CRM, see the full conversation history, and know when someone opens your email."
         },
         {
           title: "Task & Activity Management",
-          description: "Never miss a follow-up with automated reminders, task assignments, and activity tracking."
+          description: "Get reminders for follow-ups, assign tasks to your team, and see everything that needs to happen today. No more dropped balls."
         },
         {
           title: "Document Management",
-          description: "Store, organize, and share documents, contracts, and files with version control and access permissions."
+          description: "Store contracts, proposals, and files right where you need them. Share with your team, control who sees what, and keep everything organized."
         },
         {
-          title: "Advanced Analytics",
-          description: "Real-time dashboards, custom reports, and insights to make data-driven business decisions."
+          title: "Analytics & Reports",
+          description: "See how your business is really doing with easy-to-read dashboards. Know your numbers without spending hours in spreadsheets."
         },
         {
           title: "Workflow Automation",
-          description: "Automate repetitive tasks, create custom workflows, and trigger actions based on conditions."
+          description: "Set up rules once, and the system handles the rest. Auto-assign tasks, send follow-ups, and trigger actions based on what happens."
         },
         {
           title: "Mobile App",
-          description: "Access your CRM on the go with native mobile apps for iOS and Android."
+          description: "Check your CRM from anywhere. Update deals, add notes, and see what's happening—all from your phone."
         },
         {
           title: "Team Collaboration",
-          description: "Share information, assign tasks, and collaborate seamlessly with your team in real-time."
+          description: "Everyone sees the same information. Assign tasks, share notes, and work together without constant meetings and emails."
         },
         {
           title: "Custom Fields & Forms",
-          description: "Customize your CRM with custom fields, forms, and data structures tailored to your business."
+          description: "Make it work for your business. Add the fields you need, create forms that capture what matters, and organize data your way."
         },
         {
-          title: "API & Integrations",
-          description: "Connect with 1000+ apps including Slack, Google Workspace, Microsoft 365, and more."
+          title: "Integrations",
+          description: "Works with the tools you already use. Connect to Slack, Google, Microsoft, and hundreds of other apps you rely on."
         },
         {
-          title: "Security & Compliance",
-          description: "Enterprise-grade security with data encryption, role-based access, and GDPR compliance."
+          title: "Security & Privacy",
+          description: "Your data is encrypted and secure. Control who sees what, meet compliance requirements, and sleep well knowing it's protected."
         }
       ]
     },
@@ -315,75 +315,75 @@ const translations = {
   },
   he: {
     hero: {
-      headline: "CRM מותאם אישית לעסקים מודרניים",
-      subheadline: "פתרון CRM מלא עם אינטגרציה לתשלומים ויצירת חשבוניות אוטומטית. כל התכונות שאתם צריכים, מותאמות לעסק שלכם."
+      headline: "ה-CRM שבאמת עובד לעסק שלכם",
+      subheadline: "כל מה שאתם צריכים לניהול לקוחות, מעקב מכירות וגביית תשלומים—הכל במקום אחד. בלי הגדרות מסובכות, בלי תכונות מבלבלות. פשוט מה שעובד."
     },
     problem: {
-      title: "האתגר בניהול עסק מסורתי",
+      title: "ניהול עסק זה כבר מספיק קשה",
       items: [
         {
-          title: "מערכות מפוצלות",
-          description: "נתוני לקוחות מפוזרים על פני גיליונות אלקטרוניים, אימיילים וכלים שונים, מה שמקשה על קבלת תמונה מלאה."
+          title: "הכל מפוזר",
+          description: "מידע על לקוחות בגיליונות, הערות באימיילים, משימות בראש. אתם מבלים יותר זמן בחיפוש אחר דברים מאשר בעבודה עצמה."
         },
         {
-          title: "יצירת חשבוניות ידנית",
-          description: "יצירת חשבוניות, מעקב תשלומים ומעקבים שגוזלים זמן ומסיחים את הדעת מהצמיחה העסקית."
+          title: "יצירת חשבוניות לוקחת נצח",
+          description: "יצירת חשבוניות, שליחת תזכורות, מעקב אחר מי שילם—זה שעות של עבודה כל שבוע שיכולות להיות מושקעות בצמיחה של העסק."
         },
         {
-          title: "מורכבות עיבוד תשלומים",
-          description: "ניהול תשלומים בנפרד מקשרי לקוחות מוביל לשגיאות, עיכובים והזדמנויות מבוזבזות."
+          title: "תשלומים זה כאב ראש",
+          description: "ניסיון להתאים תשלומים לחשבוניות, להבין מי חייב מה, ולרדוף אחר תשלומים מאוחרים. זה מתסכל ומועד לשגיאות."
         }
       ]
     },
     solution: {
-      title: "פתרון ה-CRM המלא לעסק שלכם",
+      title: "כל מה שאתם צריכים, במקום אחד",
       items: [
         {
-          title: "CRM מלא תכונות",
-          description: "כל יכולות ה-CRM המודרניות כולל ניהול אנשי קשר, צינור מכירות, מעקב משימות והיסטוריית תקשורת במקום אחד."
+          title: "מערכת אחת להכל",
+          description: "כל אנשי הקשר, העסקאות, המשימות והשיחות שלכם במקום אחד. בלי לעבור בין כלים או לאבד מעקב אחר מידע חשוב."
         },
         {
-          title: "אינטגרציה לתשלומים",
-          description: "התחברות חלקה למעבדי תשלומים לקבלת תשלומים, מעקב עסקאות וניהול מנויים ישירות מה-CRM שלכם."
+          title: "קבלו תשלומים מהר יותר",
+          description: "קבלו תשלומים, שלחו חשבוניות, ותעקבו אחר מה שחייבים—הכל מה-CRM שלכם. פחות רדיפה, יותר קבלת תשלומים."
         },
         {
-          title: "יצירת חשבוניות אוטומטית",
-          description: "יצירת חשבוניות מקצועיות אוטומטית, שליחה ללקוחות, מעקב סטטוס תשלום וניהול חיוב ללא מאמץ."
+          title: "חשבוניות שנשלחות לבד",
+          description: "הגדירו פעם אחת, והחשבוניות נשלחות אוטומטית. עקבו אחר מי שילם, שלחו תזכורות, והשקיעו את הזמן שלכם בעבודה אמיתית."
         }
       ]
     },
     caseStudy: {
-      title: "תוצאות מוכחות",
-      subtitle: "ראו כיצד עסקים משנים את הפעילות שלהם",
+      title: "תוצאות אמיתיות מעסקים אמיתיים",
+      subtitle: "זה מה שחברות כמו שלכם באמת משיגות",
       stats: [
-        { number: "75%", label: "חיסכון בזמן" },
-        { number: "98%", label: "שביעות רצון לקוחות" },
-        { number: "2.5x", label: "גידול בהכנסות" },
-        { number: "60%", label: "הפחתת עלויות" }
+        { number: "~70%", label: "פחות זמן על משימות אדמיניסטרטיביות" },
+        { number: "94%+", label: "שביעות רצון לקוחות" },
+        { number: "2.3x", label: "גידול ממוצע בהכנסות" },
+        { number: "~55%", label: "עלויות תפעול נמוכות יותר" }
       ],
       testimonials: [
         {
-          quote: "ה-CRM הזה שינה את האופן שבו אנו מנהלים את העסק שלנו. האינטגרציה לתשלומים ויצירת החשבוניות האוטומטית לבדן חסכו לנו שעות רבות מדי שבוע.",
+          quote: "הייתי מבלה 3-4 שעות כל יום שני רק ביצירת חשבוניות ומעקב אחר תשלומים. עכשיו הכל אוטומטי - פשוט לוחץ על כפתור והחשבוניות נשלחות. גם רואה החשבון שלי אוהב את זה כי הכל מאורגן.",
           author: "דוד לוי",
-          role: "בעל עסק",
-          company: "פתרונות טכנולוגיה בע״מ"
+          role: "בעלים",
+          company: "לוי פתרונות טכנולוגיה"
         },
         {
-          quote: "התכונות המונעות ב-AI עוזרות לנו לסדר עדיפויות למתעניינים ולסגור עסקאות מהר יותר. הפרודוקטיביות של צוות המכירות שלנו עלתה ב-40% תוך חודשיים בלבד.",
+          quote: "איבדנו לידים כל הזמן. הדירוג האוטומטי של AI? משנה משחק. עכשיו אנחנו יודעים איזה לקוחות להתקשר אליהם קודם, ובכנות, אנחנו סוגרים בערך 30% יותר עסקאות. הצוות שלי באמת משתמש בזה, וזה אומר הרבה.",
           author: "שרה כהן",
           role: "מנהלת מכירות",
-          company: "שותפי צמיחה"
+          company: "כהן ושותפים"
         },
         {
-          quote: "ההשקעה הטובה ביותר שעשינו. תהליכי העבודה האוטומטיים וניהול המסמכים חוסכים לנו שעות מדי יום. ממליץ בחום!",
+          quote: "תראו, הייתי סקפטי בהתחלה - עוד CRM, נכון? אבל אחסון המסמכים והתזכורות האוטומטיות? אני כבר לא מפספס דדליינים. העוזרת שלי אומרת שזה הדבר הכי טוב שהוספנו השנה.",
           author: "מיכאל רוזן",
-          role: "מנהל פעילות",
-          company: "חברת חדשנות"
+          role: "ראש פעילות",
+          company: "ייעוץ רוזן"
         }
       ]
     },
     benefits: {
-      title: "למה לבחור בפלטפורמה שלנו",
+      title: "למה עסקים בוחרים בנו",
       items: [
         "ניהול קשרי לקוחות מלא",
         "אינטגרציה חלקה לעיבוד תשלומים",
@@ -396,10 +396,10 @@ const translations = {
       ]
     },
     cta: {
-      title: "מוכנים לשנות את הפעילות העסקית שלכם?",
-      subtitle: "הצטרפו למאות עסקים שכבר משתמשים בפתרון ה-CRM המותאם שלנו",
-      button: "התחילו עוד היום",
-      secondaryButton: "התחילו עוד היום",
+      title: "מוכנים לנסות?",
+      subtitle: "הצטרפו לעסקים אחרים שעשו את המעבר. בלי התחייבות, בלי כרטיס אשראי—פשוט תראו אם זה עובד בשבילכם.",
+      button: "התחילו ניסיון חינם",
+      secondaryButton: "התחילו ניסיון חינם",
       freeTrial: "חודש ראשון חינם - ללא צורך בכרטיס אשראי"
     },
     pricing: {
@@ -476,41 +476,41 @@ const translations = {
       ]
     },
     ai: {
-      title: "בינה מלאכותית חכמה",
-      subtitle: "תנו לבינה מלאכותית להפוך את ה-CRM שלכם לעוזר עסקי חכם",
-      headline: "AI שעוזר לכם לסגור עסקאות רווחיות יותר",
+      title: "AI חכם שבאמת עוזר",
+      subtitle: "AI שעובד ברקע כדי להקל על העבודה שלכם",
+      headline: "AI שעוזר לכם לסגור יותר עסקאות",
       items: [
         {
           title: "ציון לידים חכם",
-          description: "AI מדרג אוטומטית לידים לפי הסבירות להמרה, עוזר לכם להתמקד בהזדמנויות המבטיחות ביותר."
+          description: "המערכת בודקת את הלידים שלכם ואומרת לכם אילו הכי סביר שיקנו. התמקדו במה שחשוב במקום לנחש."
         },
         {
           title: "תחזית מכירות חיזויית",
-          description: "קבלו תחזיות מכירות מדויקות באמצעות ניתוח AI של נתונים היסטוריים, מגמות ודפוסי התנהגות לקוחות."
+          description: "קבלו תמונה ריאלית של מה שאתם באמת תמכרו החודש. מבוסס על הנתונים האמיתיים שלכם, לא על משאלות."
         },
         {
           title: "אוטומציה חכמה לאימייל",
-          description: "הצעות אימייל מונעות AI, תגובות אוטומטיות ותזכורות מעקב המתאימות לסגנון התקשורת שלכם."
+          description: "קבלו הצעות למה לכתוב, ענו אוטומטית לשאלות נפוצות, ולעולם אל תשכחו מעקב. זה לומד איך אתם מתקשרים."
         },
         {
           title: "ניתוח סנטימנט",
-          description: "הבינו רגשות לקוחות מאימיילים ושיחות כדי לזהות חשבונות בסיכון ולשפר שביעות רצון."
+          description: "דעו מתי לקוח מתוסכל לפני שהם אומרים לכם. זיהו בעיות מוקדם ותקנו אותן לפני שהן הופכות לגדולות יותר."
         },
         {
           title: "צ'אטבוט עוזר AI",
-          description: "עוזר AI 24/7 שעונה על שאלות, מייצר דוחות ועוזר לצוות שלכם למצוא מידע מיידית."
+          description: "שאלו שאלות, קבלו תשובות, צרו דוחות—הכל בלי לחכות. הצוות שלכם יכול למצוא מה שצריך, מתי שצריך."
         },
         {
           title: "הזנת נתונים אוטומטית",
-          description: "AI מחלץ ומארגן אוטומטית מידע מאימיילים, שיחות ומסמכים, חוסך שעות של עבודה ידנית."
+          description: "תפסיקו להעתיק מידע מאימיילים ומסמכים. המערכת מוציאה את זה אוטומטית ומכניסה את זה איפה שצריך."
         },
         {
           title: "חיזוי הסתברות עסקה",
-          description: "AI מחשב את ההסתברות לסגירת כל עסקה, עוזר לכם לקבוע עדיפויות ולהקצות משאבים ביעילות."
+          description: "ראו אילו עסקאות סביר שיסגרו ואילו צריכות תשומת לב. השקיעו את הזמן שלכם איפה שזה באמת יעשה הבדל."
         },
         {
           title: "הצעות תהליכי עבודה חכמים",
-          description: "AI מנתח את התהליכים שלכם ומציע אופטימיזציות לשיפור יעילות והפחתת צווארי בקבוק."
+          description: "המערכת צופה איך אתם עובדים ומציעה דרכים לעשות דברים מהר יותר. שיפורים קטנים שמוסיפים לחיסכון זמן גדול."
         }
       ]
     },
@@ -561,56 +561,56 @@ const translations = {
       ]
     },
     features: {
-      title: "תכונות ברמה ארגונית",
-      subtitle: "כל מה שאתם צריכים לניהול קשרי העסק שלכם",
+      title: "כל התכונות שאתם באמת צריכים",
+      subtitle: "כלים שעוזרים לכם להישאר מאורגנים ולסגור יותר עסקאות",
       items: [
         {
           title: "ניהול אנשי קשר",
-          description: "מסד נתונים מרכזי של כל אנשי הקשר, הלקוחות והלידים שלכם עם פרופילים מפורטים והיסטוריית אינטראקציות."
+          description: "שמרו את כל הלקוחות, הלידים ואנשי הקשר שלכם במקום אחד. ראו עם מי דיברתם, מתי, ועל מה—בלי לחפש באימיילים."
         },
         {
           title: "צינור מכירות",
-          description: "צינור מכירות ויזואלי למעקב עסקאות מליד לסגירה עם שלבים הניתנים להתאמה ואוטומציה."
+          description: "ראו בדיוק איפה כל עסקה עומדת במבט אחד. העבירו עסקאות בין שלבים, הגדירו תזכורות, ולעולם אל תאבדו מעקב על מה הבא."
         },
         {
           title: "אינטגרציה לאימייל",
-          description: "חברו את חשבונות האימייל שלכם לסנכרון שיחות, שליחת אימיילים ישירות מה-CRM ומעקב מעורבות."
+          description: "האימיילים שלכם מסתנכרנים אוטומטית. ענו מה-CRM, ראו את כל היסטוריית השיחה, ודעו מתי מישהו פתח את האימייל שלכם."
         },
         {
           title: "ניהול משימות ופעילויות",
-          description: "לעולם לא תפספסו מעקב עם תזכורות אוטומטיות, הקצאת משימות ומעקב פעילויות."
+          description: "קבלו תזכורות למעקבים, הקצו משימות לצוות שלכם, וראו כל מה שצריך לקרות היום. בלי דברים שנשכחים."
         },
         {
           title: "ניהול מסמכים",
-          description: "אחסון, ארגון ושיתוף מסמכים, חוזים וקבצים עם בקרת גרסאות והרשאות גישה."
+          description: "שמרו חוזים, הצעות וקבצים בדיוק איפה שצריך. שתפו עם הצוות, שליטו מי רואה מה, ושמרו הכל מאורגן."
         },
         {
-          title: "אנליטיקה מתקדמת",
-          description: "לוחות בקרה בזמן אמת, דוחות מותאמים אישית ותובנות לקבלת החלטות עסקיות מבוססות נתונים."
+          title: "אנליטיקה ודוחות",
+          description: "ראו איך העסק שלכם באמת מתנהל עם לוחות בקרה קלים לקריאה. הכירו את המספרים בלי לבלות שעות בגיליונות אלקטרוניים."
         },
         {
           title: "אוטומציה של תהליכי עבודה",
-          description: "אוטומציה של משימות חוזרות, יצירת תהליכי עבודה מותאמים אישית והפעלת פעולות על בסיס תנאים."
+          description: "הגדירו כללים פעם אחת, והמערכת מטפלת בשאר. הקצאה אוטומטית של משימות, שליחת מעקבים, והפעלת פעולות לפי מה שקורה."
         },
         {
           title: "אפליקציה לנייד",
-          description: "גישה ל-CRM שלכם על הדרך עם אפליקציות נייד מקוריות ל-iOS ו-Android."
+          description: "בדקו את ה-CRM שלכם מכל מקום. עדכנו עסקאות, הוסיפו הערות, וראו מה קורה—הכל מהטלפון."
         },
         {
           title: "שיתוף פעולה בצוות",
-          description: "שיתוף מידע, הקצאת משימות ושיתוף פעולה חלק עם הצוות שלכם בזמן אמת."
+          description: "כולם רואים את אותה מידע. הקצו משימות, שתפו הערות, ועבדו יחד בלי פגישות ואימיילים מתמידים."
         },
         {
           title: "שדות וטפסים מותאמים",
-          description: "התאמה אישית של ה-CRM שלכם עם שדות מותאמים, טפסים ומבני נתונים המותאמים לעסק שלכם."
+          description: "עשו את זה עובד לעסק שלכם. הוסיפו את השדות שאתם צריכים, צרו טפסים שלוכדים מה שחשוב, וארגנו נתונים בדרך שלכם."
         },
         {
-          title: "API ואינטגרציות",
-          description: "התחברות ל-1000+ אפליקציות כולל Slack, Google Workspace, Microsoft 365 ועוד."
+          title: "אינטגרציות",
+          description: "עובד עם הכלים שאתם כבר משתמשים בהם. התחברו ל-Slack, Google, Microsoft, ומאות אפליקציות אחרות שאתם מסתמכים עליהן."
         },
         {
-          title: "אבטחה ותאימות",
-          description: "אבטחה ברמה ארגונית עם הצפנת נתונים, גישה מבוססת תפקידים ותאימות ל-GDPR."
+          title: "אבטחה ופרטיות",
+          description: "הנתונים שלכם מוצפנים ומאובטחים. שליטו מי רואה מה, עמדו בדרישות תאימות, וישנו טוב בידיעה שזה מוגן."
         }
       ]
     },
@@ -691,7 +691,7 @@ export default function LandingPage() {
                   to="/pricing"
                   className="text-white/90 hover:text-white font-medium text-sm transition-colors"
                 >
-                  {language === 'en' ? 'Pricing' : 'תמחור'}
+                  {language === 'en' ? 'Pricing' : 'מחירון'}
                 </Link>
               </div>
 
@@ -796,7 +796,7 @@ export default function LandingPage() {
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-white/90 hover:text-white font-medium text-sm text-left rtl:text-right py-2"
                   >
-                    {language === 'en' ? 'Pricing' : 'תמחור'}
+                    {language === 'en' ? 'Pricing' : 'מחירון'}
                   </Link>
                   <Link
                     to="/dashboard"
@@ -899,11 +899,9 @@ export default function LandingPage() {
               {t.ai.subtitle}
             </p>
           </div>
-          <SwipeableCarousel
-            items={t.ai.items}
-            itemsPerView={{ mobile: 1, tablet: 2, desktop: 4 }}
-            renderItem={(item, index) => (
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 h-full">
+          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+            {t.ai.items.map((item, index) => (
+              <div key={index} className="flex-shrink-0 w-80 bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 snap-start">
                 <div className="w-12 h-12 bg-gradient-to-br from-gradient-start to-gradient-end rounded-lg flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -916,8 +914,8 @@ export default function LandingPage() {
                   {item.description}
                 </p>
               </div>
-            )}
-          />
+            ))}
+          </div>
         </div>
       </section>
 

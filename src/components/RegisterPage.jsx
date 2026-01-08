@@ -211,26 +211,28 @@ export default function RegisterPage() {
           ? "Subdomain must be at least 3 characters"
           : "שם החברה חייב להכיל לפחות 3 תווים";
     } else {
-      // Check if subdomain already exists
+      // Check if subdomain already exists using database function
       if (supabase) {
         try {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("subdomain")
-            .eq("subdomain", formData.companySubdomain.toLowerCase())
-            .single();
+          const { data, error } = await supabase.rpc(
+            "check_subdomain_available",
+            {
+              subdomain_text: formData.companySubdomain.toLowerCase(),
+            }
+          );
 
-          if (data && !error) {
+          if (error) {
+            console.error("Error checking subdomain:", error);
+          } else if (data === false) {
+            // Subdomain is NOT available (exists)
             newErrors.companySubdomain =
               language === "en"
                 ? "This subdomain is already taken. Please choose another."
                 : "תת-דומיין זה כבר תפוס. אנא בחר אחר.";
           }
+          // If data === true, subdomain is available (no error)
         } catch (err) {
-          // If error is "PGRST116" it means no row found, which is good (subdomain available)
-          if (err.code !== "PGRST116") {
-            console.error("Error checking subdomain:", err);
-          }
+          console.error("Error checking subdomain:", err);
         }
       }
     }

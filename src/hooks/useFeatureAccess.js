@@ -17,15 +17,23 @@ const FEATURE_ACCESS = {
 }
 
 export function useFeatureAccess() {
-  const { profile, isTrialActive, isPro, getTrialDaysRemaining } = useAuth()
+  const { profile, isTrialActive, isPro, getTrialDaysRemaining, isSubscriptionActive } = useAuth()
 
   // Get current plan status
   const getCurrentPlan = () => {
     // If no profile yet, assume trial (be permissive while loading)
     if (!profile) return 'trial'
 
-    if (isPro()) return 'pro'
+    // Check for active pro subscription
+    if (isPro() && isSubscriptionActive()) return 'pro'
+
+    // Check legacy pro users (without subscription tracking)
+    if (profile.plan === 'pro' && !profile.subscription_status) return 'pro'
+
+    // Active trial
     if (isTrialActive()) return 'trial'
+
+    // Trial expired, no subscription
     return 'free'
   }
 

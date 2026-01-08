@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { FiZap } from 'react-icons/fi'
 import Sidebar from './Sidebar'
 import TopNav from './TopNav'
+import TrialExpiryBanner from './TrialExpiryBanner'
 import { TotalRevenueCard, ProfitCard, MonthlyGoalCard } from './KPICard'
 import DealsTable from './QuotesTable'
 import FiltersPanel from './FiltersPanel'
@@ -39,6 +40,7 @@ export default function Dashboard() {
     <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col lg:pr-16">
+        <TrialExpiryBanner />
         <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
         <main className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
           <div className="mb-3 sm:mb-4 lg:mb-6">
