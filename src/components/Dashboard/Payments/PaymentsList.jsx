@@ -139,7 +139,7 @@ export default function PaymentsList() {
     return (
       <div dir="rtl" className="min-h-screen bg-gray-50">
         <Sidebar />
-        <div className="flex-1 flex flex-col pr-16 lg:pr-16">
+        <div className="flex-1 flex flex-col lg:pr-16">
           <TopNav />
           <div className="flex-1 flex items-center justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>

@@ -12,16 +12,16 @@ export function TotalRevenueCard({ data, change }) {
   ]
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-gray-600 font-medium">Total Revenue</h3>
-        <span className="text-green-500 text-sm font-semibold">+{change}% Last 30 Days</span>
+    <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-lg border border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-2">
+        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Total Revenue</h3>
+        <span className="text-green-500 text-xs sm:text-sm font-semibold">+{change}% Last 30 Days</span>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
         ${data.totalRevenue.toLocaleString('en-US', { maximumFractionDigits: 1 })}
       </div>
-      <p className="text-sm text-gray-500 mb-4">Deals distribution by status:</p>
-      <div className="h-32">
+      <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">Deals distribution by status:</p>
+      <div className="h-24 sm:h-32">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData}>
             <Bar dataKey="value" fill="#8b5cf6" radius={[8, 8, 0, 0]}>
@@ -40,15 +40,15 @@ export function TotalRevenueCard({ data, change }) {
 
 export function ProfitCard({ data, profitValue, change }) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-gray-600 font-medium">Profit From Closed Deals</h3>
-        <span className="text-green-500 text-sm font-semibold">+{change}% Last 30 Days</span>
+    <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-lg border border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-2">
+        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Profit From Closed Deals</h3>
+        <span className="text-green-500 text-xs sm:text-sm font-semibold">+{change}% Last 30 Days</span>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-4">
+      <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
         ${(profitValue / 1000).toFixed(1)}k
       </div>
-      <div className="h-32">
+      <div className="h-24 sm:h-32">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
             <defs>
@@ -75,31 +75,32 @@ export function ProfitCard({ data, profitValue, change }) {
 
 export function MonthlyGoalCard({ goal, change }) {
   const percentage = 75 // Example percentage
-  const circumference = 2 * Math.PI * 45
+  const radius = 36 // Base radius for calculation
+  const circumference = 2 * Math.PI * radius
   const offset = circumference - (percentage / 100) * circumference
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-gray-600 font-medium">Monthly Sales Goal</h3>
-        <span className="text-green-500 text-sm font-semibold">+{change}% Last 30 Days</span>
+    <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-lg border border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-2">
+        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Monthly Sales Goal</h3>
+        <span className="text-green-500 text-xs sm:text-sm font-semibold">+{change}% Last 30 Days</span>
       </div>
       <div className="flex items-center justify-center">
-        <div className="relative w-32 h-32">
-          <svg className="transform -rotate-90 w-32 h-32">
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32">
+          <svg className="transform -rotate-90 w-full h-full" viewBox="0 0 100 100">
             <circle
-              cx="64"
-              cy="64"
-              r="45"
+              cx="50"
+              cy="50"
+              r={radius}
               stroke="currentColor"
               strokeWidth="8"
               fill="transparent"
               className="text-gray-200"
             />
             <circle
-              cx="64"
-              cy="64"
-              r="45"
+              cx="50"
+              cy="50"
+              r={radius}
               stroke="currentColor"
               strokeWidth="8"
               fill="transparent"
@@ -111,7 +112,7 @@ export function MonthlyGoalCard({ goal, change }) {
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-xl font-bold text-gray-900">
+              <div className="text-sm sm:text-base lg:text-xl font-bold text-gray-900">
                 ${(goal / 1000).toFixed(1)}k
               </div>
             </div>

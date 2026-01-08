@@ -35,6 +35,7 @@ CREATE TABLE profiles (
   company_name VARCHAR(255),
   phone VARCHAR(50),
   avatar_url TEXT,
+  subdomain VARCHAR(100) UNIQUE,
   plan VARCHAR(50) DEFAULT 'trial',
   trial_ends_at TIMESTAMP WITH TIME ZONE,
   data_initialized BOOLEAN DEFAULT FALSE,
@@ -189,6 +190,7 @@ CREATE TABLE invoices (
 -- ============================================
 -- INDEXES
 -- ============================================
+CREATE INDEX idx_profiles_subdomain ON profiles(subdomain);
 CREATE INDEX idx_leads_user_id ON leads(user_id);
 CREATE INDEX idx_leads_status ON leads(status);
 CREATE INDEX idx_contacts_user_id ON contacts(user_id);

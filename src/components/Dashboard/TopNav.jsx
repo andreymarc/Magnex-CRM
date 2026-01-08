@@ -23,34 +23,36 @@ export default function TopNav({ onMenuClick }) {
   }
 
   return (
-    <nav className="bg-purple-dark/95 backdrop-blur-md border-b border-purple-darker px-4 sm:px-6 py-3 sm:py-4">
+    <nav className="bg-purple-dark/95 backdrop-blur-md border-b border-purple-darker px-3 sm:px-4 lg:px-6 py-2.5 sm:py-3 lg:py-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
           {/* Menu toggle button - on left near sidebar */}
           <button
             onClick={onMenuClick}
-            className="lg:hidden text-white/70 hover:text-white transition-colors p-2 bg-white/10 rounded-lg"
+            className="lg:hidden text-white/70 hover:text-white transition-colors p-1.5 sm:p-2 bg-white/10 rounded-lg"
             aria-label="פתח תפריט"
           >
-            <FiMenu className="w-6 h-6" />
+            <FiMenu className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
-          <Logo size="default" />
+          <div className="scale-90 sm:scale-100">
+            <Logo size="default" />
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-4">
           {/* Trial Countdown Badge - only show for non-pro users */}
           {!isPro() && (
             <Link
               to="/dashboard/settings"
-              className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all hover:opacity-90 ${getTrialBadgeColor()}`}
+              className={`hidden sm:flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all hover:opacity-90 ${getTrialBadgeColor()}`}
             >
-              <FiClock className="w-4 h-4" />
+              <FiClock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>{getTrialText()}</span>
             </Link>
           )}
-          <button className="text-white/70 hover:text-white transition-colors relative p-2">
-            <FiBell className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          <button className="text-white/70 hover:text-white transition-colors relative p-1.5 sm:p-2">
+            <FiBell className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full"></span>
           </button>
         </div>
       </div>

@@ -99,7 +99,7 @@ export function AuthProvider({ children }) {
   }
 
   // Sign up with email and password
-  const signUp = async ({ email, password, fullName, companyName, phone }) => {
+  const signUp = async ({ email, password, fullName, companyName, phone, subdomain }) => {
     if (!supabase) {
       throw new Error('Supabase is not configured. Please set up your environment variables.')
     }
@@ -110,7 +110,8 @@ export function AuthProvider({ children }) {
         data: {
           full_name: fullName,
           company_name: companyName,
-          phone: phone
+          phone: phone,
+          subdomain: subdomain
         }
       }
     })
@@ -129,6 +130,7 @@ export function AuthProvider({ children }) {
           full_name: fullName,
           company_name: companyName,
           phone: phone,
+          subdomain: subdomain?.toLowerCase() || null,
           plan: 'trial',
           trial_ends_at: trialEndsAt.toISOString(),
           data_initialized: false,

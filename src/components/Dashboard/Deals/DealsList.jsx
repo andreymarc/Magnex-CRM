@@ -103,11 +103,11 @@ export default function DealsList() {
     return stageConfig?.label || stage
   }
 
-  if (loading) {
+    if (loading) {
     return (
       <div dir="rtl" className="min-h-screen bg-gray-50">
         <Sidebar />
-        <div className="flex-1 flex flex-col pr-16 lg:pr-16">
+        <div className="flex-1 flex flex-col lg:pr-16">
           <TopNav />
           <div className="flex-1 flex items-center justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -120,83 +120,85 @@ export default function DealsList() {
   return (
     <div dir="rtl" className="min-h-screen bg-gray-50">
       <Sidebar />
-      <div className="flex-1 flex flex-col pr-16 lg:pr-16">
+      <div className="flex-1 flex flex-col lg:pr-16">
         <TopNav />
-        <main className="flex-1 p-6 overflow-y-auto">
-          <div className="space-y-6">
+        <main className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
+          <div className="space-y-3 sm:space-y-4 lg:space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Deals Pipeline</h1>
-                <p className="text-gray-600 mt-1">ניהול עסקאות</p>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Deals Pipeline</h1>
+                <p className="text-gray-600 mt-1 text-sm sm:text-base">ניהול עסקאות</p>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <button
                   onClick={() => setViewMode(viewMode === 'kanban' ? 'list' : 'kanban')}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm sm:text-base"
                 >
-                  {viewMode === 'kanban' ? 'List View' : 'Kanban View'}
+                  <span className="hidden sm:inline">{viewMode === 'kanban' ? 'List View' : 'Kanban View'}</span>
+                  <span className="sm:hidden">{viewMode === 'kanban' ? 'List' : 'Kanban'}</span>
                 </button>
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+                  className="flex items-center gap-1.5 sm:gap-2 bg-primary-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-primary-700 transition-colors text-sm sm:text-base"
                 >
-                  <FiPlus className="w-5 h-5" />
-                  <span>Add Deal</span>
+                  <FiPlus className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">Add Deal</span>
+                  <span className="sm:hidden">Add</span>
                 </button>
               </div>
             </div>
 
             {/* Stats Cards */}
             {stats && (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <div className="bg-white rounded-lg shadow p-4">
-                  <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-                  <div className="text-sm text-gray-600">Total Deals</div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 lg:gap-4">
+                <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">{stats.total}</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Total Deals</div>
                 </div>
-                <div className="bg-white rounded-lg shadow p-4">
-                  <div className="text-2xl font-bold text-green-600">
+                <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-green-600">
                     ${(stats.won_value / 1000).toFixed(0)}k
                   </div>
-                  <div className="text-sm text-gray-600">Won Value</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Won Value</div>
                 </div>
-                <div className="bg-white rounded-lg shadow p-4">
-                  <div className="text-2xl font-bold text-primary-600">
+                <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-primary-600">
                     ${(stats.total_value / 1000).toFixed(0)}k
                   </div>
-                  <div className="text-sm text-gray-600">Total Value</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Total Value</div>
                 </div>
-                <div className="bg-white rounded-lg shadow p-4">
-                  <div className="text-2xl font-bold text-blue-600">
+                <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600">
                     ${(stats.average_deal_size / 1000).toFixed(0)}k
                   </div>
-                  <div className="text-sm text-gray-600">Avg Deal Size</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Avg Deal Size</div>
                 </div>
-                <div className="bg-white rounded-lg shadow p-4">
-                  <div className="text-2xl font-bold text-purple-600">
+                <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-purple-600">
                     {stats.win_rate.toFixed(0)}%
                   </div>
-                  <div className="text-sm text-gray-600">Win Rate</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Win Rate</div>
                 </div>
-                <div className="bg-white rounded-lg shadow p-4">
-                  <div className="text-2xl font-bold text-orange-600">
+                <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-bold text-orange-600">
                     {stats.by_stage.negotiation + stats.by_stage.proposal}
                   </div>
-                  <div className="text-sm text-gray-600">In Pipeline</div>
+                  <div className="text-xs sm:text-sm text-gray-600">In Pipeline</div>
                 </div>
               </div>
             )}
 
             {/* Search */}
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-white rounded-lg shadow p-3 sm:p-4">
               <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   type="text"
                   placeholder="Search deals..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -219,16 +221,16 @@ export default function DealsList() {
 
             {/* Kanban Board */}
             {viewMode === 'kanban' ? (
-              <div className="overflow-x-auto">
-                <div className="flex space-x-4 min-w-max pb-4">
+              <div className="overflow-x-auto -mx-3 sm:-mx-4 lg:-mx-6 px-3 sm:px-4 lg:px-6">
+                <div className="flex space-x-3 sm:space-x-4 min-w-max pb-4">
                   {dealStages.map((stage) => {
                     const stageDeals = getDealsByStage(stage.id)
                     const stageValue = stageDeals.reduce((sum, deal) => sum + (deal.amount || 0), 0)
                     
                     return (
-                      <div key={stage.id} className="flex-shrink-0 w-80">
+                      <div key={stage.id} className="flex-shrink-0 w-72 sm:w-80">
                         <div className="bg-white rounded-lg shadow">
-                          <div className={`p-4 rounded-t-lg ${getStageColor(stage.id)}`}>
+                          <div className={`p-3 sm:p-4 rounded-t-lg ${getStageColor(stage.id)}`}>
                             <div className="flex items-center justify-between">
                               <h3 className="font-semibold">{stage.label}</h3>
                               <span className="text-sm font-medium">{stageDeals.length}</span>
@@ -239,7 +241,7 @@ export default function DealsList() {
                               </div>
                             )}
                           </div>
-                          <div className="p-4 space-y-3 max-h-[600px] overflow-y-auto">
+                          <div className="p-3 sm:p-4 space-y-2 sm:space-y-3 max-h-[600px] overflow-y-auto">
                             {stageDeals.length === 0 ? (
                               <div className="text-center py-8 text-gray-400 text-sm">
                                 No deals in this stage

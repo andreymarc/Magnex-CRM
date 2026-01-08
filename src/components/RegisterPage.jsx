@@ -13,6 +13,7 @@ import {
 import Logo from "./Logo";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { supabase } from "../lib/supabase";
 
 const translations = {
   en: {
@@ -178,7 +179,7 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateStep2 = () => {
+  const validateStep2 = async () => {
     const newErrors = {};
 
     if (!formData.companyName.trim()) {
@@ -209,6 +210,29 @@ export default function RegisterPage() {
         language === "en"
           ? "Subdomain must be at least 3 characters"
           : "שם החברה חייב להכיל לפחות 3 תווים";
+    } else {
+      // Check if subdomain already exists
+      if (supabase) {
+        try {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select("subdomain")
+            .eq("subdomain", formData.companySubdomain.toLowerCase())
+            .single();
+
+          if (data && !error) {
+            newErrors.companySubdomain =
+              language === "en"
+                ? "This subdomain is already taken. Please choose another."
+                : "תת-דומיין זה כבר תפוס. אנא בחר אחר.";
+          }
+        } catch (err) {
+          // If error is "PGRST116" it means no row found, which is good (subdomain available)
+          if (err.code !== "PGRST116") {
+            console.error("Error checking subdomain:", err);
+          }
+        }
+      }
     }
 
     setErrors(newErrors);
@@ -243,7 +267,7 @@ export default function RegisterPage() {
     }
 
     // Step 2 - Final submission
-    if (!validateStep2()) {
+    if (!(await validateStep2())) {
       return;
     }
 
@@ -257,6 +281,7 @@ export default function RegisterPage() {
         fullName: `${formData.firstName} ${formData.lastName}`,
         companyName: formData.companyName,
         phone: formData.mobile,
+        subdomain: formData.companySubdomain,
       });
 
       // Show success message
@@ -272,9 +297,23 @@ export default function RegisterPage() {
       // Handle specific errors
       if (
         error.message.includes("already registered") ||
-        error.message.includes("already exists")
+        error.message.includes("already exists") ||
+        error.message.includes("duplicate key") ||
+        error.message.includes("unique constraint")
       ) {
-        setErrors({ email: t.register.emailExists });
+        if (
+          error.message.includes("subdomain") ||
+          error.message.toLowerCase().includes("subdomain")
+        ) {
+          setErrors({
+            companySubdomain:
+              language === "en"
+                ? "This subdomain is already taken"
+                : "תת-דומיין זה כבר תפוס",
+          });
+        } else {
+          setErrors({ email: t.register.emailExists });
+        }
       } else {
         alert(t.register.registrationFailed);
       }

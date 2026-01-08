@@ -24,7 +24,7 @@ export default function AnalyticsDashboard() {
   return (
     <div dir="rtl" className="min-h-screen bg-gray-50">
       <Sidebar />
-      <div className="flex-1 flex flex-col pr-16 lg:pr-16">
+      <div className="flex-1 flex flex-col lg:pr-16">
         <TopNav />
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="space-y-6">

@@ -138,7 +138,7 @@ export default function SettingsPage() {
   return (
     <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 flex flex-col pr-16 lg:pr-16">
+      <div className="flex-1 flex flex-col lg:pr-16">
         <TopNav onMenuClick={() => setSidebarOpen(true)} />
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="max-w-6xl mx-auto space-y-6">

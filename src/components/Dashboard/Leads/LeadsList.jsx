@@ -100,7 +100,7 @@ export default function LeadsList() {
   return (
     <div dir="rtl" className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 flex flex-col pr-16 lg:pr-16">
+      <div className="flex-1 flex flex-col lg:pr-16">
         <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
         <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
           <div className="space-y-4 sm:space-y-6">
