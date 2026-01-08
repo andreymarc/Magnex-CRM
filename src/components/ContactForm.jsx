@@ -140,14 +140,8 @@ export default function ContactForm({ language = "he" }) {
         <div className="absolute top-10 right-1/3 w-80 h-80 bg-white/30 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Dot pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          backgroundImage: `radial-gradient(circle, white 2px, transparent 2px)`,
-          backgroundSize: "24px 24px",
-        }}
-      ></div>
+      {/* White overlay */}
+      <div className="absolute inset-0 bg-white opacity-30"></div>
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-12 gap-8 items-start">
@@ -229,7 +223,7 @@ export default function ContactForm({ language = "he" }) {
                       value={formData.fullName}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-6 py-4 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 placeholder-gray-500 ${
+                      className={`w-full bg-white px-4 py-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 placeholder-gray-500 ${
                         isRTL ? "text-right" : "text-left"
                       }`}
                       placeholder={t.fullName}
@@ -245,9 +239,11 @@ export default function ContactForm({ language = "he" }) {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-6 py-4 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-left"
+                      className={`w-full bg-white px-4 py-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 placeholder-gray-500 ${
+                        isRTL ? "text-right" : "text-left"
+                      }`}
                       placeholder={t.email}
-                      dir="ltr"
+                      dir={isRTL ? "rtl" : "ltr"}
                     />
                   </div>
 
@@ -259,9 +255,11 @@ export default function ContactForm({ language = "he" }) {
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-6 py-4 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-left"
+                      className={`w-full bg-white px-4 py-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 placeholder-gray-500 ${
+                        isRTL ? "text-right" : "text-left"
+                      }`}
                       placeholder={t.phone}
-                      dir="ltr"
+                      dir={isRTL ? "rtl" : "ltr"}
                     />
                   </div>
 
@@ -272,8 +270,8 @@ export default function ContactForm({ language = "he" }) {
                       value={formData.preferredTime}
                       onChange={handleInputChange}
                       required
-                      className={`w-full py-4 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 appearance-none bg-white ${
-                        isRTL ? "pl-12 pr-6 text-right" : "pl-6 pr-12 text-left"
+                      className={`w-full bg-white py-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 appearance-none ${
+                        isRTL ? "pl-10 pr-4 text-right" : "pl-4 pr-10 text-left"
                       }`}
                       dir={isRTL ? "rtl" : "ltr"}
                     >

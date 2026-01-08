@@ -423,21 +423,17 @@ export default function RegisterPage() {
                     <>
                       {/* First Name */}
                       <div>
-                        <label
-                          htmlFor="firstName"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.firstName}
-                        </label>
                         <div className="relative">
-                          <FiUser className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiUser className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="text"
                             id="firstName"
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.firstName
                                 ? "border-red-300"
                                 : "border-gray-300"
@@ -455,21 +451,17 @@ export default function RegisterPage() {
 
                       {/* Last Name */}
                       <div>
-                        <label
-                          htmlFor="lastName"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.lastName}
-                        </label>
                         <div className="relative">
-                          <FiUser className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiUser className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="text"
                             id="lastName"
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.lastName
                                 ? "border-red-300"
                                 : "border-gray-300"
@@ -487,27 +479,23 @@ export default function RegisterPage() {
 
                       {/* Email */}
                       <div>
-                        <label
-                          htmlFor="email"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.email}
-                        </label>
                         <div className="relative">
-                          <FiMail className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiMail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="email"
                             id="email"
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.email
                                 ? "border-red-300"
                                 : "border-gray-300"
                             }`}
                             placeholder={t.register.email}
-                            dir="ltr"
+                            dir={isRTL ? "rtl" : "ltr"}
                           />
                         </div>
                         {errors.email && (
@@ -519,27 +507,23 @@ export default function RegisterPage() {
 
                       {/* Password */}
                       <div>
-                        <label
-                          htmlFor="password"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.password}
-                        </label>
                         <div className="relative">
-                          <FiLock className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiLock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="password"
                             id="password"
                             name="password"
                             value={formData.password}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.password
                                 ? "border-red-300"
                                 : "border-gray-300"
                             }`}
                             placeholder="••••••••"
-                            dir="ltr"
+                            dir={isRTL ? "rtl" : "ltr"}
                           />
                         </div>
                         {errors.password && (
@@ -551,27 +535,23 @@ export default function RegisterPage() {
 
                       {/* Confirm Password */}
                       <div>
-                        <label
-                          htmlFor="confirmPassword"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.confirmPassword}
-                        </label>
                         <div className="relative">
-                          <FiLock className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiLock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="password"
                             id="confirmPassword"
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.confirmPassword
                                 ? "border-red-300"
                                 : "border-gray-300"
                             }`}
                             placeholder="••••••••"
-                            dir="ltr"
+                            dir={isRTL ? "rtl" : "ltr"}
                           />
                         </div>
                         {errors.confirmPassword && (
@@ -583,27 +563,23 @@ export default function RegisterPage() {
 
                       {/* Mobile */}
                       <div>
-                        <label
-                          htmlFor="mobile"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.mobile}
-                        </label>
                         <div className="relative">
-                          <FiPhone className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiPhone className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="tel"
                             id="mobile"
                             name="mobile"
                             value={formData.mobile}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.mobile
                                 ? "border-red-300"
                                 : "border-gray-300"
                             }`}
                             placeholder={t.register.mobile}
-                            dir="ltr"
+                            dir={isRTL ? "rtl" : "ltr"}
                           />
                         </div>
                         {errors.mobile && (
@@ -620,21 +596,17 @@ export default function RegisterPage() {
                     <>
                       {/* Company Name */}
                       <div>
-                        <label
-                          htmlFor="companyName"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.companyName}
-                        </label>
                         <div className="relative">
-                          <FiHome className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiHome className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="text"
                             id="companyName"
                             name="companyName"
                             value={formData.companyName}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.companyName
                                 ? "border-red-300"
                                 : "border-gray-300"
@@ -652,27 +624,23 @@ export default function RegisterPage() {
 
                       {/* Company Phone */}
                       <div>
-                        <label
-                          htmlFor="companyPhone"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.companyPhone}
-                        </label>
                         <div className="relative">
-                          <FiPhone className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiPhone className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="tel"
                             id="companyPhone"
                             name="companyPhone"
                             value={formData.companyPhone}
                             onChange={handleInputChange}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.companyPhone
                                 ? "border-red-300"
                                 : "border-gray-300"
                             }`}
                             placeholder={t.register.companyPhone}
-                            dir="ltr"
+                            dir={isRTL ? "rtl" : "ltr"}
                           />
                         </div>
                         {errors.companyPhone && (
@@ -684,14 +652,8 @@ export default function RegisterPage() {
 
                       {/* Company Subdomain */}
                       <div>
-                        <label
-                          htmlFor="companySubdomain"
-                          className="block text-xs sm:text-sm font-medium text-gray-700 mb-0.5 sm:mb-1"
-                        >
-                          {t.register.companySubdomain}
-                        </label>
                         <div className="relative">
-                          <FiBriefcase className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <FiBriefcase className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                           <input
                             type="text"
                             id="companySubdomain"
@@ -706,7 +668,9 @@ export default function RegisterPage() {
                                 target: { name: "companySubdomain", value },
                               });
                             }}
-                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 rtl:pr-3 rtl:pl-9 sm:rtl:pr-4 sm:rtl:pl-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                            className={`w-full bg-white pl-3 sm:pl-4 pr-9 sm:pr-10 py-1.5 sm:py-2 text-sm text-gray-900 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all ${
+                              isRTL ? "text-right" : "text-left"
+                            } ${
                               errors.companySubdomain
                                 ? "border-red-300"
                                 : "border-gray-300"

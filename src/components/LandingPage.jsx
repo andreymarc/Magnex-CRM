@@ -833,11 +833,6 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center">
-            <div className="inline-block mb-6">
-              <span className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold glowing-text-green">
-                {t.cta.freeTrial}
-              </span>
-            </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
               <span className="bg-gradient-to-r from-gradient-start via-primary-500 to-gradient-end bg-clip-text text-transparent">
                 {t.hero.headline}
