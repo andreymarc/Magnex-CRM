@@ -2,18 +2,29 @@ import { useAuth } from '../context/AuthContext'
 
 // Define which features are available for each plan
 const FEATURE_ACCESS = {
-  // Free features (available after trial ends)
+  // All features viewable in soft lock mode
   contacts: ['trial', 'free', 'pro'],
   tasks: ['trial', 'free', 'pro'],
+  leads: ['trial', 'free', 'pro'],
+  deals: ['trial', 'free', 'pro'],
+  schedule: ['trial', 'free', 'pro'],
+  documents: ['trial', 'free', 'pro'],
+  analytics: ['trial', 'free', 'pro'],
+  payments: ['trial', 'free', 'pro'],
+  settings: ['trial', 'free', 'pro'],
+}
 
-  // Paid features (only during trial or with pro plan)
+// Define which plans can CREATE/EDIT (not just view)
+const EDIT_ACCESS = {
+  contacts: ['trial', 'pro'],
+  tasks: ['trial', 'pro'],
   leads: ['trial', 'pro'],
   deals: ['trial', 'pro'],
   schedule: ['trial', 'pro'],
   documents: ['trial', 'pro'],
   analytics: ['trial', 'pro'],
   payments: ['trial', 'pro'],
-  settings: ['trial', 'free', 'pro'], // Settings always available
+  settings: ['trial', 'free', 'pro'], // Settings always editable
 }
 
 export function useFeatureAccess() {
@@ -37,7 +48,7 @@ export function useFeatureAccess() {
     return 'free'
   }
 
-  // Check if a feature is accessible
+  // Check if a feature is accessible (viewable)
   const canAccess = (feature) => {
     const currentPlan = getCurrentPlan()
 
@@ -47,9 +58,29 @@ export function useFeatureAccess() {
     return allowedPlans.includes(currentPlan)
   }
 
+  // Check if user can CREATE/EDIT (not just view)
+  const canEdit = (feature) => {
+    const currentPlan = getCurrentPlan()
+
+    const allowedPlans = EDIT_ACCESS[feature]
+    if (!allowedPlans) return true // If feature not defined, allow edit
+
+    return allowedPlans.includes(currentPlan)
+  }
+
+  // Check if trial has expired (for showing upgrade prompts)
+  const isTrialExpired = () => {
+    return getCurrentPlan() === 'free'
+  }
+
   // Check if feature is locked (for UI display)
   const isLocked = (feature) => {
     return !canAccess(feature)
+  }
+
+  // Check if editing is locked (for UI display)
+  const isEditLocked = (feature) => {
+    return !canEdit(feature)
   }
 
   // Get list of all locked features
@@ -74,7 +105,10 @@ export function useFeatureAccess() {
 
   return {
     canAccess,
+    canEdit,
     isLocked,
+    isEditLocked,
+    isTrialExpired,
     getLockedFeatures,
     getAccessibleFeatures,
     getCurrentPlan,

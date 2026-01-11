@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
-import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiBriefcase, FiZap } from 'react-icons/fi'
+import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiBriefcase, FiZap, FiLock } from 'react-icons/fi'
 import { getLeads, deleteLead, convertLeadToContact } from '../../../services/leadsService'
+import { useFeatureAccess } from '../../../hooks/useFeatureAccess'
 import LeadModal from './LeadModal'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
 import AIAssistant from '../AIAssistant'
+import UpgradeBanner from '../UpgradeBanner'
 
 export default function LeadsList() {
   const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
@@ -16,6 +18,10 @@ export default function LeadsList() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedLead, setSelectedLead] = useState(null)
   const [error, setError] = useState(null)
+
+  // Check if user can edit (trial active or pro)
+  const { canEdit, isTrialExpired } = useFeatureAccess()
+  const canEditLeads = canEdit('leads')
 
   useEffect(() => {
     loadLeads()
@@ -111,13 +117,21 @@ export default function LeadsList() {
           <p className="text-gray-600 mt-1 text-sm sm:text-base">ניהול מתעניינים</p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center justify-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors w-full sm:w-auto"
+          onClick={() => canEditLeads && setIsModalOpen(true)}
+          disabled={!canEditLeads}
+          className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors w-full sm:w-auto ${
+            canEditLeads
+              ? 'bg-primary-600 text-white hover:bg-primary-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
         >
-          <FiPlus className="w-5 h-5" />
+          {canEditLeads ? <FiPlus className="w-5 h-5" /> : <FiLock className="w-5 h-5" />}
           <span>Add Lead</span>
         </button>
       </div>
+
+      {/* Upgrade Banner - show when trial expired */}
+      {isTrialExpired() && <UpgradeBanner feature="leads" />}
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow p-4">
@@ -258,25 +272,28 @@ export default function LeadsList() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => handleEdit(lead)}
-                            className="text-primary-600 hover:text-primary-900 p-1"
-                            title="Edit"
+                            onClick={() => canEditLeads && handleEdit(lead)}
+                            disabled={!canEditLeads}
+                            className={`p-1 ${canEditLeads ? 'text-primary-600 hover:text-primary-900' : 'text-gray-400 cursor-not-allowed'}`}
+                            title={canEditLeads ? 'Edit' : 'Upgrade to edit'}
                           >
                             <FiEdit className="w-5 h-5" />
                           </button>
                           {lead.status !== 'converted' && (
                             <button
-                              onClick={() => handleConvert(lead.id)}
-                              className="text-green-600 hover:text-green-900 text-xs px-2 py-1 rounded"
-                              title="Convert to Contact"
+                              onClick={() => canEditLeads && handleConvert(lead.id)}
+                              disabled={!canEditLeads}
+                              className={`text-xs px-2 py-1 rounded ${canEditLeads ? 'text-green-600 hover:text-green-900' : 'text-gray-400 cursor-not-allowed'}`}
+                              title={canEditLeads ? 'Convert to Contact' : 'Upgrade to convert'}
                             >
                               Convert
                             </button>
                           )}
                           <button
-                            onClick={() => handleDelete(lead.id)}
-                            className="text-red-600 hover:text-red-900 p-1"
-                            title="Delete"
+                            onClick={() => canEditLeads && handleDelete(lead.id)}
+                            disabled={!canEditLeads}
+                            className={`p-1 ${canEditLeads ? 'text-red-600 hover:text-red-900' : 'text-gray-400 cursor-not-allowed'}`}
+                            title={canEditLeads ? 'Delete' : 'Upgrade to delete'}
                           >
                             <FiTrash2 className="w-5 h-5" />
                           </button>
@@ -338,25 +355,28 @@ export default function LeadsList() {
 
                   <div className="flex items-center justify-end space-x-2 pt-2 border-t border-gray-100">
                     <button
-                      onClick={() => handleEdit(lead)}
-                      className="text-primary-600 hover:text-primary-900 p-2"
-                      title="Edit"
+                      onClick={() => canEditLeads && handleEdit(lead)}
+                      disabled={!canEditLeads}
+                      className={`p-2 ${canEditLeads ? 'text-primary-600 hover:text-primary-900' : 'text-gray-400 cursor-not-allowed'}`}
+                      title={canEditLeads ? 'Edit' : 'Upgrade to edit'}
                     >
                       <FiEdit className="w-5 h-5" />
                     </button>
                     {lead.status !== 'converted' && (
                       <button
-                        onClick={() => handleConvert(lead.id)}
-                        className="text-green-600 hover:text-green-900 text-xs px-3 py-1.5 rounded border border-green-600"
-                        title="Convert to Contact"
+                        onClick={() => canEditLeads && handleConvert(lead.id)}
+                        disabled={!canEditLeads}
+                        className={`text-xs px-3 py-1.5 rounded border ${canEditLeads ? 'text-green-600 hover:text-green-900 border-green-600' : 'text-gray-400 border-gray-300 cursor-not-allowed'}`}
+                        title={canEditLeads ? 'Convert to Contact' : 'Upgrade to convert'}
                       >
                         Convert
                       </button>
                     )}
                     <button
-                      onClick={() => handleDelete(lead.id)}
-                      className="text-red-600 hover:text-red-900 p-2"
-                      title="Delete"
+                      onClick={() => canEditLeads && handleDelete(lead.id)}
+                      disabled={!canEditLeads}
+                      className={`p-2 ${canEditLeads ? 'text-red-600 hover:text-red-900' : 'text-gray-400 cursor-not-allowed'}`}
+                      title={canEditLeads ? 'Delete' : 'Upgrade to delete'}
                     >
                       <FiTrash2 className="w-5 h-5" />
                     </button>
