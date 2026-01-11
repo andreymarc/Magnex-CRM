@@ -98,8 +98,8 @@ export default function Sidebar({ isOpen, onClose }) {
 
   const handleNavClick = (path) => {
     navigate(path);
-    // Close mobile menu after navigation
-    if (onClose) {
+    // Close mobile menu after navigation (only on mobile screens)
+    if (onClose && window.innerWidth < 1024) {
       onClose();
     }
   };

@@ -11,6 +11,25 @@ exports.handler = async (event) => {
     'Content-Type': 'application/json'
   };
 
+  // Check required environment variables
+  if (!process.env.VITE_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error('Missing env vars:', {
+      hasSupabaseUrl: !!process.env.VITE_SUPABASE_URL,
+      hasServiceRoleKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY
+    });
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
+        error: 'Server misconfiguration',
+        missing: {
+          VITE_SUPABASE_URL: !process.env.VITE_SUPABASE_URL,
+          SUPABASE_SERVICE_ROLE_KEY: !process.env.SUPABASE_SERVICE_ROLE_KEY
+        }
+      })
+    };
+  }
+
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -69,7 +88,11 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Webhook handler failed' })
+      body: JSON.stringify({
+        error: 'Webhook handler failed',
+        message: error.message,
+        details: error.details || error.hint || null
+      })
     };
   }
 
