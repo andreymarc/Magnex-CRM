@@ -118,16 +118,17 @@ export default function Sidebar({ isOpen, onClose }) {
       <div
         className={`
         fixed inset-y-0 right-0 z-50
-        w-64 lg:w-16
+        w-64
         bg-gray-900
-        transform transition-transform duration-300 ease-in-out
+        transform transition-all duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}
+        ${isOpen ? "lg:w-64" : "lg:w-16"}
         flex flex-col
-        shadow-xl lg:shadow-none
+        shadow-xl
       `}
       >
-        {/* Mobile Header */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-800">
+        {/* Header - visible on mobile when open, always visible on desktop */}
+        <div className={`flex items-center justify-between p-4 border-b border-gray-800 ${!isOpen ? "lg:hidden" : ""}`}>
           <h2 className="text-white font-semibold text-lg">תפריט</h2>
           <button
             onClick={onClose}
@@ -139,7 +140,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Menu Items */}
         <div className="flex-1 overflow-y-auto py-4 lg:py-6 min-h-0">
-          <div className="flex flex-col lg:items-center space-y-2 lg:space-y-6 px-2 lg:px-0">
+          <div className={`flex flex-col space-y-2 lg:space-y-6 px-2 lg:px-0 ${isOpen ? 'lg:items-start' : 'lg:items-center'}`}>
             {menuItems.map((item, index) => {
               const Icon = item.icon;
               const active = isActive(item.path);
@@ -148,11 +149,10 @@ export default function Sidebar({ isOpen, onClose }) {
                   <button
                     onClick={() => handleNavClick(item.path)}
                     className={`
-                      w-full lg:w-12 h-12
+                      w-full h-12
                       rounded-lg
                       flex items-center
-                      lg:justify-center
-                      px-4 lg:px-0
+                      ${isOpen ? 'lg:justify-start px-4' : 'lg:w-12 lg:justify-center lg:px-0'}
                       transition-all duration-200
                       ${
                         active
@@ -163,7 +163,7 @@ export default function Sidebar({ isOpen, onClose }) {
                     title={item.label}
                   >
                     <Icon className="w-5 h-5 flex-shrink-0" />
-                    <span className="mr-3 lg:hidden text-sm font-medium">
+                    <span className={`mr-3 text-sm font-medium ${!isOpen ? "lg:hidden" : ""}`}>
                       {item.label}
                     </span>
                   </button>
@@ -207,24 +207,23 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
 
         {/* Logout Button */}
-        <div className="flex-shrink-0 border-t border-gray-800 p-4 lg:py-4 lg:px-2">
-          <div className="relative group flex lg:justify-center">
+        <div className={`flex-shrink-0 border-t border-gray-800 ${isOpen ? 'p-4' : 'p-4 lg:py-4 lg:px-2'}`}>
+          <div className={`relative group flex ${isOpen ? 'lg:justify-start' : 'lg:justify-center'}`}>
             <button
               onClick={handleLogout}
-              className="
-                w-full lg:w-12 h-12
+              className={`
+                w-full h-12
                 rounded-lg
                 flex items-center
-                lg:justify-center
-                px-4 lg:px-0
+                ${isOpen ? 'lg:justify-start px-4' : 'lg:w-12 lg:justify-center lg:px-0'}
                 transition-all duration-200
                 text-gray-400 hover:text-red-400 hover:bg-red-500/10
                 bg-gray-800/50
-              "
+              `}
               title="התנתק"
             >
               <FiLogOut className="w-5 h-5 flex-shrink-0" />
-              <span className="mr-3 lg:hidden text-sm font-medium">
+              <span className={`mr-3 text-sm font-medium ${!isOpen ? "lg:hidden" : ""}`}>
                 התנתק
               </span>
             </button>

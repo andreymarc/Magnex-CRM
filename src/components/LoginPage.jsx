@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
+import { getAuthErrorMessage } from '../utils/authErrors'
 import Logo from './Logo'
 import { FiMail, FiLock, FiArrowLeft, FiCheck } from 'react-icons/fi'
 
@@ -26,6 +27,9 @@ const translations = {
       invalidCredentials: 'Invalid email or password',
       emailRequired: 'Please enter email',
       passwordRequired: 'Please enter password',
+      emailNotConfirmed: 'Please confirm your email address before logging in',
+      emailInvalid: 'Please enter a valid email address',
+      networkError: 'Network error. Please check your connection',
       generic: 'An error occurred, please try again'
     }
   },
@@ -49,6 +53,9 @@ const translations = {
       invalidCredentials: 'אימייל או סיסמה שגויים',
       emailRequired: 'נא להזין אימייל',
       passwordRequired: 'נא להזין סיסמה',
+      emailNotConfirmed: 'אנא אמת את כתובת האימייל שלך לפני ההתחברות',
+      emailInvalid: 'נא להזין כתובת אימייל תקינה',
+      networkError: 'שגיאת רשת. אנא בדוק את החיבור שלך',
       generic: 'אירעה שגיאה, נסה שוב'
     }
   }
@@ -87,11 +94,7 @@ export default function LoginPage() {
       navigate('/dashboard')
     } catch (err) {
       console.error('Login error:', err)
-      if (err.message.includes('Invalid login credentials')) {
-        setError(t.errors.invalidCredentials)
-      } else {
-        setError(t.errors.generic)
-      }
+      setError(getAuthErrorMessage(err, language))
     } finally {
       setLoading(false)
     }
@@ -112,7 +115,7 @@ export default function LoginPage() {
       setMagicLinkSent(true)
     } catch (err) {
       console.error('Magic link error:', err)
-      setError(t.errors.generic)
+      setError(getAuthErrorMessage(err, language))
     } finally {
       setLoading(false)
     }

@@ -1,4 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 exports.handler = async (event) => {
   // CORS headers
@@ -23,13 +29,28 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { customerId } = JSON.parse(event.body);
+    const { customerId, userId } = JSON.parse(event.body);
 
-    if (!customerId) {
+    if (!customerId || !userId) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Missing required field: customerId' })
+        body: JSON.stringify({ error: 'Missing required fields: customerId, userId' })
+      };
+    }
+
+    // Verify the customer ID belongs to this user
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('stripe_customer_id')
+      .eq('id', userId)
+      .single();
+
+    if (profile?.stripe_customer_id !== customerId) {
+      return {
+        statusCode: 403,
+        headers,
+        body: JSON.stringify({ error: 'Not authorized' })
       };
     }
 

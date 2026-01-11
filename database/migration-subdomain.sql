@@ -17,3 +17,4 @@ CREATE INDEX IF NOT EXISTS idx_profiles_subdomain_lookup ON profiles(subdomain);
 -- Each company can have a unique subdomain like: companyname.magnex-crm.com
 -- ============================================
 
+

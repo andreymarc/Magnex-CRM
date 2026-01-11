@@ -59,12 +59,12 @@ export const createCheckoutSession = async ({ priceId, userId, userEmail, billin
 /**
  * Open Stripe Customer Portal for subscription management
  */
-export const openCustomerPortal = async (customerId) => {
+export const openCustomerPortal = async (customerId, userId) => {
   try {
     const response = await fetch('/api/create-portal-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ customerId })
+      body: JSON.stringify({ customerId, userId })
     });
 
     const data = await response.json();

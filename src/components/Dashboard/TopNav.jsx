@@ -34,10 +34,10 @@ export default function TopNav({ onMenuClick }) {
       <nav className="bg-purple-dark/95 backdrop-blur-md border-b border-purple-darker px-3 sm:px-4 lg:px-6 py-2.5 sm:py-3 lg:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-            {/* Menu toggle button - on left near sidebar */}
+            {/* Menu toggle button - visible on all screen sizes */}
             <button
               onClick={onMenuClick}
-              className="lg:hidden text-white/70 hover:text-white transition-colors p-1.5 sm:p-2 bg-white/10 rounded-lg"
+              className="text-white/70 hover:text-white transition-colors p-1.5 sm:p-2 bg-white/10 rounded-lg"
               aria-label={isHebrew ? 'פתח תפריט' : 'Open menu'}
             >
               <FiMenu className="w-5 h-5 sm:w-6 sm:h-6" />

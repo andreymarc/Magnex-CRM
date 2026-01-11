@@ -13,6 +13,7 @@ import {
 import Logo from "./Logo";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { getAuthErrorMessage } from "../utils/authErrors";
 import { supabase } from "../lib/supabase";
 
 const translations = {
@@ -49,8 +50,13 @@ const translations = {
       passwordMinLength: "Password must be at least 6 characters",
       passwordsNotMatch: "Passwords do not match",
       emailExists: "This email is already registered",
+      emailInvalid: "Please enter a valid email address",
+      passwordTooWeak: "Password is too weak",
+      networkError: "Network error. Please check your connection",
       registrationFailed: "Registration failed. Please try again.",
       checkEmail: "Please check your email to verify your account",
+      checkEmailDetails: "We sent a confirmation link to your email. Click the link to activate your account.",
+      goToLogin: "Go to Login",
     },
   },
   he: {
@@ -84,8 +90,13 @@ const translations = {
       passwordMinLength: "הסיסמה חייבת להכיל לפחות 6 תווים",
       passwordsNotMatch: "הסיסמאות אינן תואמות",
       emailExists: "אימייל זה כבר רשום במערכת",
+      emailInvalid: "נא להזין כתובת אימייל תקינה",
+      passwordTooWeak: "הסיסמה חלשה מדי",
+      networkError: "שגיאת רשת. אנא בדוק את החיבור שלך",
       registrationFailed: "ההרשמה נכשלה. אנא נסה שוב.",
       checkEmail: "אנא בדוק את האימייל שלך לאימות החשבון",
+      checkEmailDetails: "שלחנו קישור אימות לאימייל שלך. לחץ על הקישור כדי להפעיל את החשבון.",
+      goToLogin: "עבור להתחברות",
     },
   },
 };
@@ -113,6 +124,7 @@ export default function RegisterPage() {
   });
 
   const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
@@ -274,6 +286,8 @@ export default function RegisterPage() {
     }
 
     setIsSubmitting(true);
+    setGeneralError("");
+    setErrors({});
 
     try {
       // Register with Supabase Auth
@@ -286,38 +300,41 @@ export default function RegisterPage() {
         subdomain: formData.companySubdomain,
       });
 
-      // Show success message
+      // Show success message - user needs to verify email first
       setRegistrationSuccess(true);
-
-      // Redirect to dashboard after a short delay
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
     } catch (error) {
       console.error("Registration error:", error);
 
-      // Handle specific errors
+      const errorMessage = getAuthErrorMessage(error, language);
+      const lowerMessage = (error.message || "").toLowerCase();
+
+      // Handle specific errors that should be shown on specific fields
       if (
-        error.message.includes("already registered") ||
-        error.message.includes("already exists") ||
-        error.message.includes("duplicate key") ||
-        error.message.includes("unique constraint")
+        lowerMessage.includes("subdomain") &&
+        (lowerMessage.includes("already taken") ||
+          lowerMessage.includes("already exists") ||
+          lowerMessage.includes("unique constraint") ||
+          lowerMessage.includes("duplicate key"))
       ) {
-        if (
-          error.message.includes("subdomain") ||
-          error.message.toLowerCase().includes("subdomain")
-        ) {
-          setErrors({
-            companySubdomain:
-              language === "en"
-                ? "This subdomain is already taken"
-                : "תת-דומיין זה כבר תפוס",
-          });
-        } else {
-          setErrors({ email: t.register.emailExists });
-        }
+        setErrors({
+          companySubdomain:
+            language === "en"
+              ? "This subdomain is already taken"
+              : "תת-דומיין זה כבר תפוס",
+        });
+      } else if (
+        lowerMessage.includes("email") &&
+        (lowerMessage.includes("already registered") ||
+          lowerMessage.includes("already exists"))
+      ) {
+        setErrors({ email: t.register.emailExists });
+      } else if (lowerMessage.includes("email") && lowerMessage.includes("invalid")) {
+        setErrors({ email: t.register.emailInvalid });
+      } else if (lowerMessage.includes("password") && lowerMessage.includes("weak")) {
+        setErrors({ password: t.register.passwordTooWeak });
       } else {
-        alert(t.register.registrationFailed);
+        // For other errors, show as general error
+        setGeneralError(errorMessage);
       }
     } finally {
       setIsSubmitting(false);
@@ -391,31 +408,23 @@ export default function RegisterPage() {
             {registrationSuccess ? (
               <div className="text-center py-8">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-green-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                  <FiMail className="w-8 h-8 text-green-500" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   {language === "en"
                     ? "Registration Successful!"
                     : "ההרשמה הצליחה!"}
                 </h2>
-                <p className="text-gray-600 mb-4">{t.register.checkEmail}</p>
-                <p className="text-sm text-gray-500">
-                  {language === "en"
-                    ? "Redirecting to dashboard..."
-                    : "מעביר לדשבורד..."}
+                <p className="text-gray-600 mb-2 font-medium">{t.register.checkEmail}</p>
+                <p className="text-sm text-gray-500 mb-6">
+                  {t.register.checkEmailDetails}
                 </p>
+                <Link
+                  to="/login"
+                  className="inline-block bg-primary-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                >
+                  {t.register.goToLogin}
+                </Link>
               </div>
             ) : (
               <>
@@ -453,6 +462,13 @@ export default function RegisterPage() {
                     ></div>
                   </div>
                 </div>
+
+                {/* General Error Message */}
+                {generalError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-red-700 text-center text-sm">
+                    {generalError}
+                  </div>
+                )}
 
                 {/* Registration Form - tighter spacing on mobile */}
                 <form

@@ -39,7 +39,7 @@ export default function Dashboard() {
   return (
     <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 flex flex-col lg:pr-16">
+      <div className={`flex-1 flex flex-col ${sidebarOpen ? 'lg:pr-64' : 'lg:pr-16'} transition-all duration-300`}>
         <TrialExpiryBanner />
         <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
         <main className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">

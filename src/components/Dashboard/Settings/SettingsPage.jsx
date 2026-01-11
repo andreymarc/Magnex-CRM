@@ -1,52 +1,81 @@
-import { useState, useEffect } from 'react'
-import { FiUser, FiBell, FiShield, FiLink, FiSave, FiZap, FiMail, FiKey, FiDatabase, FiCreditCard, FiCamera, FiCalendar, FiCheck } from 'react-icons/fi'
-import { useAuth } from '../../../context/AuthContext'
-import { useLanguage } from '../../../context/LanguageContext'
-import { openCustomerPortal, PRICING, formatPrice, getSubscriptionStatusText, getBillingCycleText } from '../../../services/stripeService'
-import Sidebar from '../Sidebar'
-import TopNav from '../TopNav'
-import AIAssistant from '../AIAssistant'
-import UpgradeModal from '../UpgradeModal'
+import { useState, useEffect } from "react";
+import {
+  FiUser,
+  FiBell,
+  FiShield,
+  FiLink,
+  FiSave,
+  FiZap,
+  FiMail,
+  FiKey,
+  FiDatabase,
+  FiCreditCard,
+  FiCamera,
+  FiCalendar,
+  FiCheck,
+} from "react-icons/fi";
+import { useAuth } from "../../../context/AuthContext";
+import { useLanguage } from "../../../context/LanguageContext";
+import {
+  openCustomerPortal,
+  PRICING,
+  formatPrice,
+  getSubscriptionStatusText,
+  getBillingCycleText,
+} from "../../../services/stripeService";
+import Sidebar from "../Sidebar";
+import TopNav from "../TopNav";
+import AIAssistant from "../AIAssistant";
+import UpgradeModal from "../UpgradeModal";
 
 export default function SettingsPage() {
-  const { user, profile: authProfile, updateProfile, uploadProfilePhoto, isPro, isTrialActive, getTrialDaysRemaining, getSubscriptionInfo } = useAuth()
-  const { language, changeLanguage, isRTL } = useLanguage()
-  const [activeTab, setActiveTab] = useState('profile')
-  const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState(false)
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false)
-  const [portalLoading, setPortalLoading] = useState(false)
+  const {
+    user,
+    profile: authProfile,
+    updateProfile,
+    uploadProfilePhoto,
+    isPro,
+    isTrialActive,
+    getTrialDaysRemaining,
+    getSubscriptionInfo,
+  } = useAuth();
+  const { language, changeLanguage, isRTL } = useLanguage();
+  const [activeTab, setActiveTab] = useState("profile");
+  const [aiAssistantOpen, setAIAssistantOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   // Profile settings form
   const [profileForm, setProfileForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    company: '',
-    jobTitle: '',
-    language: 'he',
-    timezone: 'Asia/Jerusalem'
-  })
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    company: "",
+    jobTitle: "",
+    language: "he",
+    timezone: "Asia/Jerusalem",
+  });
 
   // Load profile data from auth context
   useEffect(() => {
     if (authProfile && user) {
-      const nameParts = (authProfile.full_name || '').split(' ')
+      const nameParts = (authProfile.full_name || "").split(" ");
       setProfileForm({
-        firstName: nameParts[0] || '',
-        lastName: nameParts.slice(1).join(' ') || '',
-        email: user.email || '',
-        phone: authProfile.phone || '',
-        company: authProfile.company_name || '',
-        jobTitle: authProfile.job_title || '',
-        language: authProfile.language || language || 'he',
-        timezone: authProfile.timezone || 'Asia/Jerusalem'
-      })
+        firstName: nameParts[0] || "",
+        lastName: nameParts.slice(1).join(" ") || "",
+        email: user.email || "",
+        phone: authProfile.phone || "",
+        company: authProfile.company_name || "",
+        jobTitle: authProfile.job_title || "",
+        language: authProfile.language || language || "he",
+        timezone: authProfile.timezone || "Asia/Jerusalem",
+      });
     }
-  }, [authProfile, user, language])
+  }, [authProfile, user, language]);
 
   // Notification settings
   const [notifications, setNotifications] = useState({
@@ -55,92 +84,92 @@ export default function SettingsPage() {
     dealUpdates: true,
     paymentReminders: true,
     weeklyReports: false,
-    marketingEmails: false
-  })
+    marketingEmails: false,
+  });
 
   // Security settings
   const [security, setSecurity] = useState({
     twoFactorAuth: false,
     sessionTimeout: 30,
-    passwordLastChanged: '2024-01-15'
-  })
+    passwordLastChanged: "2024-01-15",
+  });
 
   // Integration settings
   const [integrations, setIntegrations] = useState({
-    email: { enabled: false, provider: 'gmail' },
-    calendar: { enabled: false, provider: 'google' },
-    payment: { enabled: false, provider: 'stripe' },
-    storage: { enabled: false, provider: 'onedrive' }
-  })
+    email: { enabled: false, provider: "gmail" },
+    calendar: { enabled: false, provider: "google" },
+    payment: { enabled: false, provider: "stripe" },
+    storage: { enabled: false, provider: "onedrive" },
+  });
 
   const handleProfileChange = (field, value) => {
-    setProfileForm(prev => ({ ...prev, [field]: value }))
-  }
+    setProfileForm((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleNotificationChange = (field, value) => {
-    setNotifications(prev => ({ ...prev, [field]: value }))
-  }
+    setNotifications((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSecurityChange = (field, value) => {
-    setSecurity(prev => ({ ...prev, [field]: value }))
-  }
+    setSecurity((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleIntegrationToggle = (integration, enabled) => {
-    setIntegrations(prev => ({
+    setIntegrations((prev) => ({
       ...prev,
-      [integration]: { ...prev[integration], enabled }
-    }))
-  }
+      [integration]: { ...prev[integration], enabled },
+    }));
+  };
 
   const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
+    const file = e.target.files[0];
+    if (!file) return;
 
     try {
-      setUploading(true)
-      await uploadProfilePhoto(file)
+      setUploading(true);
+      await uploadProfilePhoto(file);
     } catch (error) {
-      console.error('Upload error:', error)
-      alert('העלאת התמונה נכשלה')
+      console.error("Upload error:", error);
+      alert("העלאת התמונה נכשלה");
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-  }
+  };
 
   const handleSave = async () => {
     try {
-      setSaving(true)
+      setSaving(true);
       await updateProfile({
         full_name: `${profileForm.firstName} ${profileForm.lastName}`.trim(),
         phone: profileForm.phone,
         company_name: profileForm.company,
         job_title: profileForm.jobTitle,
         language: profileForm.language,
-        timezone: profileForm.timezone
-      })
+        timezone: profileForm.timezone,
+      });
       // Update language context when language is changed
       if (profileForm.language !== language) {
-        changeLanguage(profileForm.language)
+        changeLanguage(profileForm.language);
       }
-      alert('ההגדרות נשמרו בהצלחה!')
+      alert("ההגדרות נשמרו בהצלחה!");
     } catch (error) {
-      console.error('Save error:', error)
-      alert('שמירת ההגדרות נכשלה')
+      console.error("Save error:", error);
+      alert("שמירת ההגדרות נכשלה");
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const tabs = [
-    { id: 'profile', label: 'פרופיל', icon: FiUser },
-    { id: 'notifications', label: 'התראות', icon: FiBell },
-    { id: 'security', label: 'אבטחה', icon: FiShield },
-    { id: 'integrations', label: 'אינטגרציות', icon: FiLink },
-    { id: 'billing', label: 'חיובים', icon: FiCreditCard }
-  ]
+    { id: "profile", label: "פרופיל", icon: FiUser },
+    { id: "notifications", label: "התראות", icon: FiBell },
+    { id: "security", label: "אבטחה", icon: FiShield },
+    { id: "integrations", label: "אינטגרציות", icon: FiLink },
+    { id: "billing", label: "חיובים", icon: FiCreditCard },
+  ];
 
   return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
+    <div dir={isRTL ? "rtl" : "ltr"} className="min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col lg:pr-16">
         <TopNav onMenuClick={() => setSidebarOpen(true)} />
@@ -156,21 +185,21 @@ export default function SettingsPage() {
               <div className="lg:col-span-1">
                 <div className="bg-white rounded-lg shadow p-4 space-y-2">
                   {tabs.map((tab) => {
-                    const Icon = tab.icon
+                    const Icon = tab.icon;
                     return (
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                           activeTab === tab.id
-                            ? 'bg-primary-100 text-primary-700 font-semibold'
-                            : 'text-gray-700 hover:bg-gray-100'
+                            ? "bg-primary-100 text-primary-700 font-semibold"
+                            : "text-gray-700 hover:bg-gray-100"
                         }`}
                       >
                         <Icon className="w-5 h-5 flex-shrink-0" />
                         <span>{tab.label}</span>
                       </button>
-                    )
+                    );
                   })}
                 </div>
               </div>
@@ -179,22 +208,33 @@ export default function SettingsPage() {
               <div className="lg:col-span-3">
                 <div className="bg-white rounded-lg shadow p-6">
                   {/* Profile Tab */}
-                  {activeTab === 'profile' && (
+                  {activeTab === "profile" && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">הגדרות פרופיל</h2>
-                        <p className="text-gray-600">נהל את המידע האישי שלך וההעדפות</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                          הגדרות פרופיל
+                        </h2>
+                        <p className="text-gray-600">
+                          נהל את המידע האישי שלך וההעדפות
+                        </p>
                       </div>
 
                       {/* Profile Photo Section */}
                       <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                         <div className="relative">
                           <img
-                            src={authProfile?.avatar_url || `https://ui-avatars.com/api/?name=${profileForm.firstName}+${profileForm.lastName}&background=6366f1&color=fff&size=80`}
+                            src={
+                              authProfile?.avatar_url ||
+                              `https://ui-avatars.com/api/?name=${profileForm.firstName}+${profileForm.lastName}&background=6366f1&color=fff&size=80`
+                            }
                             alt="Profile"
                             className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
                           />
-                          <label className={`absolute bottom-0 right-0 bg-primary-600 text-white p-1.5 rounded-full cursor-pointer hover:bg-primary-700 transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                          <label
+                            className={`absolute bottom-0 right-0 bg-primary-600 text-white p-1.5 rounded-full cursor-pointer hover:bg-primary-700 transition-colors ${
+                              uploading ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                          >
                             <input
                               type="file"
                               accept="image/*"
@@ -206,9 +246,13 @@ export default function SettingsPage() {
                           </label>
                         </div>
                         <div>
-                          <h3 className="font-medium text-gray-900">תמונת פרופיל</h3>
+                          <h3 className="font-medium text-gray-900">
+                            תמונת פרופיל
+                          </h3>
                           <p className="text-sm text-gray-500">
-                            {uploading ? 'מעלה...' : 'לחץ על סמל המצלמה כדי להעלות תמונה חדשה'}
+                            {uploading
+                              ? "מעלה..."
+                              : "לחץ על סמל המצלמה כדי להעלות תמונה חדשה"}
                           </p>
                         </div>
                       </div>
@@ -222,7 +266,9 @@ export default function SettingsPage() {
                             <input
                               type="text"
                               value={profileForm.firstName}
-                              onChange={(e) => handleProfileChange('firstName', e.target.value)}
+                              onChange={(e) =>
+                                handleProfileChange("firstName", e.target.value)
+                              }
                               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
@@ -233,7 +279,9 @@ export default function SettingsPage() {
                             <input
                               type="text"
                               value={profileForm.lastName}
-                              onChange={(e) => handleProfileChange('lastName', e.target.value)}
+                              onChange={(e) =>
+                                handleProfileChange("lastName", e.target.value)
+                              }
                               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
@@ -249,7 +297,9 @@ export default function SettingsPage() {
                             disabled
                             className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
                           />
-                          <p className="text-xs text-gray-500 mt-1">לא ניתן לשנות את האימייל</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            לא ניתן לשנות את האימייל
+                          </p>
                         </div>
 
                         <div>
@@ -259,8 +309,10 @@ export default function SettingsPage() {
                           <input
                             type="tel"
                             value={profileForm.phone}
-                            onChange={(e) => handleProfileChange('phone', e.target.value)}
-                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            onChange={(e) =>
+                              handleProfileChange("phone", e.target.value)
+                            }
+                            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           />
                         </div>
 
@@ -272,7 +324,9 @@ export default function SettingsPage() {
                             <input
                               type="text"
                               value={profileForm.company}
-                              onChange={(e) => handleProfileChange('company', e.target.value)}
+                              onChange={(e) =>
+                                handleProfileChange("company", e.target.value)
+                              }
                               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
@@ -283,7 +337,9 @@ export default function SettingsPage() {
                             <input
                               type="text"
                               value={profileForm.jobTitle}
-                              onChange={(e) => handleProfileChange('jobTitle', e.target.value)}
+                              onChange={(e) =>
+                                handleProfileChange("jobTitle", e.target.value)
+                              }
                               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                           </div>
@@ -296,7 +352,9 @@ export default function SettingsPage() {
                             </label>
                             <select
                               value={profileForm.language}
-                              onChange={(e) => handleProfileChange('language', e.target.value)}
+                              onChange={(e) =>
+                                handleProfileChange("language", e.target.value)
+                              }
                               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             >
                               <option value="en">English</option>
@@ -309,13 +367,23 @@ export default function SettingsPage() {
                             </label>
                             <select
                               value={profileForm.timezone}
-                              onChange={(e) => handleProfileChange('timezone', e.target.value)}
+                              onChange={(e) =>
+                                handleProfileChange("timezone", e.target.value)
+                              }
                               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             >
-                              <option value="Asia/Jerusalem">Asia/Jerusalem (GMT+2)</option>
-                              <option value="America/New_York">America/New_York (GMT-5)</option>
-                              <option value="Europe/London">Europe/London (GMT+0)</option>
-                              <option value="Asia/Tokyo">Asia/Tokyo (GMT+9)</option>
+                              <option value="Asia/Jerusalem">
+                                Asia/Jerusalem (GMT+2)
+                              </option>
+                              <option value="America/New_York">
+                                America/New_York (GMT-5)
+                              </option>
+                              <option value="Europe/London">
+                                Europe/London (GMT+0)
+                              </option>
+                              <option value="Asia/Tokyo">
+                                Asia/Tokyo (GMT+9)
+                              </option>
                             </select>
                           </div>
                         </div>
@@ -324,34 +392,52 @@ export default function SettingsPage() {
                   )}
 
                   {/* Notifications Tab */}
-                  {activeTab === 'notifications' && (
+                  {activeTab === "notifications" && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">הגדרות התראות</h2>
-                        <p className="text-gray-600">הגדר איך ומתי תקבל התראות</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                          הגדרות התראות
+                        </h2>
+                        <p className="text-gray-600">
+                          הגדר איך ומתי תקבל התראות
+                        </p>
                       </div>
 
                       <div className="space-y-4">
                         {Object.entries(notifications).map(([key, value]) => (
-                          <div key={key} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                          <div
+                            key={key}
+                            className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                          >
                             <div>
                               <h3 className="font-medium text-gray-900 capitalize">
-                                {key.replace(/([A-Z])/g, ' $1').trim()}
+                                {key.replace(/([A-Z])/g, " $1").trim()}
                               </h3>
                               <p className="text-sm text-gray-500">
-                                {key === 'emailNotifications' && 'קבל התראות אימייל לעדכונים חשובים'}
-                                {key === 'taskReminders' && 'קבל תזכורות למשימות קרובות'}
-                                {key === 'dealUpdates' && 'התראות כאשר עסקאות משנות סטטוס'}
-                                {key === 'paymentReminders' && 'תזכורות לתאריכי תשלום קרובים'}
-                                {key === 'weeklyReports' && 'דוחות סיכום שבועיים בדוא"ל'}
-                                {key === 'marketingEmails' && 'עדכוני מוצר ותקשורת שיווקית'}
+                                {key === "emailNotifications" &&
+                                  "קבל התראות אימייל לעדכונים חשובים"}
+                                {key === "taskReminders" &&
+                                  "קבל תזכורות למשימות קרובות"}
+                                {key === "dealUpdates" &&
+                                  "התראות כאשר עסקאות משנות סטטוס"}
+                                {key === "paymentReminders" &&
+                                  "תזכורות לתאריכי תשלום קרובים"}
+                                {key === "weeklyReports" &&
+                                  'דוחות סיכום שבועיים בדוא"ל'}
+                                {key === "marketingEmails" &&
+                                  "עדכוני מוצר ותקשורת שיווקית"}
                               </p>
                             </div>
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input
                                 type="checkbox"
                                 checked={value}
-                                onChange={(e) => handleNotificationChange(key, e.target.checked)}
+                                onChange={(e) =>
+                                  handleNotificationChange(
+                                    key,
+                                    e.target.checked
+                                  )
+                                }
                                 className="sr-only peer"
                               />
                               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
@@ -363,25 +449,38 @@ export default function SettingsPage() {
                   )}
 
                   {/* Security Tab */}
-                  {activeTab === 'security' && (
+                  {activeTab === "security" && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">הגדרות אבטחה</h2>
-                        <p className="text-gray-600">נהל את אבטחת החשבון והפרטיות שלך</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                          הגדרות אבטחה
+                        </h2>
+                        <p className="text-gray-600">
+                          נהל את אבטחת החשבון והפרטיות שלך
+                        </p>
                       </div>
 
                       <div className="space-y-4">
                         <div className="p-4 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-2">
                             <div>
-                              <h3 className="font-medium text-gray-900">אימות דו-שלבי</h3>
-                              <p className="text-sm text-gray-500">הוסף שכבת אבטחה נוספת לחשבון שלך</p>
+                              <h3 className="font-medium text-gray-900">
+                                אימות דו-שלבי
+                              </h3>
+                              <p className="text-sm text-gray-500">
+                                הוסף שכבת אבטחה נוספת לחשבון שלך
+                              </p>
                             </div>
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input
                                 type="checkbox"
                                 checked={security.twoFactorAuth}
-                                onChange={(e) => handleSecurityChange('twoFactorAuth', e.target.checked)}
+                                onChange={(e) =>
+                                  handleSecurityChange(
+                                    "twoFactorAuth",
+                                    e.target.checked
+                                  )
+                                }
                                 className="sr-only peer"
                               />
                               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
@@ -396,18 +495,30 @@ export default function SettingsPage() {
                           <input
                             type="number"
                             value={security.sessionTimeout}
-                            onChange={(e) => handleSecurityChange('sessionTimeout', parseInt(e.target.value))}
+                            onChange={(e) =>
+                              handleSecurityChange(
+                                "sessionTimeout",
+                                parseInt(e.target.value)
+                              )
+                            }
                             min="5"
                             max="120"
-                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           />
-                          <p className="text-xs text-gray-500 mt-1">התנתק אוטומטית לאחר חוסר פעילות</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            התנתק אוטומטית לאחר חוסר פעילות
+                          </p>
                         </div>
 
                         <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-2">סיסמה</h3>
+                          <h3 className="font-medium text-gray-900 mb-2">
+                            סיסמה
+                          </h3>
                           <p className="text-sm text-gray-500 mb-3">
-                            שונה לאחרונה: {new Date(security.passwordLastChanged).toLocaleDateString('he-IL')}
+                            שונה לאחרונה:{" "}
+                            {new Date(
+                              security.passwordLastChanged
+                            ).toLocaleDateString("he-IL")}
                           </p>
                           <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
                             שנה סיסמה
@@ -415,7 +526,9 @@ export default function SettingsPage() {
                         </div>
 
                         <div className="p-4 border border-gray-200 rounded-lg">
-                          <h3 className="font-medium text-gray-900 mb-2">מפתחות API</h3>
+                          <h3 className="font-medium text-gray-900 mb-2">
+                            מפתחות API
+                          </h3>
                           <p className="text-sm text-gray-500 mb-3">
                             נהל את מפתחות ה-API שלך לאינטגרציות
                           </p>
@@ -429,11 +542,15 @@ export default function SettingsPage() {
                   )}
 
                   {/* Integrations Tab */}
-                  {activeTab === 'integrations' && (
+                  {activeTab === "integrations" && (
                     <div className="space-y-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">אינטגרציות</h2>
-                        <p className="text-gray-600">חבר את הכלים והשירותים המועדפים עליך</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                          אינטגרציות
+                        </h2>
+                        <p className="text-gray-600">
+                          חבר את הכלים והשירותים המועדפים עליך
+                        </p>
                       </div>
 
                       <div className="space-y-4">
@@ -442,17 +559,26 @@ export default function SettingsPage() {
                             <div className="flex items-center gap-3">
                               <FiMail className="w-8 h-8 text-blue-600 flex-shrink-0" />
                               <div>
-                                <h3 className="font-medium text-gray-900">אינטגרציית אימייל</h3>
-                                <p className="text-sm text-gray-500">חבר Gmail, Outlook או IMAP</p>
+                                <h3 className="font-medium text-gray-900">
+                                  אינטגרציית אימייל
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                  חבר Gmail, Outlook או IMAP
+                                </p>
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
                               <select
                                 value={integrations.email.provider}
-                                onChange={(e) => setIntegrations(prev => ({
-                                  ...prev,
-                                  email: { ...prev.email, provider: e.target.value }
-                                }))}
+                                onChange={(e) =>
+                                  setIntegrations((prev) => ({
+                                    ...prev,
+                                    email: {
+                                      ...prev.email,
+                                      provider: e.target.value,
+                                    },
+                                  }))
+                                }
                                 className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="gmail">Gmail</option>
@@ -463,7 +589,12 @@ export default function SettingsPage() {
                                 <input
                                   type="checkbox"
                                   checked={integrations.email.enabled}
-                                  onChange={(e) => handleIntegrationToggle('email', e.target.checked)}
+                                  onChange={(e) =>
+                                    handleIntegrationToggle(
+                                      "email",
+                                      e.target.checked
+                                    )
+                                  }
                                   className="sr-only peer"
                                 />
                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
@@ -477,27 +608,43 @@ export default function SettingsPage() {
                             <div className="flex items-center gap-3">
                               <FiCalendar className="w-8 h-8 text-green-600 flex-shrink-0" />
                               <div>
-                                <h3 className="font-medium text-gray-900">סנכרון יומן</h3>
-                                <p className="text-sm text-gray-500">סנכרן עם Google Calendar או Outlook</p>
+                                <h3 className="font-medium text-gray-900">
+                                  סנכרון יומן
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                  סנכרן עם Google Calendar או Outlook
+                                </p>
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
                               <select
                                 value={integrations.calendar.provider}
-                                onChange={(e) => setIntegrations(prev => ({
-                                  ...prev,
-                                  calendar: { ...prev.calendar, provider: e.target.value }
-                                }))}
+                                onChange={(e) =>
+                                  setIntegrations((prev) => ({
+                                    ...prev,
+                                    calendar: {
+                                      ...prev.calendar,
+                                      provider: e.target.value,
+                                    },
+                                  }))
+                                }
                                 className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="google">Google Calendar</option>
-                                <option value="outlook">Outlook Calendar</option>
+                                <option value="outlook">
+                                  Outlook Calendar
+                                </option>
                               </select>
                               <label className="relative inline-flex items-center cursor-pointer">
                                 <input
                                   type="checkbox"
                                   checked={integrations.calendar.enabled}
-                                  onChange={(e) => handleIntegrationToggle('calendar', e.target.checked)}
+                                  onChange={(e) =>
+                                    handleIntegrationToggle(
+                                      "calendar",
+                                      e.target.checked
+                                    )
+                                  }
                                   className="sr-only peer"
                                 />
                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
@@ -511,17 +658,26 @@ export default function SettingsPage() {
                             <div className="flex items-center gap-3">
                               <FiCreditCard className="w-8 h-8 text-purple-600 flex-shrink-0" />
                               <div>
-                                <h3 className="font-medium text-gray-900">שער תשלום</h3>
-                                <p className="text-sm text-gray-500">חבר Stripe, PayPal או מעבדי תשלום אחרים</p>
+                                <h3 className="font-medium text-gray-900">
+                                  שער תשלום
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                  חבר Stripe, PayPal או מעבדי תשלום אחרים
+                                </p>
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
                               <select
                                 value={integrations.payment.provider}
-                                onChange={(e) => setIntegrations(prev => ({
-                                  ...prev,
-                                  payment: { ...prev.payment, provider: e.target.value }
-                                }))}
+                                onChange={(e) =>
+                                  setIntegrations((prev) => ({
+                                    ...prev,
+                                    payment: {
+                                      ...prev.payment,
+                                      provider: e.target.value,
+                                    },
+                                  }))
+                                }
                                 className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="stripe">Stripe</option>
@@ -532,7 +688,12 @@ export default function SettingsPage() {
                                 <input
                                   type="checkbox"
                                   checked={integrations.payment.enabled}
-                                  onChange={(e) => handleIntegrationToggle('payment', e.target.checked)}
+                                  onChange={(e) =>
+                                    handleIntegrationToggle(
+                                      "payment",
+                                      e.target.checked
+                                    )
+                                  }
                                   className="sr-only peer"
                                 />
                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
@@ -546,28 +707,44 @@ export default function SettingsPage() {
                             <div className="flex items-center gap-3">
                               <FiDatabase className="w-8 h-8 text-orange-600 flex-shrink-0" />
                               <div>
-                                <h3 className="font-medium text-gray-900">אחסון ענן</h3>
-                                <p className="text-sm text-gray-500">חבר OneDrive, Google Drive או Dropbox</p>
+                                <h3 className="font-medium text-gray-900">
+                                  אחסון ענן
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                  חבר OneDrive, Google Drive או Dropbox
+                                </p>
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
                               <select
                                 value={integrations.storage.provider}
-                                onChange={(e) => setIntegrations(prev => ({
-                                  ...prev,
-                                  storage: { ...prev.storage, provider: e.target.value }
-                                }))}
+                                onChange={(e) =>
+                                  setIntegrations((prev) => ({
+                                    ...prev,
+                                    storage: {
+                                      ...prev.storage,
+                                      provider: e.target.value,
+                                    },
+                                  }))
+                                }
                                 className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
                               >
                                 <option value="onedrive">OneDrive</option>
-                                <option value="googledrive">Google Drive</option>
+                                <option value="googledrive">
+                                  Google Drive
+                                </option>
                                 <option value="dropbox">Dropbox</option>
                               </select>
                               <label className="relative inline-flex items-center cursor-pointer">
                                 <input
                                   type="checkbox"
                                   checked={integrations.storage.enabled}
-                                  onChange={(e) => handleIntegrationToggle('storage', e.target.checked)}
+                                  onChange={(e) =>
+                                    handleIntegrationToggle(
+                                      "storage",
+                                      e.target.checked
+                                    )
+                                  }
                                   className="sr-only peer"
                                 />
                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
@@ -580,7 +757,7 @@ export default function SettingsPage() {
                   )}
 
                   {/* Billing Tab */}
-                  {activeTab === 'billing' && (
+                  {activeTab === "billing" && (
                     <BillingTab
                       isPro={isPro}
                       isTrialActive={isTrialActive}
@@ -590,6 +767,7 @@ export default function SettingsPage() {
                       portalLoading={portalLoading}
                       setPortalLoading={setPortalLoading}
                       language={language}
+                      user={user}
                     />
                   )}
 
@@ -598,10 +776,14 @@ export default function SettingsPage() {
                     <button
                       onClick={handleSave}
                       disabled={saving}
-                      className={`flex items-center gap-2 bg-primary-600 text-white px-6 py-2 rounded-lg transition-colors ${saving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-700'}`}
+                      className={`flex items-center gap-2 bg-primary-600 text-white px-6 py-2 rounded-lg transition-colors ${
+                        saving
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-primary-700"
+                      }`}
                     >
                       <FiSave className="w-5 h-5" />
-                      <span>{saving ? 'שומר...' : 'שמור שינויים'}</span>
+                      <span>{saving ? "שומר..." : "שמור שינויים"}</span>
                     </button>
                   </div>
                 </div>
@@ -621,111 +803,135 @@ export default function SettingsPage() {
       </button>
 
       {/* AI Assistant */}
-      <AIAssistant isOpen={aiAssistantOpen} onClose={() => setAIAssistantOpen(false)} />
+      <AIAssistant
+        isOpen={aiAssistantOpen}
+        onClose={() => setAIAssistantOpen(false)}
+      />
 
       {/* Upgrade Modal */}
-      <UpgradeModal isOpen={upgradeModalOpen} onClose={() => setUpgradeModalOpen(false)} />
+      <UpgradeModal
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+      />
     </div>
-  )
+  );
 }
 
 // Billing Tab Component
-function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscriptionInfo, onUpgrade, portalLoading, setPortalLoading, language }) {
-  const subscriptionInfo = getSubscriptionInfo()
-  const isHebrew = language === 'he'
-  const hasActiveSubscription = isPro() && subscriptionInfo?.status === 'active'
-  const trialActive = isTrialActive()
-  const daysRemaining = getTrialDaysRemaining()
+function BillingTab({
+  isPro,
+  isTrialActive,
+  getTrialDaysRemaining,
+  getSubscriptionInfo,
+  onUpgrade,
+  portalLoading,
+  setPortalLoading,
+  language,
+  user,
+}) {
+  const subscriptionInfo = getSubscriptionInfo();
+  const isHebrew = language === "he";
+  const hasActiveSubscription =
+    isPro() && subscriptionInfo?.status === "active";
+  const trialActive = isTrialActive();
+  const daysRemaining = getTrialDaysRemaining();
 
   const handleManageBilling = async () => {
-    if (!subscriptionInfo?.customerId) return
+    if (!subscriptionInfo?.customerId || !user?.id) return;
 
     try {
-      setPortalLoading(true)
-      await openCustomerPortal(subscriptionInfo.customerId)
+      setPortalLoading(true);
+      await openCustomerPortal(subscriptionInfo.customerId, user.id);
     } catch (error) {
-      console.error('Portal error:', error)
-      alert(isHebrew ? 'שגיאה בפתיחת פורטל החיובים' : 'Error opening billing portal')
+      console.error("Portal error:", error);
+      alert(
+        isHebrew ? "שגיאה בפתיחת פורטל החיובים" : "Error opening billing portal"
+      );
     } finally {
-      setPortalLoading(false)
+      setPortalLoading(false);
     }
-  }
+  };
 
   const texts = {
     he: {
-      title: 'חיובים ומנוי',
-      subtitle: 'נהל את המנוי ואמצעי התשלום שלך',
-      currentPlan: 'התוכנית הנוכחית',
-      pro: 'Pro',
-      trial: 'תקופת ניסיון',
-      free: 'חינם (מוגבל)',
-      perMonth: 'לחודש',
-      perYear: 'לשנה',
-      nextBilling: 'תאריך חיוב הבא',
-      billingCycle: 'מחזור חיוב',
-      upgrade: 'שדרג עכשיו',
-      manageBilling: 'נהל חיובים',
-      trialEnds: 'תקופת הניסיון מסתיימת בעוד',
-      days: 'ימים',
-      trialExpired: 'תקופת הניסיון הסתיימה',
-      upgradeToAccess: 'שדרג כדי לקבל גישה לכל התכונות',
-      features: 'תכונות כלולות',
+      title: "חיובים ומנוי",
+      subtitle: "נהל את המנוי ואמצעי התשלום שלך",
+      currentPlan: "התוכנית הנוכחית",
+      pro: "Pro",
+      trial: "תקופת ניסיון",
+      free: "חינם (מוגבל)",
+      perMonth: "לחודש",
+      perYear: "לשנה",
+      nextBilling: "תאריך חיוב הבא",
+      billingCycle: "מחזור חיוב",
+      upgrade: "שדרג עכשיו",
+      manageBilling: "נהל חיובים",
+      trialEnds: "תקופת הניסיון מסתיימת בעוד",
+      days: "ימים",
+      trialExpired: "תקופת הניסיון הסתיימה",
+      upgradeToAccess: "שדרג כדי לקבל גישה לכל התכונות",
+      features: "תכונות כלולות",
       featuresList: [
-        'ניהול לידים ללא הגבלה',
-        'ניהול עסקאות',
-        'לוח שנה ותזכורות',
-        'ניהול מסמכים',
-        'דוחות ואנליטיקס',
-        'ניהול חשבוניות'
+        "ניהול לידים ללא הגבלה",
+        "ניהול עסקאות",
+        "לוח שנה ותזכורות",
+        "ניהול מסמכים",
+        "דוחות ואנליטיקס",
+        "ניהול חשבוניות",
       ],
-      cancelInfo: 'ביטול המנוי יגרום לאובדן גישה לתכונות הפרימיום בסיום תקופת החיוב.',
-      processing: 'מעבד...'
+      cancelInfo:
+        "ביטול המנוי יגרום לאובדן גישה לתכונות הפרימיום בסיום תקופת החיוב.",
+      processing: "מעבד...",
     },
     en: {
-      title: 'Billing & Subscription',
-      subtitle: 'Manage your subscription and payment methods',
-      currentPlan: 'Current Plan',
-      pro: 'Pro',
-      trial: 'Trial Period',
-      free: 'Free (Limited)',
-      perMonth: '/month',
-      perYear: '/year',
-      nextBilling: 'Next billing date',
-      billingCycle: 'Billing cycle',
-      upgrade: 'Upgrade Now',
-      manageBilling: 'Manage Billing',
-      trialEnds: 'Trial ends in',
-      days: 'days',
-      trialExpired: 'Trial period has ended',
-      upgradeToAccess: 'Upgrade to access all features',
-      features: 'Included Features',
+      title: "Billing & Subscription",
+      subtitle: "Manage your subscription and payment methods",
+      currentPlan: "Current Plan",
+      pro: "Pro",
+      trial: "Trial Period",
+      free: "Free (Limited)",
+      perMonth: "/month",
+      perYear: "/year",
+      nextBilling: "Next billing date",
+      billingCycle: "Billing cycle",
+      upgrade: "Upgrade Now",
+      manageBilling: "Manage Billing",
+      trialEnds: "Trial ends in",
+      days: "days",
+      trialExpired: "Trial period has ended",
+      upgradeToAccess: "Upgrade to access all features",
+      features: "Included Features",
       featuresList: [
-        'Unlimited lead management',
-        'Deal management',
-        'Calendar & reminders',
-        'Document management',
-        'Reports & analytics',
-        'Invoice management'
+        "Unlimited lead management",
+        "Deal management",
+        "Calendar & reminders",
+        "Document management",
+        "Reports & analytics",
+        "Invoice management",
       ],
-      cancelInfo: 'Canceling your subscription will result in loss of premium features at the end of the billing period.',
-      processing: 'Processing...'
-    }
-  }
+      cancelInfo:
+        "Canceling your subscription will result in loss of premium features at the end of the billing period.",
+      processing: "Processing...",
+    },
+  };
 
-  const t = texts[isHebrew ? 'he' : 'en']
+  const t = texts[isHebrew ? "he" : "en"];
 
   // Get status badge color and text
   const getStatusBadge = () => {
     if (hasActiveSubscription) {
-      return { color: 'bg-green-100 text-green-800', text: getSubscriptionStatusText('active', language) }
+      return {
+        color: "bg-green-100 text-green-800",
+        text: getSubscriptionStatusText("active", language),
+      };
     }
     if (trialActive) {
-      return { color: 'bg-blue-100 text-blue-800', text: t.trial }
+      return { color: "bg-blue-100 text-blue-800", text: t.trial };
     }
-    return { color: 'bg-gray-100 text-gray-800', text: t.free }
-  }
+    return { color: "bg-gray-100 text-gray-800", text: t.free };
+  };
 
-  const statusBadge = getStatusBadge()
+  const statusBadge = getStatusBadge();
 
   return (
     <div className="space-y-6">
@@ -736,7 +942,15 @@ function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscripti
 
       <div className="space-y-4">
         {/* Current Plan Card */}
-        <div className={`p-6 border-2 rounded-lg ${hasActiveSubscription ? 'border-green-200 bg-green-50' : trialActive ? 'border-blue-200 bg-blue-50' : 'border-yellow-200 bg-yellow-50'}`}>
+        <div
+          className={`p-6 border-2 rounded-lg ${
+            hasActiveSubscription
+              ? "border-green-200 bg-green-50"
+              : trialActive
+              ? "border-blue-200 bg-blue-50"
+              : "border-yellow-200 bg-yellow-50"
+          }`}
+        >
           <div className="flex items-start justify-between">
             <div>
               <div className="text-sm text-gray-600 mb-1">{t.currentPlan}</div>
@@ -746,16 +960,18 @@ function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscripti
 
               {hasActiveSubscription && subscriptionInfo?.billingCycle && (
                 <p className="text-gray-600 mt-1">
-                  {subscriptionInfo.billingCycle === 'annual'
+                  {subscriptionInfo.billingCycle === "annual"
                     ? `${formatPrice(PRICING.annual.price)} ${t.perYear}`
-                    : `${formatPrice(PRICING.monthly.price)} ${t.perMonth}`
-                  }
+                    : `${formatPrice(PRICING.monthly.price)} ${t.perMonth}`}
                 </p>
               )}
 
               {hasActiveSubscription && subscriptionInfo?.currentPeriodEnd && (
                 <p className="text-sm text-gray-500 mt-2">
-                  {t.nextBilling}: {new Date(subscriptionInfo.currentPeriodEnd).toLocaleDateString(isHebrew ? 'he-IL' : 'en-US')}
+                  {t.nextBilling}:{" "}
+                  {new Date(
+                    subscriptionInfo.currentPeriodEnd
+                  ).toLocaleDateString(isHebrew ? "he-IL" : "en-US")}
                 </p>
               )}
 
@@ -771,7 +987,9 @@ function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscripti
                 </p>
               )}
             </div>
-            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${statusBadge.color}`}>
+            <span
+              className={`px-3 py-1 rounded-full text-sm font-semibold ${statusBadge.color}`}
+            >
               {statusBadge.text}
             </span>
           </div>
@@ -803,22 +1021,30 @@ function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscripti
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Monthly */}
             <div className="p-4 border border-gray-200 rounded-lg">
-              <h4 className="font-semibold text-gray-900">{isHebrew ? 'חודשי' : 'Monthly'}</h4>
+              <h4 className="font-semibold text-gray-900">
+                {isHebrew ? "חודשי" : "Monthly"}
+              </h4>
               <div className="text-2xl font-bold text-gray-900 mt-2">
                 {formatPrice(PRICING.monthly.price)}
-                <span className="text-sm font-normal text-gray-500">{t.perMonth}</span>
+                <span className="text-sm font-normal text-gray-500">
+                  {t.perMonth}
+                </span>
               </div>
             </div>
 
             {/* Annual */}
             <div className="p-4 border-2 border-primary-200 rounded-lg bg-primary-50 relative">
               <div className="absolute -top-3 right-4 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
-                {isHebrew ? 'חסוך 15%' : 'Save 15%'}
+                {isHebrew ? "חסוך 15%" : "Save 15%"}
               </div>
-              <h4 className="font-semibold text-gray-900">{isHebrew ? 'שנתי' : 'Annual'}</h4>
+              <h4 className="font-semibold text-gray-900">
+                {isHebrew ? "שנתי" : "Annual"}
+              </h4>
               <div className="text-2xl font-bold text-gray-900 mt-2">
                 {formatPrice(PRICING.annual.price)}
-                <span className="text-sm font-normal text-gray-500">{t.perYear}</span>
+                <span className="text-sm font-normal text-gray-500">
+                  {t.perYear}
+                </span>
               </div>
             </div>
           </div>
@@ -829,7 +1055,10 @@ function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscripti
           <h3 className="font-medium text-gray-900 mb-3">{t.features}</h3>
           <ul className="space-y-2">
             {t.featuresList.map((feature, index) => (
-              <li key={index} className="flex items-center gap-2 text-sm text-gray-700">
+              <li
+                key={index}
+                className="flex items-center gap-2 text-sm text-gray-700"
+              >
                 <FiCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>{feature}</span>
               </li>
@@ -840,13 +1069,10 @@ function BillingTab({ isPro, isTrialActive, getTrialDaysRemaining, getSubscripti
         {/* Cancel info for subscribers */}
         {hasActiveSubscription && (
           <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <p className="text-sm text-gray-600">
-              {t.cancelInfo}
-            </p>
+            <p className="text-sm text-gray-600">{t.cancelInfo}</p>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
-
