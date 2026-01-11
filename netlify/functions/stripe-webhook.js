@@ -141,12 +141,17 @@ async function updateUserSubscription(userId, subscription) {
   const billingCycle = subscription.metadata?.billing_cycle ||
     (subscription.items.data[0]?.price.recurring?.interval === 'year' ? 'annual' : 'monthly');
 
+  // Safely convert timestamp to ISO string
+  const periodEnd = subscription.current_period_end
+    ? new Date(subscription.current_period_end * 1000).toISOString()
+    : null;
+
   const updateData = {
     stripe_subscription_id: subscription.id,
     subscription_status: subscription.status,
     subscription_price_id: subscription.items.data[0]?.price.id,
-    subscription_current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-    subscription_cancel_at_period_end: subscription.cancel_at_period_end,
+    subscription_current_period_end: periodEnd,
+    subscription_cancel_at_period_end: subscription.cancel_at_period_end || false,
     billing_cycle: billingCycle,
     // Set plan to 'pro' if subscription is active
     plan: subscription.status === 'active' ? 'pro' : 'free'
