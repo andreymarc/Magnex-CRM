@@ -51,7 +51,6 @@ export const createCheckoutSession = async ({ priceId, userId, userEmail, billin
 
     return data;
   } catch (error) {
-    console.error('Checkout error:', error);
     throw error;
   }
 };
@@ -80,7 +79,6 @@ export const openCustomerPortal = async (customerId, userId) => {
 
     return data;
   } catch (error) {
-    console.error('Portal error:', error);
     throw error;
   }
 };

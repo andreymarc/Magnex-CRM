@@ -3,14 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Debug: Check if variables are loaded (remove in production)
-console.log('Supabase URL loaded:', supabaseUrl ? 'Yes' : 'No')
-console.log('Supabase URL:', supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : 'Missing')
-console.log('Supabase Key loaded:', supabaseAnonKey ? 'Yes' : 'No')
-console.log('Supabase Key:', supabaseAnonKey ? `${supabaseAnonKey.substring(0, 20)}...` : 'Missing')
-
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file')
+  // Supabase not configured - app will use mock data fallback
 }
 
 export const supabase = (supabaseUrl && supabaseAnonKey) 
@@ -45,7 +39,6 @@ export const testSupabaseConnection = async () => {
 // Helper function to handle Supabase errors
 export const handleSupabaseError = (error) => {
   if (error) {
-    console.error('Supabase Error:', error)
     return {
       error: true,
       message: error.message || 'An error occurred',

@@ -1,15 +1,13 @@
 import { useState } from 'react'
-import { FiTrendingUp, FiTrendingDown, FiDollarSign, FiBriefcase, FiTarget, FiBarChart2, FiZap, FiDownload, FiFilter } from 'react-icons/fi'
+import { FiTrendingUp, FiTrendingDown, FiDollarSign, FiBriefcase, FiTarget, FiBarChart2, FiDownload, FiFilter } from 'react-icons/fi'
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from 'recharts'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
-import AIAssistant from '../AIAssistant'
 import { salesData, leadSourceData, dealStageData, activityData, topCustomers, conversionFunnel, teamPerformance, monthlyComparison, kpiMetrics } from '../../../data/mockAnalytics'
 
 const COLORS = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#6366f1']
 
 export default function AnalyticsDashboard() {
-  const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
   const [dateRange, setDateRange] = useState('last30days')
 
   const formatCurrency = (value) => {
@@ -361,17 +359,6 @@ export default function AnalyticsDashboard() {
         </main>
       </div>
 
-      {/* AI Assistant Button */}
-      <button
-        onClick={() => setAIAssistantOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-200 z-40"
-        title="Open AI Assistant"
-      >
-        <FiZap className="w-6 h-6" />
-      </button>
-
-      {/* AI Assistant */}
-      <AIAssistant isOpen={aiAssistantOpen} onClose={() => setAIAssistantOpen(false)} />
     </div>
   )
 }

@@ -86,10 +86,6 @@ export default function ContactForm({ language = "he" }) {
         body: formDataEncoded,
       });
 
-      // Log response for debugging
-      console.log("Response status:", response.status);
-      console.log("Response ok:", response.ok);
-
       // Netlify Forms can return 200, 302, or even 404 if form not detected
       // But if status is 200-299, consider it success
       if (response.status >= 200 && response.status < 300) {
@@ -102,16 +98,9 @@ export default function ContactForm({ language = "he" }) {
         });
         setTimeout(() => setSubmitStatus(null), 5000);
       } else {
-        const errorText = await response.text().catch(() => "No error details");
-        console.error("Form submission failed:", {
-          status: response.status,
-          statusText: response.statusText,
-          body: errorText,
-        });
         setSubmitStatus("error");
       }
     } catch (error) {
-      console.error("Form submission error:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);

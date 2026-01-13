@@ -25,7 +25,6 @@ import {
 } from "../../../services/stripeService";
 import Sidebar from "../Sidebar";
 import TopNav from "../TopNav";
-import AIAssistant from "../AIAssistant";
 import UpgradeModal from "../UpgradeModal";
 
 export default function SettingsPage() {
@@ -41,7 +40,6 @@ export default function SettingsPage() {
   } = useAuth();
   const { language, changeLanguage, isRTL } = useLanguage();
   const [activeTab, setActiveTab] = useState("profile");
-  const [aiAssistantOpen, setAIAssistantOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -129,7 +127,6 @@ export default function SettingsPage() {
       setUploading(true);
       await uploadProfilePhoto(file);
     } catch (error) {
-      console.error("Upload error:", error);
       alert("העלאת התמונה נכשלה");
     } finally {
       setUploading(false);
@@ -153,7 +150,6 @@ export default function SettingsPage() {
       }
       alert("ההגדרות נשמרו בהצלחה!");
     } catch (error) {
-      console.error("Save error:", error);
       alert("שמירת ההגדרות נכשלה");
     } finally {
       setSaving(false);
@@ -793,21 +789,6 @@ export default function SettingsPage() {
         </main>
       </div>
 
-      {/* AI Assistant Button */}
-      <button
-        onClick={() => setAIAssistantOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-200 z-40"
-        title="פתח עוזר AI"
-      >
-        <FiZap className="w-6 h-6" />
-      </button>
-
-      {/* AI Assistant */}
-      <AIAssistant
-        isOpen={aiAssistantOpen}
-        onClose={() => setAIAssistantOpen(false)}
-      />
-
       {/* Upgrade Modal */}
       <UpgradeModal
         isOpen={upgradeModalOpen}
@@ -843,7 +824,6 @@ function BillingTab({
       setPortalLoading(true);
       await openCustomerPortal(subscriptionInfo.customerId, user.id);
     } catch (error) {
-      console.error("Portal error:", error);
       alert(
         isHebrew ? "שגיאה בפתיחת פורטל החיובים" : "Error opening billing portal"
       );

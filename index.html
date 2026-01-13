@@ -2,9 +2,74 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
     <title>Magnex CRM - Tailor-Made CRM for Modern Businesses</title>
+    <meta name="title" content="Magnex CRM - Tailor-Made CRM for Modern Businesses" />
+    <meta name="description" content="Everything you need to manage customers, track sales, and get paid—all in one place. No complicated setup, no confusing features. Just what works. Start your free trial today." />
+    <meta name="keywords" content="CRM, customer relationship management, business management, sales tracking, invoicing, payment processing, business software, Israel CRM" />
+    <meta name="author" content="Magnex CRM" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <link rel="canonical" href="https://magnex-crm.com/" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://magnex-crm.com/" />
+    <meta property="og:title" content="Magnex CRM - Tailor-Made CRM for Modern Businesses" />
+    <meta property="og:description" content="Everything you need to manage customers, track sales, and get paid—all in one place. No complicated setup, no confusing features. Just what works." />
+    <meta property="og:image" content="https://magnex-crm.com/og-image.jpg" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="he_IL" />
+    <meta property="og:site_name" content="Magnex CRM" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://magnex-crm.com/" />
+    <meta property="twitter:title" content="Magnex CRM - Tailor-Made CRM for Modern Businesses" />
+    <meta property="twitter:description" content="Everything you need to manage customers, track sales, and get paid—all in one place. No complicated setup, no confusing features. Just what works." />
+    <meta property="twitter:image" content="https://magnex-crm.com/og-image.jpg" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Magnex CRM",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free trial available"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "150"
+      },
+      "description": "Everything you need to manage customers, track sales, and get paid—all in one place. No complicated setup, no confusing features. Just what works.",
+      "url": "https://magnex-crm.com",
+      "author": {
+        "@type": "Organization",
+        "name": "Magnex CRM"
+      },
+      "featureList": [
+        "Customer Relationship Management",
+        "Sales Pipeline Tracking",
+        "Invoice Generation",
+        "Payment Processing",
+        "Task Management",
+        "Document Storage",
+        "Analytics & Reports"
+      ]
+    }
+    </script>
+    
     <script>
       // Unregister any existing service workers
       if ('serviceWorker' in navigator) {
@@ -14,6 +79,17 @@
           }
         });
       }
+      
+      // Global error handler
+      window.addEventListener('error', function(event) {
+        console.error('Global error:', event.error);
+        // You can add error reporting service here (e.g., Sentry)
+      });
+      
+      window.addEventListener('unhandledrejection', function(event) {
+        console.error('Unhandled promise rejection:', event.reason);
+        // You can add error reporting service here (e.g., Sentry)
+      });
     </script>
   </head>
   <body>

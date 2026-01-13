@@ -245,7 +245,7 @@ export const deleteDocument = async (id) => {
         .remove([document.file_path])
 
       if (storageError) {
-        console.warn('Failed to delete file from storage:', storageError)
+        // Failed to delete file from storage - continue with record deletion
       }
     }
 

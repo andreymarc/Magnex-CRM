@@ -234,7 +234,7 @@ export default function RegisterPage() {
           );
 
           if (error) {
-            console.error("Error checking subdomain:", error);
+            // Error checking subdomain
           } else if (data === false) {
             // Subdomain is NOT available (exists)
             newErrors.companySubdomain =
@@ -244,7 +244,7 @@ export default function RegisterPage() {
           }
           // If data === true, subdomain is available (no error)
         } catch (err) {
-          console.error("Error checking subdomain:", err);
+          // Error checking subdomain
         }
       }
     }
@@ -303,8 +303,6 @@ export default function RegisterPage() {
       // Show success message - user needs to verify email first
       setRegistrationSuccess(true);
     } catch (error) {
-      console.error("Registration error:", error);
-
       const errorMessage = getAuthErrorMessage(error, language);
       const lowerMessage = (error.message || "").toLowerCase();
 
@@ -817,7 +815,11 @@ export default function RegisterPage() {
                   {/* Terms - smaller on mobile */}
                   {currentStep === 1 && (
                     <p className="text-xs text-gray-500 text-center mt-1 sm:mt-2 px-2">
-                      {t.register.terms}
+                      {language === 'en' ? (
+                        <>By continuing, you agree to our <Link to="/terms" className="text-purple-400 hover:text-purple-300 underline">Terms of Service</Link> and <Link to="/privacy" className="text-purple-400 hover:text-purple-300 underline">Privacy Policy</Link></>
+                      ) : (
+                        <>בהמשך, אתה מסכים ל<Link to="/terms" className="text-purple-400 hover:text-purple-300 underline">תנאי השירות</Link> ו<Link to="/privacy" className="text-purple-400 hover:text-purple-300 underline">מדיניות הפרטיות</Link> שלנו</>
+                      )}
                     </p>
                   )}
                 </form>

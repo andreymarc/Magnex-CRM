@@ -76,7 +76,6 @@ export default function UpgradeModal({ isOpen, onClose }) {
         billingCycle: selectedPlan
       })
     } catch (err) {
-      console.error('Upgrade error:', err)
       setError(isHebrew ? 'שגיאה בתהליך השדרוג. נסה שוב.' : 'Error during upgrade. Please try again.')
       setLoading(false)
     }

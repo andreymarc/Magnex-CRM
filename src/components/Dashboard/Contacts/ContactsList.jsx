@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
-import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiBriefcase, FiMapPin, FiGlobe, FiZap } from 'react-icons/fi'
+import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiBriefcase, FiMapPin, FiGlobe } from 'react-icons/fi'
 import { getContacts, deleteContact } from '../../../services/contactsService'
 import ContactModal from './ContactModal'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
-import AIAssistant from '../AIAssistant'
 
 export default function ContactsList() {
   const [contacts, setContacts] = useState([])
@@ -15,7 +14,6 @@ export default function ContactsList() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedContact, setSelectedContact] = useState(null)
   const [error, setError] = useState(null)
-  const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
 
   useEffect(() => {
     loadContacts()
@@ -314,17 +312,6 @@ export default function ContactsList() {
         </main>
       </div>
 
-      {/* AI Assistant Button */}
-      <button
-        onClick={() => setAIAssistantOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-200 z-40"
-        title="Open AI Assistant"
-      >
-        <FiZap className="w-6 h-6" />
-      </button>
-
-      {/* AI Assistant */}
-      <AIAssistant isOpen={aiAssistantOpen} onClose={() => setAIAssistantOpen(false)} />
     </div>
   )
 }

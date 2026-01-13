@@ -13,7 +13,6 @@ import { mockInvoices } from '../data/mockInvoices'
 // Initialize user data with mock data
 export const initializeUserData = async (userId) => {
   if (!userId) {
-    console.error('No user ID provided for data initialization')
     return false
   }
 
@@ -26,16 +25,12 @@ export const initializeUserData = async (userId) => {
       .limit(1)
 
     if (checkError) {
-      console.error('Error checking existing data:', checkError)
       // Continue anyway - might be first user or table issue
     }
 
     if (existingLeads && existingLeads.length > 0) {
-      console.log('User already has data, skipping initialization')
       return true
     }
-
-    console.log('Initializing mock data for user:', userId)
 
     // Insert leads (8 records) - only include valid DB columns
     const leadsToInsert = mockLeads.slice(0, 8).map(lead => ({
@@ -61,7 +56,7 @@ export const initializeUserData = async (userId) => {
       .insert(leadsToInsert)
 
     if (leadsError) {
-      console.error('Error inserting leads:', leadsError)
+      // Error inserting leads - continue with other data
     }
 
     // Insert contacts (8 records) - only include valid DB columns
@@ -93,7 +88,7 @@ export const initializeUserData = async (userId) => {
       .insert(contactsToInsert)
 
     if (contactsError) {
-      console.error('Error inserting contacts:', contactsError)
+      // Error inserting contacts - continue with other data
     }
 
     // Insert tasks (8 records) - only include valid DB columns
@@ -120,7 +115,7 @@ export const initializeUserData = async (userId) => {
       .insert(tasksToInsert)
 
     if (tasksError) {
-      console.error('Error inserting tasks:', tasksError)
+      // Error inserting tasks - continue with other data
     }
 
     // Insert deals (8 records) - only include valid DB columns
@@ -147,7 +142,7 @@ export const initializeUserData = async (userId) => {
       .insert(dealsToInsert)
 
     if (dealsError) {
-      console.error('Error inserting deals:', dealsError)
+      // Error inserting deals - continue with other data
     }
 
     // Insert events (8 records) - only include valid DB columns
@@ -175,7 +170,7 @@ export const initializeUserData = async (userId) => {
       .insert(eventsToInsert)
 
     if (eventsError) {
-      console.error('Error inserting events:', eventsError)
+      // Error inserting events - continue with other data
     }
 
     // Insert documents (8 records, metadata only, no actual files) - only include valid DB columns
@@ -201,7 +196,7 @@ export const initializeUserData = async (userId) => {
       .insert(documentsToInsert)
 
     if (documentsError) {
-      console.error('Error inserting documents:', documentsError)
+      // Error inserting documents - continue with other data
     }
 
     // Insert invoices (8 records) - only include valid DB columns
@@ -226,13 +221,11 @@ export const initializeUserData = async (userId) => {
       .insert(invoicesToInsert)
 
     if (invoicesError) {
-      console.error('Error inserting invoices:', invoicesError)
+      // Error inserting invoices
     }
 
-    console.log('Mock data initialization completed for user:', userId)
     return true
   } catch (error) {
-    console.error('Error initializing user data:', error)
     return false
   }
 }
@@ -246,13 +239,11 @@ export const markDataInitialized = async (userId) => {
       .eq('id', userId)
 
     if (error) {
-      console.error('Error marking data as initialized:', error)
       return false
     }
 
     return true
   } catch (error) {
-    console.error('Error marking data as initialized:', error)
     return false
   }
 }

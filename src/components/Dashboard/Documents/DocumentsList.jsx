@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiDownload, FiFile, FiZap, FiTag, FiLink } from 'react-icons/fi'
+import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiDownload, FiFile, FiTag, FiLink } from 'react-icons/fi'
 import { getDocuments, deleteDocument, getDocumentStats, getDocumentUrl } from '../../../services/documentsService'
 import { documentCategories, formatFileSize, getFileIcon } from '../../../data/mockDocuments'
 import DocumentModal from './DocumentModal'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
-import AIAssistant from '../AIAssistant'
 import { format } from 'date-fns'
 
 export default function DocumentsList() {
@@ -18,7 +17,6 @@ export default function DocumentsList() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedDocument, setSelectedDocument] = useState(null)
   const [error, setError] = useState(null)
-  const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
 
   useEffect(() => {
@@ -429,17 +427,6 @@ export default function DocumentsList() {
         </main>
       </div>
 
-      {/* AI Assistant Button */}
-      <button
-        onClick={() => setAIAssistantOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-200 z-40"
-        title="Open AI Assistant"
-      >
-        <FiZap className="w-6 h-6" />
-      </button>
-
-      {/* AI Assistant */}
-      <AIAssistant isOpen={aiAssistantOpen} onClose={() => setAIAssistantOpen(false)} />
     </div>
   )
 }

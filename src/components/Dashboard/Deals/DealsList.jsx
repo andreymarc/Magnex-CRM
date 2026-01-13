@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { FiPlus, FiSearch, FiEdit, FiTrash2, FiDollarSign, FiTrendingUp, FiZap, FiMoreVertical } from 'react-icons/fi'
+import { FiPlus, FiSearch, FiEdit, FiTrash2, FiDollarSign, FiTrendingUp, FiMoreVertical } from 'react-icons/fi'
 import { getDeals, deleteDeal, updateDeal, getDealStats } from '../../../services/dealsService'
 import { dealStages } from '../../../data/mockDeals'
 import DealModal from './DealModal'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
-import AIAssistant from '../AIAssistant'
 import { format } from 'date-fns'
 
 export default function DealsList() {
@@ -16,7 +15,6 @@ export default function DealsList() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedDeal, setSelectedDeal] = useState(null)
   const [error, setError] = useState(null)
-  const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
   const [viewMode, setViewMode] = useState('kanban') // 'kanban' or 'list'
 
   useEffect(() => {
@@ -418,17 +416,6 @@ export default function DealsList() {
         </main>
       </div>
 
-      {/* AI Assistant Button */}
-      <button
-        onClick={() => setAIAssistantOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-200 z-40"
-        title="Open AI Assistant"
-      >
-        <FiZap className="w-6 h-6" />
-      </button>
-
-      {/* AI Assistant */}
-      <AIAssistant isOpen={aiAssistantOpen} onClose={() => setAIAssistantOpen(false)} />
     </div>
   )
 }

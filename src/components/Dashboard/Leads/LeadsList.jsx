@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react'
-import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiBriefcase, FiZap, FiLock } from 'react-icons/fi'
+import { FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiBriefcase, FiLock } from 'react-icons/fi'
 import { getLeads, deleteLead, convertLeadToContact } from '../../../services/leadsService'
 import { useFeatureAccess } from '../../../hooks/useFeatureAccess'
 import LeadModal from './LeadModal'
 import Sidebar from '../Sidebar'
 import TopNav from '../TopNav'
-import AIAssistant from '../AIAssistant'
 import UpgradeBanner from '../UpgradeBanner'
 
 export default function LeadsList() {
-  const [aiAssistantOpen, setAIAssistantOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [leads, setLeads] = useState([])
   const [loading, setLoading] = useState(true)
@@ -397,18 +395,6 @@ export default function LeadsList() {
           </div>
         </main>
       </div>
-
-      {/* AI Assistant Button */}
-      <button
-        onClick={() => setAIAssistantOpen(true)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform duration-200 z-40"
-        title="Open AI Assistant"
-      >
-        <FiZap className="w-5 h-5 sm:w-6 sm:h-6" />
-      </button>
-
-      {/* AI Assistant */}
-      <AIAssistant isOpen={aiAssistantOpen} onClose={() => setAIAssistantOpen(false)} />
     </div>
   )
 }

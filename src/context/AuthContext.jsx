@@ -13,8 +13,6 @@ export function AuthProvider({ children }) {
 
   // Fetch user profile from profiles table with timeout
   const fetchProfile = async (userId) => {
-    console.log('Fetching profile for:', userId)
-
     // Create a default profile for fallback
     const defaultProfile = {
       id: userId,
@@ -24,7 +22,6 @@ export function AuthProvider({ children }) {
 
     // Check if supabase is available
     if (!supabase) {
-      console.warn('Supabase not configured, using default profile')
       setProfile(defaultProfile)
       return null
     }
@@ -43,10 +40,7 @@ export function AuthProvider({ children }) {
 
       const { data, error } = await Promise.race([fetchPromise, timeoutPromise])
 
-      console.log('Profile result:', data, error)
-
       if (error) {
-        console.error('Profile fetch error:', error)
         setProfile(defaultProfile)
         return null
       }
@@ -55,7 +49,6 @@ export function AuthProvider({ children }) {
         setProfile(data)
         // Initialize user data on first login
         if (!data.data_initialized) {
-          console.log('First login detected, initializing user data...')
           const initSuccess = await initializeUserData(userId)
           if (initSuccess) {
             await markDataInitialized(userId)
@@ -65,12 +58,10 @@ export function AuthProvider({ children }) {
         }
         return data
       } else {
-        console.log('No profile found, using default')
         setProfile(defaultProfile)
         return null
       }
     } catch (error) {
-      console.error('Error fetching profile:', error)
       setProfile(defaultProfile)
       return null
     }
@@ -242,38 +233,34 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     // Check if supabase is available first
     if (!supabase) {
-      console.warn('Supabase not configured, skipping auth initialization')
       setLoading(false)
       return
     }
 
     // Get initial session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      console.log('Initial session:', session?.user?.email)
       setUser(session?.user ?? null)
       if (session?.user) {
         try {
           await fetchProfile(session.user.id)
         } catch (err) {
-          console.error('Initial profile fetch error:', err)
+          // Profile fetch error - using default profile
         }
       }
       setLoading(false)
     }).catch(err => {
-      console.error('Session error:', err)
       setLoading(false)
     })
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.email)
         setUser(session?.user ?? null)
         if (session?.user) {
           try {
             await fetchProfile(session.user.id)
           } catch (err) {
-            console.error('Profile fetch error:', err)
+            // Profile fetch error - using default profile
           }
         } else {
           setProfile(null)

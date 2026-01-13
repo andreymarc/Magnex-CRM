@@ -54,7 +54,6 @@ export function LanguageProvider({ children }) {
 
       return null
     } catch (error) {
-      console.error('Error detecting country from IP:', error)
       return null
     }
   }
@@ -109,7 +108,7 @@ export function LanguageProvider({ children }) {
       try {
         await updateProfile({ language: newLanguage })
       } catch (error) {
-        console.error('Error updating language in profile:', error)
+        // Error updating language in profile
       }
     }
   }
